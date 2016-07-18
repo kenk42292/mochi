@@ -21,4 +21,7 @@ class RMSProp:
 
         delta_w = (self.eta/(np.sqrt(self.avg_w_grad_sq)+self.eps)) * weight_gradient
         delta_b = (self.eta/(np.sqrt(self.avg_b_grad_sq) + self.eps)) * bias_gradient
+
+        # print("RMSProp updates are: %f, %f" % (np.max(np.abs(delta_w)), np.max(np.abs(delta_b))))
+
         return delta_w, delta_b

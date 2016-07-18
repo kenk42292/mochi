@@ -24,7 +24,7 @@ class NeuralNet(object):
                 layer.update(batch_size)
                 layer.clear_grads()
 
-            if not (iter + 1) % 20:
+            if not (iter + 1) % 100:
                 print("######################################################################################")
                 print("iter: %d" % iter)
                 print("time elased: " + str(time.time() - t))

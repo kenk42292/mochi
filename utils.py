@@ -13,7 +13,6 @@ def sigmoid_prime(z):
         t = np.exp(-z)
         result = t / (1.0+t)**2.0
     except FloatingPointError:
-        print("sigmoid prime overflow")
         result = sigmoid(z)*(1.0-sigmoid(z))
     return result
 
@@ -22,7 +21,6 @@ def softplus(z):
     try:
         result = np.log(1.0+np.exp(z))
     except FloatingPointError:
-        print("softplus overflow")
         result = relu(z)
     return result
 

@@ -40,9 +40,6 @@ class VanillaFeedForward(NeuralLayer):
         :param delta: dL_dy back-propagated to this layer. Note: Unconventional delta notation
         :return: delta_prev
         """
-
-        # print("magnitude of sig_prime(z stored) is: " + str(np.max(np.abs(self.act_prime(self.training_vars["z"])))))
-
         dL_dz = delta*self.act_prime(self.z)
         self.dL_dWxz += np.dot(dL_dz, self.x.T)
         self.dL_dbz += dL_dz
