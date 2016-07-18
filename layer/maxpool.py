@@ -12,13 +12,10 @@ class MaxPool(NeuralLayer):
         print("instantiating Max Pool")
         self.pool_dim = pool_dim
         output_dim = [input_dim[0]/pool_dim[0], input_dim[1]/pool_dim[1], input_dim[2]/pool_dim[2]]
-
         NeuralLayer.__init__(self, input_dim, output_dim, categorical_input=False)
 
         # Stored values for back propagation and batch updates
-        self.training_vars = {
-            "max_binary_filter": np.zeros(self.input_dim),
-        }
+        self.max_binary_filter = np.zeros(self.input_dim)
 
     def feed_forward(self, x):
         """
@@ -26,8 +23,7 @@ class MaxPool(NeuralLayer):
         :return: output of this neural layer
         """
         x = x.reshape(self.input_dim)
-        self.training_vars["x"] = x
-        self.training_vars["max_binary_filter"] = np.zeros(self.input_dim)
+        self.max_binary_filter = np.zeros(self.input_dim)
 
         output = np.zeros(self.output_dim)
         k = 0
@@ -45,7 +41,7 @@ class MaxPool(NeuralLayer):
                                 if x[k+r, j+q, i+p] > max_val:
                                     max_val = x[k+r, j+q, i+p]
                                     max_index = [k+r, j+q, i+p]
-                    self.training_vars["max_binary_filter"][max_index[0], max_index[1], max_index[2]] = 1.0
+                    self.max_binary_filter[max_index[0], max_index[1], max_index[2]] = 1.0
                     output[k//self.pool_dim[0], j//self.pool_dim[1], i//self.pool_dim[2]] = max_val
                     i += self.pool_dim[2]
                 j += self.pool_dim[1]
@@ -69,7 +65,7 @@ class MaxPool(NeuralLayer):
                     i += 1
                 j += 1
             k += 1
-        o = delta_prev*self.training_vars["max_binary_filter"]
+        o = delta_prev*self.max_binary_filter
         return o
 
     def update(self, batch_size):

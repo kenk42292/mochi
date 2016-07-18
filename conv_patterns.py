@@ -3,7 +3,8 @@ import matplotlib.pyplot as plt
 import pickle
 
 layers = None
-#with open("layers-stoch-32-64-989percent.pkl") as h:
+file = "layers-stoch-32-64-989percent.pkl"
+#with open(file) as h:
 with open("layers-adam-001-32-64.pkl") as h:
     layers = pickle.load(h) 
 

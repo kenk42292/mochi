@@ -1,8 +1,5 @@
 import numpy as np
-
 import utils
-import random
-
 import time
 import cPickle as pickle
 
@@ -17,7 +14,6 @@ class NeuralNet(object):
         iter = 0
         t = time.time()
         while iter < niter:
-
             batch_indeces = np.random.choice(range(len(training_data)), size=batch_size, replace=False)
             for sample_index in batch_indeces:
                 x, y = training_data[sample_index]
@@ -27,40 +23,16 @@ class NeuralNet(object):
             for layer in self.layers:
                 layer.update(batch_size)
                 layer.clear_grads()
-            """
-            for batch_index in range(0, len(training_data)-batch_size, batch_size):
-                for sample_index in range(batch_index, batch_index+batch_size):
-                    x, y = training_data[sample_index]
-                    activation = self.forward_pass(x)
-                    delta = utils.softmax(activation) - y
-                    self.backward_pass(delta)
-                for layer in self.layers:
-                    layer.update(batch_size)
-                    layer.clear_grads()
-            """
 
-            #BUG:: IF THE FOLLOWING DOESN'T HAPPEN EVERY 20 OR SO ITERATIONS OR MORE FREQUENTLY, IT DOESN'T WORK!!
-            #Fix first. To avoid such bugs in future, should switch to passing entire mini-batch in one pass
-
-             # perhaps it's th forward pass that somehow fixes everything...?
-            #Let's start with a forward pass that happens for just one of the training sampes - if this doesn't work,
-            #we'll do it for all training samples in batch
-            if not (iter+1) % 20:
-                activation = training_data[0][0]
-                for i in range(2):
-                    activation = self.layers[i].feed_forward(activation)
-            if not (iter + 1) % 100:
+            if not (iter + 1) % 20:
                 print("######################################################################################")
                 print("iter: %d" % iter)
                 print("time elased: " + str(time.time() - t))
-                training_val_rate = self.train_validate(training_data, batch_indeces)
-                #print("training loss: " + str(self.training_loss(training_data, batch_indeces)))
-                print("training validation rate %0.17f" % training_val_rate)
-                #self.grad_check(training_data[batch_indeces[0]][0], training_data[batch_indeces[0]][1])
+                print("training loss: " + str(self.training_loss(training_data, batch_indeces)))
+                print("training validation rate %0.17f" % self.train_validate(training_data, batch_indeces))
                 with open(self.layers_file, "wb") as handle:
                     pickle.dump(self.layers, handle)
                 t = time.time()
-
             iter += 1
         print("validation rate: %0.17f" % self.validate(validation_data))
         return True
@@ -127,7 +99,7 @@ class NeuralNet(object):
         grad_names = ["dL_dWxz", "dL_dbz"]
         for param_name, grad_name in zip(param_names, grad_names):
             model_param = getattr(layer, param_name)
-            model_grad = layer.training_vars[grad_name]
+            model_grad = getattr(layer, grad_name)
             index_iter = np.nditer(model_grad, flags=["multi_index"], op_flags=["readwrite"])
             while not index_iter.finished:
                 original_value = model_param[index_iter.multi_index]

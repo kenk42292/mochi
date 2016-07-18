@@ -3,7 +3,6 @@ import numpy as np
 np.seterr(over="raise")
 
 # Activation Functions
-#COULD IT BE A PROBLEM THAT ONE FLOATING POINT ERROR IN THE ENTIRE VECTOR COULD SEND THE WHOLE VECTOR TO CATCH CLAUSE?
 
 def sigmoid(z):
     return ss.logistic.cdf(z)
