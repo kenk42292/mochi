@@ -26,21 +26,20 @@ class VanillaRecurrent(NeuralLayer):
         self.act_fxn = activation[0]
         self.act_prime = activation[1]
 
+        self.optimizer = optimizer
+
         # Stored values for back propagation and batch updates
-        self.training_vars = {
-            "x": None,
-            "z": None,
-            "dL_dWxz": np.zeros_like(self.Wxz),
-            "dL_dbz": np.zeros_like(self.bz),
-            "eta": eta,
-            "adagrad_cache": [np.zeros_like(self.Wxz), np.zeros_like(self.bz)]
-        }
+        self.x = None
+        self.z = None
+        self.dL_dWxz = np.zeros_like(self.Wxz)
+        self.dL_dbz = np.zeros_like(self.bz)
+        self.eta = eta
 
 
     def feed_forward(self, input):
         assert len(input)==self.len_seq_in, "Input length is inconsistent with what is specified upon layer construction"
 
-        self.training_vars["x"] = input
+        self.x = input
         if self.categorical_input:
             hidden_states = np.zeros((self.len_seq_hidden, self.len_elem_hidden))
             outputs = np.zeros((self.len_seq_in, self.len_elem_out))

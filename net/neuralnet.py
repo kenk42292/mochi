@@ -14,69 +14,51 @@ class NeuralNet(object):
         iter = 0
         t = time.time()
         while iter < niter:
-            batch_indeces = np.random.choice(range(len(training_data)), size=batch_size, replace=False)
-            for sample_index in batch_indeces:
-                x, y = training_data[sample_index]
-                activation = self.forward_pass(x)
-                delta = utils.softmax(activation) - y
-                self.backward_pass(delta)
-            for layer in self.layers:
-                layer.update(batch_size)
-                layer.clear_grads()
-
-            if not (iter + 1) % 100:
+            batch = [training_data[i] for i in np.random.choice(range(len(training_data)), size=batch_size, replace=False)]
+            batch_x = np.array([sample[0] for sample in batch])
+            batch_y = np.array([sample[1] for sample in batch])
+            activations = self.forward_pass(batch_x)
+            deltas = np.array([utils.softmax(activation) for activation in activations]) - batch_y
+            self.backward_pass(deltas, update=True)
+            if not (iter + 1) % 20:
                 print("######################################################################################")
                 print("iter: %d" % iter)
                 print("time elased: " + str(time.time() - t))
-                print("training loss: " + str(self.training_loss(training_data, batch_indeces)))
-                print("training validation rate %0.17f" % self.train_validate(training_data, batch_indeces))
+                print("training loss: " + str(self.loss(batch_x, batch_y)))
+                print("training validation rate %0.17f" % self.validate(batch_x, batch_y))
                 with open(self.layers_file, "wb") as handle:
                     pickle.dump(self.layers, handle)
                 t = time.time()
             iter += 1
-        print("validation rate: %0.17f" % self.validate(validation_data))
+        val_batch_x = np.array([sample[0] for sample in validation_data])
+        val_batch_y = np.array([sample[1] for sample in validation_data])
+        print("validation rate: %0.17f" % self.validate(val_batch_x, val_batch_y))
         return True
 
-    def forward_pass(self, activation):
+    def forward_pass(self, activations):
         for i in range(self.num_layers):
-            activation = self.layers[i].feed_forward(activation)
-        return activation
+            activations = self.layers[i].feed_forward(activations)
+        return activations
 
-    def backward_pass(self, delta):
+    def backward_pass(self, deltas, update=True):
         for i in range(self.num_layers)[::-1]:
-            delta = self.layers[i].back_prop(delta)
+            deltas = self.layers[i].back_prop(deltas, update)
 
-    def predict(self, x):
-        activation = self.forward_pass(x)
-        return max(range(len(activation)), key=lambda i: activation[i])
+    def predict(self, batch_x):
+        activations = self.forward_pass(batch_x)
+        return np.array([max(range(len(activation)), key=lambda i: activation[i]) for activation in activations])
 
-    def train_validate(self, training_data, batch_indeces):
+    def validate(self, batch_x, batch_y):
+        predictions = self.predict(batch_x)
         num_correct = 0
-        for batch_index in batch_indeces:
-            x, y = training_data[batch_index]
-            prediction = self.predict(x)
-            if prediction == utils.onehot2Int(y):
+        for prediction, y in zip(predictions, batch_y):
+            if prediction == (y if (type(y) is np.int64) else utils.onehot2Int(y)):
                 num_correct += 1
-        return float(num_correct)/len(batch_indeces)
+        return float(num_correct)/len(batch_x)
 
-    def validate(self, validation_data):
-        num_correct = 0
-        for x, y in validation_data:
-            prediction = self.predict(x)
-            if prediction == y:
-                num_correct += 1
-        return float(num_correct)/len(validation_data)
-
-    def training_loss(self, training_data, training_indeces):
-        total = 0.0
-        for index in training_indeces:
-            x, y = training_data[index]
-            total += self.loss(x, y)
-        return total
-
-    def loss(self, x, y):
-        output = utils.softmax(self.forward_pass(x))
-        return -float(np.sum(y * np.log(output)))
+    def loss(self, batch_x, batch_y):
+        outputs = np.array([utils.softmax(activation) for activation in self.forward_pass(batch_x)])
+        return -float(np.sum(batch_y * np.log(outputs)))
 
     def grad_check(self, x, y, d=1e-6, err_threshold=0.01):
         """

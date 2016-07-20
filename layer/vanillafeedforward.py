@@ -16,43 +16,43 @@ class VanillaFeedForward(NeuralLayer):
         self.optimizer = optimizer
 
         # Stored values for back propagation and batch updates
-        self.x = None
-        self.z = None,
-        self.dL_dWxz = np.zeros_like(self.Wxz)
-        self.dL_dbz = np.zeros_like(self.bz)
+        self.batch_x = None
+        self.batch_z = None,
+        #self.batch_dL_dWxz = np.zeros_like(self.Wxz)
+        #self.batch_dL_dbz = np.zeros_like(self.bz)
 
-    def feed_forward(self, x):
+    def feed_forward(self, batch_x):
         """
         :param x: input to this neural layer, as either categorical or numerical numpy ndarray
         :return: output of this neural layer
         """
-        x = x.reshape(self.input_dim)
-        self.x = x
+        batch_x = np.array([x.reshape(self.input_dim) for x in batch_x])
+        self.batch_x = batch_x
         if self.categorical_input:
             # TODO: categorical input implementation
             print("categorical_input")
         else:
-            self.z = np.dot(self.Wxz, self.x)+self.bz
-            return self.act_fxn(self.z)
+            self.batch_z = np.array([np.dot(self.Wxz, x) for x in self.batch_x]) + self.bz
+            return self.act_fxn(self.batch_z)
 
-    def back_prop(self, delta):
+    def back_prop(self, deltas, update=True):
         """
         :param delta: dL_dy back-propagated to this layer. Note: Unconventional delta notation
+        'update': should I update during backprop?
         :return: delta_prev
         """
-        dL_dz = delta*self.act_prime(self.z)
-        self.dL_dWxz += np.dot(dL_dz, self.x.T)
-        self.dL_dbz += dL_dz
-        delta_prev = self.Wxz.T.dot(dL_dz)
-        return delta_prev
+        batch_size = len(deltas)
+        batch_dL_dz = deltas*self.act_prime(self.batch_z)
+        dL_dWxz, dL_dbz = 0, 0
+        for i in range(len(deltas)):
+            dL_dWxz += np.dot(batch_dL_dz[i], self.batch_x[i].T)
+            dL_dbz += batch_dL_dz[i]
+        batch_dL_dx = np.array([np.dot(self.Wxz.T, dL_dz) for dL_dz in batch_dL_dz])
+        if update:
+            self.update(dL_dWxz/batch_size, dL_dbz/batch_size)
+        return batch_dL_dx
 
-    def update(self, batch_size):
-        self.dL_dWxz /= float(batch_size)
-        self.dL_dbz /= float(batch_size)
-        delta_w, delta_b = self.optimizer.delta(self.dL_dWxz, self.dL_dbz)
+    def update(self, dL_dWxz, dL_dbz):
+        delta_w, delta_b = self.optimizer.delta(dL_dWxz, dL_dbz)
         self.Wxz -= delta_w
         self.bz -= delta_b
-
-    def clear_grads(self):
-        self.dL_dWxz = np.zeros_like(self.Wxz)
-        self.dL_dbz = np.zeros_like(self.bz)

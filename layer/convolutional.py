@@ -21,47 +21,45 @@ class Convolutional(NeuralLayer):
         self.optimizer = optimizer
 
         # Stored values for back propagation and batch updates
-        self.x = None
-        self.z = None
-        self.dL_dWxz = np.array([np.zeros_like(W) for W in self.Wxz])
-        self.dL_dbz = np.zeros(self.num_patterns)
+        self.batch_x = None
+        self.batch_z = None
 
-    def feed_forward(self, x):
+    def feed_forward(self, batch_x):
         """
         :param x: input to this neural layer, as either categorical or numerical numpy ndarray
         :return: output of this neural layer
         """
-        x = x.reshape(self.x_depth, self.x_height, self.x_width)
-        self.x = x
-        z = np.array([scisig.correlate(x, self.Wxz[k], mode="valid")
-                     .reshape(self.z_height, self.z_width) + self.bz[k]
-                      for k in range(self.num_patterns)])
-        self.z = z
-        return self.act_fxn(z)
+        batch_x = np.array([x.reshape(self.x_depth, self.x_height, self.x_width) for x in batch_x])
+        self.batch_x = batch_x
+        batch_z = np.array([[scisig.correlate(x, self.Wxz[k], mode="valid")
+                             .reshape(self.z_height, self.z_width) + self.bz[k]
+                             for k in range(self.num_patterns)] for x in batch_x])
+        self.batch_z = batch_z
+        return self.act_fxn(batch_z)
 
-    def back_prop(self, delta):
+    def back_prop(self, deltas, update=True):
         """
         :param delta: dL_dy back-propagated to this layer. Note: Unconventional delta notation
         :return: delta_prev
         """
-        delta = delta.reshape(self.z_depth, self.z_height, self.z_width)
-        dL_dz = delta*self.act_prime(self.z)
-        dL_dx = np.zeros_like(self.x)
-        x_flipped = self.x
-        for k in range(self.num_patterns):
-            self.dL_dWxz[k] \
-                += scisig.correlate(x_flipped, dL_dz[k].reshape(1, self.z_height, self.z_width), mode="valid")
-            self.dL_dbz[k] += np.sum(dL_dz[k])
-            dL_dx += scisig.fftconvolve(dL_dz[k].reshape(1, self.z_height, self.z_width), self.Wxz[k], mode="full")
-        return dL_dx
+        batch_size = len(deltas)
+        deltas = np.array([delta.reshape(self.z_depth, self.z_height, self.z_width) for delta in deltas])
+        batch_dL_dz = deltas*self.act_prime(self.batch_z)
+        batch_dL_dx = [0]*batch_size
+        dL_dWxz = np.array([np.zeros_like(W) for W in self.Wxz])
+        dL_dbz = np.zeros(self.num_patterns)
+        for i in range(batch_size):
+            x, dL_dz = self.batch_x[i], batch_dL_dz[i]
+            for k in range(self.num_patterns):
+                dL_dWxz[k] \
+                    += scisig.correlate(x, dL_dz[k].reshape(1, self.z_height, self.z_width), mode="valid")
+                dL_dbz[k] += np.sum(dL_dz[k])
+                batch_dL_dx[i] += scisig.fftconvolve(dL_dz[k].reshape(1, self.z_height, self.z_width), self.Wxz[k], mode="full")
+        if update:
+            self.update(dL_dWxz/batch_size, dL_dbz/batch_size)
+        return batch_dL_dx
 
-    def update(self, batch_size):
-        self.dL_dWxz /= float(batch_size)
-        self.dL_dbz /= float(batch_size)
-        delta_w, delta_b = self.optimizer.delta(self.dL_dWxz, self.dL_dbz)
+    def update(self, dL_dWxz, dL_dbz):
+        delta_w, delta_b = self.optimizer.delta(dL_dWxz, dL_dbz)
         self.Wxz -= delta_w
         self.bz -= delta_b
-
-    def clear_grads(self):
-        self.dL_dWxz = np.array([np.zeros_like(W) for W in self.Wxz])
-        self.dL_dbz = np.zeros(self.num_patterns)

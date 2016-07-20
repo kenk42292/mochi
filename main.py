@@ -18,7 +18,7 @@ layers = [
                          optimizer=optimizer.RMSProp(0.01),
                          activation=(utils.softplus, utils.softplus_prime)),
     layer.MaxPool(input_dim=[64, 10, 10], pool_dim=[1, 2, 2]),
-    layer.VanillaFeedForward([64 * 5 * 5, 1], [1000, 1],
+    layer.VanillaFeedForward([64*5*5, 1], [1000, 1],
                              optimizer=optimizer.RMSProp(0.005),
                              activation=(utils.softplus, utils.softplus_prime)),
     layer.VanillaFeedForward([1000, 1], [10, 1],
@@ -38,7 +38,7 @@ training_data, validation_data, test_data = mnist_loader.load_data_wrapper()
 np.random.shuffle(training_data)
 np.random.shuffle(validation_data)
 
-neural_net.train(training_data, validation_data, niter=20000, batch_size=50)
+neural_net.train(training_data, validation_data, niter=2000, batch_size=50)
 
 # neural_net.grad_check(training_data[0][0], training_data[0][1])
 
