@@ -7,7 +7,7 @@ from neurallayer import NeuralLayer
 
 class Convolutional(NeuralLayer):
     def __init__(self, input_dim, num_patterns, filter_dim, optimizer, activation=(utils.softplus, utils.softplus_prime)):
-        print("instantiating Convolutional2")
+        print("instantiating Convolutional")
         self.num_patterns = num_patterns
         self.x_depth, self.x_height, self.x_width = input_dim[0], input_dim[1], input_dim[2]
         self.w_depth, self.w_height, self.w_width = filter_dim[0], filter_dim[1], filter_dim[2]
@@ -51,10 +51,9 @@ class Convolutional(NeuralLayer):
         for i in range(batch_size):
             x, dL_dz = self.batch_x[i], batch_dL_dz[i]
             for k in range(self.num_patterns):
-                dL_dWxz[k] \
-                    += scisig.correlate(x, dL_dz[k].reshape(1, self.z_height, self.z_width), mode="valid")
-                dL_dbz[k] += np.sum(dL_dz[k])
+                dL_dWxz[k] += scisig.correlate(x, dL_dz[k].reshape(1, self.z_height, self.z_width), mode="valid")
                 batch_dL_dx[i] += scisig.fftconvolve(dL_dz[k].reshape(1, self.z_height, self.z_width), self.Wxz[k], mode="full")
+            dL_dbz += np.sum(dL_dz, axis=(1,2))
         if update:
             self.update(dL_dWxz/batch_size, dL_dbz/batch_size)
         return batch_dL_dx

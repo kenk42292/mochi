@@ -14,12 +14,13 @@ class NeuralNet(object):
         iter = 0
         t = time.time()
         while iter < niter:
+
+            """ BATCH ASSIGNMENT """
             batch = [training_data[i] for i in np.random.choice(range(len(training_data)), size=batch_size, replace=False)]
             batch_x = np.array([sample[0] for sample in batch])
             batch_y = np.array([sample[1] for sample in batch])
-            activations = self.forward_pass(batch_x)
-            deltas = np.array([utils.softmax(activation) for activation in activations]) - batch_y
-            self.backward_pass(deltas, update=True)
+
+            """ TRAINING EVALUATION """
             if not (iter + 1) % 20:
                 print("######################################################################################")
                 print("iter: %d" % iter)
@@ -29,6 +30,18 @@ class NeuralNet(object):
                 with open(self.layers_file, "wb") as handle:
                     pickle.dump(self.layers, handle)
                 t = time.time()
+
+            """ TRAINING """
+            activations = self.forward_pass(batch_x)
+            deltas = np.array([utils.softmax(activation) for activation in activations]) - batch_y
+            self.backward_pass(deltas, update=True)
+
+            """ LEARNING RATE ADJUSTMENTS """
+            if not (iter + 1) % 500:
+                for layer in self.layers:
+                    if hasattr(layer, "optimizer") and hasattr(layer.optimizer, "eta"):
+                        layer.optimizer.eta /= 2.0
+
             iter += 1
         val_batch_x = np.array([sample[0] for sample in validation_data])
         val_batch_y = np.array([sample[1] for sample in validation_data])
@@ -70,9 +83,7 @@ class NeuralNet(object):
         :param err_threshold: tolerance of error in gradient
         :return:
         """
-        for layer in self.layers:
-            layer.clear_grads()
-        activation = self.forward_pass(x)
+        activation = self.forward_pass([x])
         delta = utils.softmax(activation) - y
         self.backward_pass(delta)
 
