@@ -3,8 +3,8 @@ import utils
 import time
 import cPickle as pickle
 
-class NeuralNet(object):
 
+class NeuralNet(object):
     def __init__(self, layers, layers_file):
         self.layers = layers
         self.num_layers = len(layers)
@@ -16,12 +16,13 @@ class NeuralNet(object):
         while iter < niter:
 
             """ BATCH ASSIGNMENT """
-            batch = [training_data[i] for i in np.random.choice(range(len(training_data)), size=batch_size, replace=False)]
+            batch = [training_data[i] for i in
+                     np.random.choice(range(len(training_data)), size=batch_size, replace=False)]
             batch_x = np.array([sample[0] for sample in batch])
             batch_y = np.array([sample[1] for sample in batch])
 
             """ TRAINING EVALUATION """
-            if not (iter + 1) % 20:
+            if not (iter + 1) % 100:
                 print("######################################################################################")
                 print("iter: %d" % iter)
                 print("time elased: " + str(time.time() - t))
@@ -37,7 +38,7 @@ class NeuralNet(object):
             self.backward_pass(deltas, update=True)
 
             """ LEARNING RATE ADJUSTMENTS """
-            if not (iter + 1) % 500:
+            if not (iter + 1) % 1000:
                 for layer in self.layers:
                     if hasattr(layer, "optimizer") and hasattr(layer.optimizer, "eta"):
                         layer.optimizer.eta /= 2.0
@@ -45,7 +46,7 @@ class NeuralNet(object):
             iter += 1
         val_batch_x = np.array([sample[0] for sample in validation_data])
         val_batch_y = np.array([sample[1] for sample in validation_data])
-        print("validation rate: %0.17f" % self.validate(val_batch_x, val_batch_y))
+        print("validation rate: %0.17f" % (self.validate(val_batch_x, val_batch_y, 100)))
         return True
 
     def forward_pass(self, activations):
@@ -61,13 +62,24 @@ class NeuralNet(object):
         activations = self.forward_pass(batch_x)
         return np.array([max(range(len(activation)), key=lambda i: activation[i]) for activation in activations])
 
-    def validate(self, batch_x, batch_y):
+    def validate(self, batch_x, batch_y, forced_batch_size=False):
+        if forced_batch_size:
+            #print("FORCED BATCH SIZE!!")
+            total = 0.0
+            num_batches = len(batch_x) // forced_batch_size
+            #print(num_batches)
+            for i in range(num_batches):
+                partial_batch_rate = self.validate(batch_x[i * forced_batch_size: (i + 1) * forced_batch_size],
+                                                   batch_y[i * forced_batch_size:(i + 1) * forced_batch_size])
+                #print("partial batch rate: " + str(partial_batch_rate))
+                total += partial_batch_rate
+            return float(total) / num_batches
         predictions = self.predict(batch_x)
         num_correct = 0
         for prediction, y in zip(predictions, batch_y):
             if prediction == (y if (type(y) is np.int64) else utils.onehot2Int(y)):
                 num_correct += 1
-        return float(num_correct)/len(batch_x)
+        return float(num_correct) / len(batch_x)
 
     def loss(self, batch_x, batch_y):
         outputs = np.array([utils.softmax(activation) for activation in self.forward_pass(batch_x)])
@@ -101,10 +113,10 @@ class NeuralNet(object):
                 model_param[index_iter.multi_index] = original_value - d
                 grad_minus = self.loss(x, y)
                 model_param[index_iter.multi_index] = original_value
-                estimated_param_grad = ((grad_plus-grad_minus)/(2*d))
+                estimated_param_grad = ((grad_plus - grad_minus) / (2 * d))
                 model_param_grad = model_grad[index_iter.multi_index]
-                relative_error = np.abs(model_param_grad-estimated_param_grad)\
-                    / (np.abs(model_param_grad)+np.abs(estimated_param_grad))
+                relative_error = np.abs(model_param_grad - estimated_param_grad) \
+                                 / (np.abs(model_param_grad) + np.abs(estimated_param_grad))
                 if (relative_error > err_threshold) and (relative_error < 1.0):
                     print("Gradient Check Fails for %s[%s]" % (param_name, index_iter.multi_index))
                     print("grad_plus: %0.17f" % grad_plus)
