@@ -40,6 +40,14 @@ def relu_prime(z):
 def tanh(x):
     return np.tanh(x)
 
+
+def linear(z):
+    return z
+
+
+def const_one(z):
+    return 1
+
 def softmax(x):
     """Compute softmax values for each sets of scores in x."""
     e_x = np.exp(x - np.max(x))
