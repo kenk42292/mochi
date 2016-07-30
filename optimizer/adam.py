@@ -3,7 +3,7 @@ import numpy as np
 import math
 
 class Adam:
-    def __init__(self, eta=1e-8, beta1=0.9, beta2=0.999):
+    def __init__(self, eta, beta1=0.9, beta2=0.999):
         self.eta = eta
         self.mean_w_grad = 0.0
         self.mean_b_grad = 0.0
