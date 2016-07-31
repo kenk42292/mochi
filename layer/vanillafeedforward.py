@@ -7,8 +7,9 @@ from neurallayer import NeuralLayer
 class VanillaFeedForward(NeuralLayer):
     def __init__(self, input_dim, output_dim, optimizer, categorical_input=False,
                  activation=(utils.sigmoid, utils.sigmoid_prime)):
-        NeuralLayer.__init__(self, input_dim, output_dim, categorical_input)
         print("instantiating Vanilla Feed Forward")
+        self.input_dim, self.output_dim = input_dim, output_dim
+        self.categorical_input = categorical_input
         self.Wxz = np.random.randn(output_dim[0], input_dim[0])/np.sqrt(input_dim[0])
         self.bz = np.zeros(output_dim)
         self.act_fxn = activation[0]

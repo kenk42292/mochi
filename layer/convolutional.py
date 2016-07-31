@@ -13,7 +13,6 @@ class Convolutional(NeuralLayer):
         self.w_depth, self.w_height, self.w_width = filter_dim[0], filter_dim[1], filter_dim[2]
         self.z_depth, self.z_height, self.z_width \
             = self.num_patterns, self.x_height-self.w_height+1, self.x_width-self.w_width+1
-        NeuralLayer.__init__(self, input_dim, [self.z_depth, self.z_height, self.z_width])
         self.Wxz = np.random.randn(self.num_patterns, self.w_depth, self.w_height, self.w_width)
         self.bz = np.zeros(self.num_patterns)
         self.act_fxn = activation[0]
