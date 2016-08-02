@@ -3,26 +3,32 @@ import utils
 import time
 import cPickle as pickle
 
+from data_iter import RandBatchIter
 
-class NeuralNet(object):
+"""
+A feed-forward-only neural net. Within LAYERS, can take only feed-forward layers (No recurrent layers)
+However, unlike a recurrent net, supports mini-batch training.
+"""
+
+
+class NeuralNet:
     def __init__(self, layers, layers_file):
         self.layers = layers
         self.num_layers = len(layers)
         self.layers_file = layers_file
+        self.data_iter_type = RandBatchIter
 
     def train(self, training_data, validation_data, niter=100, batch_size=100):
         iter = 0
         t = time.time()
+        data_iter = self.data_iter_type(training_data, batch_size)
         while iter < niter:
 
             """ BATCH ASSIGNMENT """
-            batch = [training_data[i] for i in
-                     np.random.choice(range(len(training_data)), size=batch_size, replace=False)]
-            batch_x = np.array([sample[0] for sample in batch])
-            batch_y = np.array([sample[1] for sample in batch])
+            batch_x, batch_y = data_iter.next();
 
             """ TRAINING EVALUATION """
-            if not (iter + 1) % 100:
+            if not (iter + 1) % 1:
                 print("######################################################################################")
                 print("iter: %d" % iter)
                 print("time elased: " + str(time.time() - t))
@@ -33,12 +39,13 @@ class NeuralNet(object):
                 t = time.time()
 
             """ TRAINING """
+            print('---------------------------------')
             activations = self.forward_pass(batch_x)
             deltas = np.array([utils.softmax(activation) for activation in activations]) - batch_y
             self.backward_pass(deltas, update=True)
 
             """ LEARNING RATE ADJUSTMENTS """
-            if not (iter + 1) % 1000:
+            if not (iter + 1) % 2000:
                 for layer in self.layers:
                     if hasattr(layer, "optimizer") and hasattr(layer.optimizer, "eta"):
                         layer.optimizer.eta /= 2.0
