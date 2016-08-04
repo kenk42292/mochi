@@ -33,7 +33,7 @@ class VanillaFeedForward(NeuralLayer):
             # TODO: categorical input implementation
             print("categorical_input")
         else:
-            self.batch_z = np.array([np.dot(self.Wxz, x) for x in self.batch_x]) + self.bz
+            self.batch_z = np.array([np.dot(self.Wxz, x) + self.bz for x in self.batch_x])
             return self.act_fxn(self.batch_z)
 
     def back_prop(self, deltas, update=True):
