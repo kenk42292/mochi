@@ -78,6 +78,8 @@ class MaxPool(NeuralLayer):
             outputs[b] = delta_prev*max_binary_filter
         return outputs
 
+    def get_grads(self, deltas):
+        return 0, 0, self.back_prop(deltas)
 
 
 

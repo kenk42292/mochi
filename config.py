@@ -1,5 +1,5 @@
 
-layers_file = 'layers-adam-001-32-64.pkl'
+layers_file = 'layers-rmsprop-32-64-good.pkl'
 train_from_file = False
 
 

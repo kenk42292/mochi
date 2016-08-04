@@ -41,6 +41,12 @@ class Convolutional(NeuralLayer):
         :param delta: dL_dy back-propagated to this layer. Note: Unconventional delta notation
         :return: delta_prev
         """
+        avg_dL_dWxz, avg_dL_dbz, batch_dL_dx = self.get_grads(deltas)
+        if update:
+            self.update(avg_dL_dWxz, avg_dL_dbz)
+        return batch_dL_dx
+
+    def get_grads(self, deltas):
         batch_size = len(deltas)
         deltas = np.array([delta.reshape(self.z_depth, self.z_height, self.z_width) for delta in deltas])
         batch_dL_dz = deltas*self.act_prime(self.batch_z)
@@ -53,19 +59,17 @@ class Convolutional(NeuralLayer):
                 dL_dWxz[k] += scisig.correlate(x, dL_dz[k].reshape(1, self.z_height, self.z_width), mode="valid")
                 batch_dL_dx[i] += scisig.fftconvolve(dL_dz[k].reshape(1, self.z_height, self.z_width), self.Wxz[k], mode="full")
             dL_dbz += np.sum(dL_dz, axis=(1,2))
-        if update:
-            self.update(dL_dWxz/batch_size, dL_dbz/batch_size)
-        return batch_dL_dx
+        return dL_dWxz/batch_size, dL_dbz/batch_size, batch_dL_dx
 
     def update(self, dL_dWxz, dL_dbz):
         delta_w, delta_b = self.optimizer.delta(dL_dWxz, dL_dbz)
         self.Wxz -= delta_w
         self.bz -= delta_b
 
-        print("Resulting params in Conv: largest magnitudes are: (%f, %f) with sums of (%f, %f) and abs sums of (%f, %f)"
+        """print("Resulting params in Conv: largest magnitudes are: (%f, %f) with sums of (%f, %f) and abs sums of (%f, %f)"
               % (max([np.max(self.Wxz), np.min(self.Wxz)], key=abs),
                  max([np.max(self.bz), np.min(self.bz)], key=abs),
                  np.sum(self.Wxz),
                  np.sum(self.bz),
                  np.sum(np.abs(self.Wxz)),
-                 np.sum(np.abs(self.bz))))
+                 np.sum(np.abs(self.bz))))"""

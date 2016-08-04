@@ -42,6 +42,12 @@ class VanillaFeedForward(NeuralLayer):
         'update': should I update during backprop?
         :return: delta_prev
         """
+        avg_dL_dWxz, avg_dL_dbz, batch_dL_dx = self.get_grads(deltas)
+        if update:
+            self.update(avg_dL_dWxz, avg_dL_dbz)
+        return batch_dL_dx
+
+    def get_grads(self, deltas):
         batch_size = len(deltas)
         batch_dL_dz = deltas*self.act_prime(self.batch_z)
         dL_dWxz, dL_dbz = 0, 0
@@ -49,18 +55,16 @@ class VanillaFeedForward(NeuralLayer):
             dL_dWxz += np.dot(batch_dL_dz[i], self.batch_x[i].T)
             dL_dbz += batch_dL_dz[i]
         batch_dL_dx = np.array([np.dot(self.Wxz.T, dL_dz) for dL_dz in batch_dL_dz])
-        if update:
-            self.update(dL_dWxz/batch_size, dL_dbz/batch_size)
-        return batch_dL_dx
+        return dL_dWxz/batch_size, dL_dbz/batch_size, batch_dL_dx
 
     def update(self, dL_dWxz, dL_dbz):
         delta_w, delta_b = self.optimizer.delta(dL_dWxz, dL_dbz)
         self.Wxz -= delta_w
         self.bz -= delta_b
-        print("Resulting params in VFF: largest magnitudes are: (%f, %f) with sums of (%f, %f) and abs sums of (%f, %f)"
+        """print("Resulting params in VFF: largest magnitudes are: (%f, %f) with sums of (%f, %f) and abs sums of (%f, %f)"
               % (max([np.max(self.Wxz), np.min(self.Wxz)], key=abs),
                  max([np.max(self.bz), np.min(self.bz)], key=abs),
                  np.sum(self.Wxz),
                  np.sum(self.bz),
                  np.sum(np.abs(self.Wxz)),
-                 np.sum(np.abs(self.bz))))
+                 np.sum(np.abs(self.bz))))"""

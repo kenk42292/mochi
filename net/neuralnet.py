@@ -71,14 +71,11 @@ class NeuralNet:
 
     def validate(self, batch_x, batch_y, forced_batch_size=False):
         if forced_batch_size:
-            #print("FORCED BATCH SIZE!!")
             total = 0.0
             num_batches = len(batch_x) // forced_batch_size
-            #print(num_batches)
             for i in range(num_batches):
                 partial_batch_rate = self.validate(batch_x[i * forced_batch_size: (i + 1) * forced_batch_size],
                                                    batch_y[i * forced_batch_size:(i + 1) * forced_batch_size])
-                #print("partial batch rate: " + str(partial_batch_rate))
                 total += partial_batch_rate
             return float(total) / num_batches
         predictions = self.predict(batch_x)
@@ -92,7 +89,7 @@ class NeuralNet:
         outputs = np.array([utils.softmax(activation) for activation in self.forward_pass(batch_x)])
         return -float(np.sum(batch_y * np.log(outputs)))
 
-    def grad_check(self, x, y, d=1e-6, err_threshold=0.01):
+    def grad_check(self, x, y, d=1e-6, err_threshold=0.001):
         """
         Note: the grad_check CLEARS all gradients in each layer.
         Gradient check is only performed on first layer parameters.
@@ -102,25 +99,31 @@ class NeuralNet:
         :param err_threshold: tolerance of error in gradient
         :return:
         """
-        activation = self.forward_pass([x])
-        delta = utils.softmax(activation) - y
-        self.backward_pass(delta)
+        weight_grads, bias_grads = [], []
+        activations = self.forward_pass([x,])
+        deltas = utils.softmax(activations) - y
+        for layer in self.layers[::-1]:
+            dL_dWxz, dL_dbz, deltas = layer.get_grads(deltas)
+            weight_grads.insert(0, dL_dWxz)
+            bias_grads.insert(0, dL_dbz)
 
+        model_grads = {"dL_dWxz":weight_grads[0], "dL_dbz":bias_grads[0]}
         layer = self.layers[0]
         param_names = ["Wxz", "bz"]
         grad_names = ["dL_dWxz", "dL_dbz"]
         for param_name, grad_name in zip(param_names, grad_names):
             model_param = getattr(layer, param_name)
-            model_grad = getattr(layer, grad_name)
+            model_grad = model_grads[grad_name]
             index_iter = np.nditer(model_grad, flags=["multi_index"], op_flags=["readwrite"])
             while not index_iter.finished:
                 original_value = model_param[index_iter.multi_index]
                 model_param[index_iter.multi_index] = original_value + d
-                grad_plus = self.loss(x, y)
+                grad_plus = self.loss([x], [y])
                 model_param[index_iter.multi_index] = original_value - d
-                grad_minus = self.loss(x, y)
+                grad_minus = self.loss([x], [y])
                 model_param[index_iter.multi_index] = original_value
                 estimated_param_grad = ((grad_plus - grad_minus) / (2 * d))
+
                 model_param_grad = model_grad[index_iter.multi_index]
                 relative_error = np.abs(model_param_grad - estimated_param_grad) \
                                  / (np.abs(model_param_grad) + np.abs(estimated_param_grad))
@@ -136,5 +139,3 @@ class NeuralNet:
                     # return
                 index_iter.iternext()
             print("Gradient check for %s passed" % param_name)
-        for layer in self.layers:
-            layer.clear_grads()
