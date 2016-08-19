@@ -1,15 +1,13 @@
 import cPickle as pickle
 
-import numpy as np
-
-import mnist_loader
-import net.layer
+import net
 import utils
 from config import *
+from data import load_reddit, load_mnist, load_digits, load_chars
 from net import optimizer, layer
-import net
 
-layers = [
+"""
+layers1 = [
     layer.Convolutional(input_dim=[1, 28, 28], num_patterns=32, filter_dim=[1, 5, 5],
                         optimizer=optimizer.RMSProp(1e-2),
                         activation=(utils.softplus, utils.softplus_prime)),
@@ -23,20 +21,56 @@ layers = [
                              activation=(utils.softplus, utils.softplus_prime)),
     layer.VanillaFeedForward([1000, 1], [10, 1],
                              optimizer=optimizer.RMSProp(5e-3),
-                             activation=(utils.softplus, utils.softplus_prime))  # 13520
+                             activation=(utils.linear, utils.const_one))  # 13520
+]"""
+
+layers = [
+    layer.VanillaRecurrent(len_seq=20, len_elem_in=84, len_elem_out=100,
+                           optimizer=optimizer.Adagrad(5e-2),
+                           activation=(utils.sigmoid, utils.sigmoid_prime)),
+    layer.VanillaFeedForward([100, 1], [84, 1],
+                             optimizer=optimizer.Adagrad(5e-2),
+                             activation=(utils.linear, utils.const_one))
 ]
+"""
+layers3 = [
+    layer.VanillaFeedForward([784, 1], [300, 1],
+                             optimizer=optimizer.RMSProp(5e-3),
+                             activation=(utils.softplus, utils.softplus_prime)),
+    layer.VanillaFeedForward([300, 1], [10, 1],
+                             optimizer=optimizer.RMSProp(5e-3),
+                             activation=(utils.linear, utils.const_one))
+]
+"""
 
 if train_from_file:
     print("Training from File...")
     with open(layers_file, "rb") as handle:
         layers = pickle.load(handle)
 
-neural_net = net.FeedForwardNet(layers, layers_file)
-data_file = 'data/mnist.pkl.gz'
+# data_file = 'data/mnist.pkl.gz'
+# training_data, validation_data, test_data = load_mnist(data_path='data/datasets/mnist.pkl.gz')
+# feedforward_net = net.FeedForwardNet(layers, layers_file)
+# feedforward_net.train(training_data, niter=20000, batch_size=50)
 
-training_data, validation_data, test_data = mnist_loader.load_data_wrapper()
+"""result, domain_size, index_to_word, word_to_index = load_reddit(use_existing=True,
+                                                                existing_path="data/datasets/training_data.pickle",
+                                                                data_path="data/datasets/reddit_text.csv")"""
+result, domain_size, index_to_word, word_to_index = load_chars("data/datasets/shakespeare.txt")
+print(len(index_to_word))
 
-# neural_net.train(training_data, validation_data, niter=20000, batch_size=50)
+# data = load_digits()
+recurrent_net = net.RecurrentNet(layers, "dummy.pkl", len_seq=20, domain_size=len(index_to_word), index2word=index_to_word)
+recurrent_net.train(result, niter=500000, len_seq=20)
 
-for x, y in training_data[:10]:
-    neural_net.grad_check(x, y)
+
+
+
+
+
+
+
+# neural_net.validate(validation_data)
+
+# for x, y in training_data[:10]:
+#    neural_net.grad_check(x, y)

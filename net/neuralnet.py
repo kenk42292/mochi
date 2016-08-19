@@ -1,9 +1,9 @@
-import numpy as np
-import utils
-import time
 import cPickle as pickle
+import time
 
-from data_iter import RandBatchIter
+import numpy as np
+
+import utils
 
 """
 A feed-forward-only neural net. Within LAYERS, can take only feed-forward layers (No recurrent layers)
@@ -16,58 +16,33 @@ class NeuralNet:
         self.layers = layers
         self.num_layers = len(layers)
         self.layers_file = layers_file
-        self.data_iter_type = RandBatchIter
 
-    def train(self, training_data, validation_data, niter=100, batch_size=100):
-        iter = 0
-        t = time.time()
-        data_iter = self.data_iter_type(training_data, batch_size)
-        while iter < niter:
+    def train(self, training_data_iter, niter=100, batch_size=100):
+        print "not implemented"
 
-            """ BATCH ASSIGNMENT """
-            batch_x, batch_y = data_iter.next();
-
-            """ TRAINING EVALUATION """
-            if not (iter + 1) % 1:
-                print("######################################################################################")
-                print("iter: %d" % iter)
-                print("time elased: " + str(time.time() - t))
-                print("training loss: " + str(self.loss(batch_x, batch_y)))
-                print("training validation rate %0.17f" % self.validate(batch_x, batch_y))
-                with open(self.layers_file, "wb") as handle:
-                    pickle.dump(self.layers, handle)
-                t = time.time()
-
-            """ TRAINING """
-            print('---------------------------------')
-            activations = self.forward_pass(batch_x)
-            deltas = np.array([utils.softmax(activation) for activation in activations]) - batch_y
-            self.backward_pass(deltas, update=True)
-
-            """ LEARNING RATE ADJUSTMENTS """
-            if not (iter + 1) % 2000:
-                for layer in self.layers:
-                    if hasattr(layer, "optimizer") and hasattr(layer.optimizer, "eta"):
-                        layer.optimizer.eta /= 2.0
-
-            iter += 1
-        val_batch_x = np.array([sample[0] for sample in validation_data])
-        val_batch_y = np.array([sample[1] for sample in validation_data])
-        print("validation rate: %0.17f" % (self.validate(val_batch_x, val_batch_y, 100)))
-        return True
-
-    def forward_pass(self, activations):
+    def forward_pass_single(self, activation):
         for i in range(self.num_layers):
-            activations = self.layers[i].feed_forward(activations)
+            activation = self.layers[i].feed_forward_single(activation)
+        return activation
+
+    def forward_pass_batch(self, activations):
+        for i in range(self.num_layers):
+            activations = self.layers[i].feed_forward_batch(activations)
         return activations
+
 
     def backward_pass(self, deltas, update=True):
         for i in range(self.num_layers)[::-1]:
             deltas = self.layers[i].back_prop(deltas, update)
 
     def predict(self, batch_x):
-        activations = self.forward_pass(batch_x)
+        activations = self.forward_pass_batch(batch_x)
         return np.array([max(range(len(activation)), key=lambda i: activation[i]) for activation in activations])
+
+    def validation_set_val(self, validation_data):
+        val_batch_x = np.array([sample[0] for sample in validation_data])
+        val_batch_y = np.array([sample[1] for sample in validation_data])
+        print("validation rate: %0.17f" % (self.validate(val_batch_x, val_batch_y, 100)))
 
     def validate(self, batch_x, batch_y, forced_batch_size=False):
         if forced_batch_size:
@@ -86,7 +61,7 @@ class NeuralNet:
         return float(num_correct) / len(batch_x)
 
     def loss(self, batch_x, batch_y):
-        outputs = np.array([utils.softmax(activation) for activation in self.forward_pass(batch_x)])
+        outputs = np.array([utils.softmax(activation) for activation in self.forward_pass_batch(batch_x)])
         return -float(np.sum(batch_y * np.log(outputs)))
 
     def grad_check(self, x, y, d=1e-6, err_threshold=0.001):
@@ -100,7 +75,7 @@ class NeuralNet:
         :return:
         """
         weight_grads, bias_grads = [], []
-        activations = self.forward_pass([x,])
+        activations = self.forward_pass_batch([x, ])
         deltas = utils.softmax(activations) - y
         for layer in self.layers[::-1]:
             dL_dWxz, dL_dbz, deltas = layer.get_grads(deltas)

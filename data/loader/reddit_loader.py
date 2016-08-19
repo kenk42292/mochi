@@ -3,6 +3,7 @@ import pickle
 import csv
 import itertools
 import nltk
+import utils
 
 VOCAB_SIZE = 8000
 REDDIT_TEXT_CSV = 'datasets/reddit_text.csv'
@@ -53,4 +54,4 @@ def load_reddit(use_existing=True, data_path='datasets/reddit_text.csv', existin
         with open(existing_path, 'w') as f:
             pickle.dump([seq_all, index_to_word, word_to_index], f)
 
-    return np.array(seq_all), index_to_word, word_to_index
+    return seq_all, VOCAB_SIZE, index_to_word, word_to_index

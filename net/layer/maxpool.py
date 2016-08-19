@@ -14,12 +14,15 @@ class MaxPool(NeuralLayer):
         self.input_dim = input_dim
         self.output_dim = [input_dim[0]/pool_dim[0], input_dim[1]/pool_dim[1], input_dim[2]/pool_dim[2]]
 
-        # Stored values for back propagation and batch updates
+        # Stored values for back propagation and updates
         self.batch_max_binary_filter = None
 
-    def feed_forward(self, batch_x):
+    def feed_forward_single(self, x):
+        return self.feed_forward_batch(np.array([x]))[0]
+
+    def feed_forward_batch(self, batch_x):
         """
-        :param x: input to this neural layer, as either categorical or numerical numpy ndarray
+        :param x: input to this neural layer
         :return: output of this neural layer
         """
         batch_size = len(batch_x)

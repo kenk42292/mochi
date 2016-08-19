@@ -6,7 +6,7 @@ class SoftMax(NeuralLayer):
         NeuralLayer.__init__(self, input_dim, output_dim)
         print("instantiating SoftMax")
 
-    def feed_forward(self, input):
+    def feed_forward_batch(self, input):
         return
 
     def back_prop(self, delta):

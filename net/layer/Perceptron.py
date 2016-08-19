@@ -6,7 +6,7 @@ from vanillafeedforward import VanillaFeedForward
 
 
 class VanillaFeedForward(VanillaFeedForward):
-    def __init__(self, input_dim, output_dim, optimizer, categorical_input=False):
+    def __init__(self, input_dim, output_dim, optimizer):
         print("instantiating Perceptron")
         self.Wxz = np.random.randn(output_dim[0], input_dim[0]) / np.sqrt(input_dim[0])
         self.bz = np.zeros(output_dim)

@@ -5,36 +5,33 @@ from neurallayer import NeuralLayer
 
 
 class VanillaFeedForward(NeuralLayer):
-    def __init__(self, input_dim, output_dim, optimizer, categorical_input=False,
+    def __init__(self, input_dim, output_dim, optimizer,
                  activation=(utils.sigmoid, utils.sigmoid_prime)):
         print("instantiating Vanilla Feed Forward")
         self.input_dim, self.output_dim = input_dim, output_dim
-        self.categorical_input = categorical_input
         self.Wxz = np.random.randn(output_dim[0], input_dim[0])/np.sqrt(input_dim[0])
         self.bz = np.zeros(output_dim)
         self.act_fxn = activation[0]
         self.act_prime = activation[1]
         self.optimizer = optimizer
 
-        # Stored values for back propagation and batch updates
+        # Stored values for batch back propagation and batch updates
         self.batch_x = None
-        self.batch_z = None,
+        self.batch_z = None
         #self.batch_dL_dWxz = np.zeros_like(self.Wxz)
         #self.batch_dL_dbz = np.zeros_like(self.bz)
 
-    def feed_forward(self, batch_x):
+    def feed_forward_batch(self, batch_x):
         """
-        :param x: input to this neural layer, as either categorical or numerical numpy ndarray
+        :param x: input to this neural layer
         :return: output of this neural layer
         """
+
         batch_x = np.array([x.reshape(self.input_dim) for x in batch_x])
         self.batch_x = batch_x
-        if self.categorical_input:
-            # TODO: categorical input implementation
-            print("categorical_input")
-        else:
-            self.batch_z = np.array([np.dot(self.Wxz, x) + self.bz for x in self.batch_x])
-            return self.act_fxn(self.batch_z)
+        self.batch_z = np.array([np.dot(self.Wxz, x) + self.bz for x in self.batch_x])
+        # print("VANILLA FEEDFORWARD FEEDFORWARD OUTPUT dim: " + str(self.batch_z.shape))
+        return self.act_fxn(self.batch_z)
 
     def back_prop(self, deltas, update=True):
         """

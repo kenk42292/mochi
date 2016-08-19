@@ -54,9 +54,9 @@ def softmax(x):
     return e_x / e_x.sum()
 
 
-def int2Onehot(j):
-    e = np.zeros((10, 1))
-    e[j] = 1.0
+def int2Onehot(j, v_size=10):
+    e = np.zeros((v_size, 1))
+    e[int(j)] = 1.0
     return e
 
 

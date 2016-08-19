@@ -23,9 +23,12 @@ class Convolutional(NeuralLayer):
         self.batch_x = None
         self.batch_z = None
 
-    def feed_forward(self, batch_x):
+    def feed_forward_single(self, x):
+        return self.feed_forward_batch(np.array([x]))[0]
+
+    def feed_forward_batch(self, batch_x):
         """
-        :param x: input to this neural layer, as either categorical or numerical numpy ndarray
+        :param x: input to this neural layer
         :return: output of this neural layer
         """
         batch_x = np.array([x.reshape(self.x_depth, self.x_height, self.x_width) for x in batch_x])
