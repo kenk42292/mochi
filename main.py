@@ -25,11 +25,11 @@ layers1 = [
 ]"""
 
 layers = [
-    layer.VanillaRecurrent(len_seq=20, len_elem_in=84, len_elem_out=100,
-                           optimizer=optimizer.Adagrad(5e-2),
+    layer.VanillaRecurrent(len_seq=5, len_elem_in=5, len_elem_out=50,
+                           optimizer=optimizer.Adagrad(1e-1),
                            activation=(utils.sigmoid, utils.sigmoid_prime)),
-    layer.VanillaFeedForward([100, 1], [84, 1],
-                             optimizer=optimizer.Adagrad(5e-2),
+    layer.VanillaFeedForward([50, 1], [5, 1],
+                             optimizer=optimizer.Adagrad(1e-1),
                              activation=(utils.linear, utils.const_one))
 ]
 """
@@ -56,15 +56,13 @@ if train_from_file:
 """result, domain_size, index_to_word, word_to_index = load_reddit(use_existing=True,
                                                                 existing_path="data/datasets/training_data.pickle",
                                                                 data_path="data/datasets/reddit_text.csv")"""
-result, domain_size, index_to_word, word_to_index = load_chars("data/datasets/shakespeare.txt")
-print(len(index_to_word))
 
-# data = load_digits()
-recurrent_net = net.RecurrentNet(layers, "dummy.pkl", len_seq=20, domain_size=len(index_to_word), index2word=index_to_word)
-recurrent_net.train(result, niter=500000, len_seq=20)
+#shakespear_char_data, domain_size, index_to_word, word_to_index = load_chars("data/datasets/shakespeare.txt")
+#print(len(index_to_word))
 
-
-
+digits_data, domain_size, index_to_digit, digit_to_index = load_digits()
+recurrent_net = net.RecurrentNet(layers, "dummy.pkl", len_seq=5, domain_size=domain_size, index2word=index_to_digit)
+# recurrent_net.train(digits_data, niter=500000, len_seq=5)
 
 
 

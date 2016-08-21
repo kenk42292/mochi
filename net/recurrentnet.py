@@ -22,6 +22,9 @@ class RecurrentNet(NeuralNet):
         NeuralNet.__init__(self, layers, layers_file)
         self.len_seq = len_seq
         self.len_elem = domain_size
+        print('$$$$$$$$$$$$$$$$$')
+        print(self.len_seq)
+        print(self.len_elem)
         self.index2Word = index2word
 
     def train(self, training_data, niter=100, len_seq=20):
@@ -32,9 +35,7 @@ class RecurrentNet(NeuralNet):
         while iter < niter:
 
             """ SEQUENCE ASSIGNMENT """
-            seq_x, seq_y = training_data_iter.next();
-            # print([utils.onehot2Int(x) for x in seq_x])
-            # print([utils.onehot2Int(y) for y in seq_y])
+            seq_x, seq_y = training_data_iter.next()
             """ TRAINING EVALUATION """
             if not (iter + 1) % 1000 or not iter:
                 print("######################################################################################")
@@ -76,4 +77,4 @@ class RecurrentNet(NeuralNet):
             output = utils.int2Onehot(np.random.choice(range(self.len_elem), p=p.ravel()), self.len_elem)
             result[t+1] = output
         # print([self.index2Word[utils.onehot2Int(label)] for label in result])
-        print(" ".join([self.index2Word[utils.onehot2Int(label)] for label in result]))
+        print(" ".join([str(utils.onehot2Int(label)) for label in result]))

@@ -43,8 +43,8 @@ class VanillaRecurrent(NeuralLayer):
         for t in np.arange(self.len_seq):
             self.seq_z[t] = np.dot(self.Wxz, seq_x[t]) + np.dot(self.Wyz, seq_outputs[t - 1]) + self.bz
             seq_outputs[t] = self.act_fxn(self.seq_z[t])
-        self.seq_y = seq_outputs
-        return seq_outputs[:-1]
+        self.seq_y = seq_outputs[:-1]
+        return self.seq_y
 
     def back_prop(self, deltas, update=True):
         avg_dL_dWxz, avg_dL_dWyz, avg_dL_dbz, batch_dL_dx = self.get_grads(deltas)
