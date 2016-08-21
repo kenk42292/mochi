@@ -11,8 +11,9 @@ class MaxPool(NeuralLayer):
     def __init__(self, input_dim, pool_dim):
         print("instantiating Max Pool")
         self.pool_dim = pool_dim
-        self.input_dim = input_dim
-        self.output_dim = [input_dim[0]/pool_dim[0], input_dim[1]/pool_dim[1], input_dim[2]/pool_dim[2]]
+        output_dim = [input_dim[0]/pool_dim[0], input_dim[1]/pool_dim[1], input_dim[2]/pool_dim[2]]
+
+        NeuralLayer.__init__(self, input_dim, output_dim)
 
         # Stored values for back propagation and updates
         self.batch_max_binary_filter = None

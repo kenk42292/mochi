@@ -9,18 +9,15 @@ Implements a vanilla recurrent neural net.
 
 
 class VanillaRecurrent(NeuralLayer):
-    def __init__(self, len_seq, len_elem_in,
-                 len_elem_out, optimizer,
+    def __init__(self, input_dim, output_dim, optimizer,
                  activation=(utils.sigmoid, utils.sigmoid_prime)):
         print("Instatiating Vanilla Recurrent")
 
-        self.len_seq = len_seq
-        self.len_elem_in = len_elem_in
-        self.len_elem_out = len_elem_out
+        NeuralLayer.__init__(self, input_dim, output_dim)
 
-        self.Wxz = np.random.randn(self.len_elem_out, self.len_elem_in)
-        self.Wyz = np.random.randn(self.len_elem_out, self.len_elem_out)
-        self.bz = np.zeros((self.len_elem_out, 1))
+        self.Wxz = np.random.randn(output_dim[0], input_dim[0])
+        self.Wyz = np.random.randn(output_dim[0], output_dim[0])
+        self.bz = np.zeros((output_dim[0], 1))
 
         self.act_fxn = activation[0]
         self.act_prime = activation[1]
@@ -29,7 +26,7 @@ class VanillaRecurrent(NeuralLayer):
 
         # Stored values for single samples: This way, can preserve state for next single sample
         # A convenience for testing (generating sentences from a single word)
-        self.y = np.zeros((self.len_elem_out, 1))
+        self.y = np.zeros((output_dim[0], 1))
 
         # Stored values for batch back propagation through time and batch updates
         self.seq_x = None
@@ -37,10 +34,11 @@ class VanillaRecurrent(NeuralLayer):
         self.seq_y = None
 
     def feed_forward_batch(self, seq_x):
+        len_seq = len(seq_x)
         self.seq_x = seq_x
-        self.seq_z = np.zeros((self.len_seq, self.len_elem_out, 1))
-        seq_outputs = np.zeros((self.len_seq + 1, self.len_elem_out, 1))
-        for t in np.arange(self.len_seq):
+        self.seq_z = np.zeros((len_seq, self.output_dim[0], 1))
+        seq_outputs = np.zeros((len_seq + 1, self.output_dim[0], 1))
+        for t in np.arange(len_seq):
             self.seq_z[t] = np.dot(self.Wxz, seq_x[t]) + np.dot(self.Wyz, seq_outputs[t - 1]) + self.bz
             seq_outputs[t] = self.act_fxn(self.seq_z[t])
         self.seq_y = seq_outputs[:-1]
@@ -53,16 +51,17 @@ class VanillaRecurrent(NeuralLayer):
         return batch_dL_dx
 
     def get_grads(self, deltas):
-        dL_dz = np.zeros((self.len_elem_out, 1))
+        len_seq = len(deltas)
+        dL_dz = np.zeros((self.output_dim[0], 1))
         dL_dWxz, dL_dWyz, dL_dbz, dL_dx = 0, 0, 0, 0
-        for t in range(self.len_seq)[::-1]:
+        for t in range(len_seq)[::-1]:
             Delta = deltas[t] + np.dot(self.Wyz.T, dL_dz)
             dL_dz = Delta * self.act_prime(self.seq_z[t])
             dL_dWxz += np.dot(dL_dz, self.seq_x[t].T)
             dL_dWyz += np.dot(dL_dz, self.seq_y[t - 1].T)
             dL_dbz += dL_dz
             dL_dx += np.dot(self.Wxz.T, dL_dz)
-        return dL_dWxz / self.len_seq, dL_dWyz / self.len_seq, dL_dbz / self.len_seq, dL_dx / self.len_seq
+        return dL_dWxz / len_seq, dL_dWyz / len_seq, dL_dbz / len_seq, dL_dx / len_seq
 
     def update(self, dL_dWxz, dL_dWyz, dL_dbz):
         delta_wxz, delta_wyz, delta_b = self.optimizer.delta(dL_dWxz, dL_dWyz, dL_dbz)

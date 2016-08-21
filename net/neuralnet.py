@@ -16,14 +16,11 @@ class NeuralNet:
         self.layers = layers
         self.num_layers = len(layers)
         self.layers_file = layers_file
+        self.input_dim = layers[0].input_dim
+        self.output_dim = layers[-1].output_dim
 
     def train(self, training_data_iter, niter=100, batch_size=100):
         print "not implemented"
-
-    def forward_pass_single(self, activation):
-        for i in range(self.num_layers):
-            activation = self.layers[i].feed_forward_single(activation)
-        return activation
 
     def forward_pass_batch(self, activations):
         for i in range(self.num_layers):

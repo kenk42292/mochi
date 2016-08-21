@@ -8,11 +8,15 @@ from neurallayer import NeuralLayer
 class Convolutional(NeuralLayer):
     def __init__(self, input_dim, num_patterns, filter_dim, optimizer, activation=(utils.softplus, utils.softplus_prime)):
         print("instantiating Convolutional")
+
         self.num_patterns = num_patterns
         self.x_depth, self.x_height, self.x_width = input_dim[0], input_dim[1], input_dim[2]
         self.w_depth, self.w_height, self.w_width = filter_dim[0], filter_dim[1], filter_dim[2]
         self.z_depth, self.z_height, self.z_width \
             = self.num_patterns, self.x_height-self.w_height+1, self.x_width-self.w_width+1
+
+        NeuralLayer.__init__(self, input_dim, [self.z_depth, self.z_height, self.z_width])
+
         self.Wxz = np.random.randn(self.num_patterns, self.w_depth, self.w_height, self.w_width)
         self.bz = np.zeros(self.num_patterns)
         self.act_fxn = activation[0]

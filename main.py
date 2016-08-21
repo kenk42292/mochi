@@ -6,42 +6,42 @@ from config import *
 from data import load_reddit, load_mnist, load_digits, load_chars
 from net import optimizer, layer
 
-"""
-layers1 = [
-    layer.Convolutional(input_dim=[1, 28, 28], num_patterns=32, filter_dim=[1, 5, 5],
-                        optimizer=optimizer.RMSProp(1e-2),
-                        activation=(utils.softplus, utils.softplus_prime)),
-    layer.MaxPool(input_dim=[32, 24, 24], pool_dim=[1, 2, 2]),
-    layer.Convolutional(input_dim=[32, 12, 12], num_patterns=64, filter_dim=[32, 3, 3],
-                        optimizer=optimizer.RMSProp(1e-2),
-                        activation=(utils.softplus, utils.softplus_prime)),
-    layer.MaxPool(input_dim=[64, 10, 10], pool_dim=[1, 2, 2]),
-    layer.VanillaFeedForward([64 * 5 * 5, 1], [1000, 1],
-                             optimizer=optimizer.RMSProp(5e-3),
-                             activation=(utils.softplus, utils.softplus_prime)),
-    layer.VanillaFeedForward([1000, 1], [10, 1],
-                             optimizer=optimizer.RMSProp(5e-3),
-                             activation=(utils.linear, utils.const_one))  # 13520
-]"""
+
+# layers1 = [
+#     layer.Convolutional(input_dim=[1, 28, 28], num_patterns=32, filter_dim=[1, 5, 5],
+#                         optimizer=optimizer.RMSProp(1e-2),
+#                         activation=(utils.softplus, utils.softplus_prime)),
+#     layer.MaxPool(input_dim=[32, 24, 24], pool_dim=[1, 2, 2]),
+#     layer.Convolutional(input_dim=[32, 12, 12], num_patterns=64, filter_dim=[32, 3, 3],
+#                         optimizer=optimizer.RMSProp(1e-2),
+#                         activation=(utils.softplus, utils.softplus_prime)),
+#     layer.MaxPool(input_dim=[64, 10, 10], pool_dim=[1, 2, 2]),
+#     layer.VanillaFeedForward([64 * 5 * 5, 1], [1000, 1],
+#                              optimizer=optimizer.RMSProp(5e-3),
+#                              activation=(utils.softplus, utils.softplus_prime)),
+#     layer.VanillaFeedForward([1000, 1], [10, 1],
+#                              optimizer=optimizer.RMSProp(5e-3),
+#                              activation=(utils.linear, utils.const_one))  # 13520
+# ]
 
 layers = [
-    layer.VanillaRecurrent(len_seq=5, len_elem_in=5, len_elem_out=50,
+    layer.VanillaRecurrent([5, 1], [50, 1],
                            optimizer=optimizer.Adagrad(1e-1),
                            activation=(utils.sigmoid, utils.sigmoid_prime)),
     layer.VanillaFeedForward([50, 1], [5, 1],
                              optimizer=optimizer.Adagrad(1e-1),
                              activation=(utils.linear, utils.const_one))
 ]
-"""
-layers3 = [
-    layer.VanillaFeedForward([784, 1], [300, 1],
-                             optimizer=optimizer.RMSProp(5e-3),
-                             activation=(utils.softplus, utils.softplus_prime)),
-    layer.VanillaFeedForward([300, 1], [10, 1],
-                             optimizer=optimizer.RMSProp(5e-3),
-                             activation=(utils.linear, utils.const_one))
-]
-"""
+
+# layers = [
+#     layer.VanillaFeedForward([784, 1], [300, 1],
+#                              optimizer=optimizer.RMSProp(5e-3),
+#                              activation=(utils.softplus, utils.softplus_prime)),
+#     layer.VanillaFeedForward([300, 1], [10, 1],
+#                              optimizer=optimizer.RMSProp(5e-3),
+#                              activation=(utils.linear, utils.const_one))
+# ]
+
 
 if train_from_file:
     print("Training from File...")
@@ -60,9 +60,10 @@ if train_from_file:
 #shakespear_char_data, domain_size, index_to_word, word_to_index = load_chars("data/datasets/shakespeare.txt")
 #print(len(index_to_word))
 
+
 digits_data, domain_size, index_to_digit, digit_to_index = load_digits()
-recurrent_net = net.RecurrentNet(layers, "dummy.pkl", len_seq=5, domain_size=domain_size, index2word=index_to_digit)
-# recurrent_net.train(digits_data, niter=500000, len_seq=5)
+recurrent_net = net.RecurrentNet(layers, "dummy.pkl")
+recurrent_net.train(digits_data, index_to_digit, niter=500000, len_seq=5)
 
 
 

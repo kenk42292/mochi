@@ -8,6 +8,9 @@ class VanillaFeedForward(NeuralLayer):
     def __init__(self, input_dim, output_dim, optimizer,
                  activation=(utils.sigmoid, utils.sigmoid_prime)):
         print("instantiating Vanilla Feed Forward")
+
+        NeuralLayer.__init__(self, input_dim, output_dim)
+
         self.input_dim, self.output_dim = input_dim, output_dim
         self.Wxz = np.random.randn(output_dim[0], input_dim[0])/np.sqrt(input_dim[0])
         self.bz = np.zeros(output_dim)
