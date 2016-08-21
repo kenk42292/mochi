@@ -30,7 +30,7 @@ class RecurrentNet(NeuralNet):
             """ SEQUENCE ASSIGNMENT """
             seq_x, seq_y = training_data_iter.next()
             """ TRAINING EVALUATION """
-            if not (iter + 1) % 1000 or not iter:
+            if not (iter + 1) % 100 or not iter:
                 print("######################################################################################")
                 print("iter: %d" % iter)
                 print("time elased: " + str(time.time() - t))
@@ -59,15 +59,13 @@ class RecurrentNet(NeuralNet):
     it to the user for them to evaluate it.
     """
 
-    def validate(self, index2word):
-        len_result = 200
+    def validate(self, index2word, len_result=200):
         x = utils.int2Onehot(np.random.randint(0, self.len_elem), self.len_elem)
-        result = np.zeros((len_result, self.len_elem, 1))
-        result[0] = x
-        for t in range(len_result-1):
-            output_seq = self.forward_pass_batch(result[-20:])
-            p = utils.softmax(output_seq[t if t<5 else -1])
+        result = [x]
+        for _ in range(len_result):
+            output_seq = self.forward_pass_batch(np.array(result))
+            p = utils.softmax(output_seq[-1])
             output = utils.int2Onehot(np.random.choice(range(self.len_elem), p=p.ravel()), self.len_elem)
-            result[t+1] = output
-        # print([self.index2word[utils.onehot2Int(label)] for label in result])
-        print(" ".join([str(utils.onehot2Int(label)) for label in result]))
+            result.append(output)
+        print(" ".join([index2word[utils.onehot2Int(label)] for label in result]))
+        # print(" ".join([str(utils.onehot2Int(label)) for label in result]))

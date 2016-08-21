@@ -63,8 +63,8 @@ class VanillaRecurrent(NeuralLayer):
             dL_dx += np.dot(self.Wxz.T, dL_dz)
         return dL_dWxz / len_seq, dL_dWyz / len_seq, dL_dbz / len_seq, dL_dx / len_seq
 
-    def update(self, dL_dWxz, dL_dWyz, dL_dbz):
+    def update(self, dL_dWxz, dL_dWyz, dL_dbz, grad_clip=5.0):
         delta_wxz, delta_wyz, delta_b = self.optimizer.delta(dL_dWxz, dL_dWyz, dL_dbz)
-        self.Wxz -= delta_wxz
-        self.Wyz -= delta_wyz
-        self.bz -= delta_b
+        self.Wxz -= np.clip(delta_wxz, -grad_clip, grad_clip)
+        self.Wyz -= np.clip(delta_wyz, -grad_clip, grad_clip)
+        self.bz -= np.clip(delta_b, -grad_clip, grad_clip)

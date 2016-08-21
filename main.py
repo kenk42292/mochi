@@ -24,14 +24,6 @@ from net import optimizer, layer
 #                              activation=(utils.linear, utils.const_one))  # 13520
 # ]
 
-layers = [
-    layer.VanillaRecurrent([5, 1], [50, 1],
-                           optimizer=optimizer.Adagrad(1e-1),
-                           activation=(utils.sigmoid, utils.sigmoid_prime)),
-    layer.VanillaFeedForward([50, 1], [5, 1],
-                             optimizer=optimizer.Adagrad(1e-1),
-                             activation=(utils.linear, utils.const_one))
-]
 
 # layers = [
 #     layer.VanillaFeedForward([784, 1], [300, 1],
@@ -57,13 +49,24 @@ if train_from_file:
                                                                 existing_path="data/datasets/training_data.pickle",
                                                                 data_path="data/datasets/reddit_text.csv")"""
 
-#shakespear_char_data, domain_size, index_to_word, word_to_index = load_chars("data/datasets/shakespeare.txt")
-#print(len(index_to_word))
+shakespeare_char_data, domain_size, index_to_word, word_to_index = load_chars("data/datasets/shakespeare.txt")
 
+layers = [
+    layer.VanillaRecurrent([domain_size, 1], [100, 1],
+                           optimizer=optimizer.Adagrad(1e-1),
+                           activation=(utils.sigmoid, utils.sigmoid_prime)),
+    layer.VanillaFeedForward([100, 1], [domain_size, 1],
+                             optimizer=optimizer.Adagrad(1e-1),
+                             activation=(utils.linear, utils.const_one))
+]
 
-digits_data, domain_size, index_to_digit, digit_to_index = load_digits()
 recurrent_net = net.RecurrentNet(layers, "dummy.pkl")
-recurrent_net.train(digits_data, index_to_digit, niter=500000, len_seq=5)
+recurrent_net.train(shakespeare_char_data, index_to_word, niter=50000, len_seq=25)
+
+
+# digits_data, domain_size, index_to_digit, digit_to_index = load_digits()
+# recurrent_net = net.RecurrentNet(layers, "dummy.pkl")
+# recurrent_net.train(digits_data, index_to_digit, niter=500000, len_seq=10)
 
 
 
