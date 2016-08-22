@@ -52,15 +52,15 @@ class VanillaRecurrent(NeuralLayer):
 
     def get_grads(self, deltas):
         len_seq = len(deltas)
-        dL_dz = np.zeros((self.output_dim[0], 1))
+        Delta = deltas[-1]
         dL_dWxz, dL_dWyz, dL_dbz, dL_dx = 0, 0, 0, 0
         for t in range(len_seq)[::-1]:
-            Delta = deltas[t] + np.dot(self.Wyz.T, dL_dz)
             dL_dz = Delta * self.act_prime(self.seq_z[t])
             dL_dWxz += np.dot(dL_dz, self.seq_x[t].T)
             dL_dWyz += np.dot(dL_dz, self.seq_y[t - 1].T)
             dL_dbz += dL_dz
             dL_dx += np.dot(self.Wxz.T, dL_dz)
+            Delta = deltas[t-1] + np.dot(self.Wyz.T, dL_dz)
         return dL_dWxz / len_seq, dL_dWyz / len_seq, dL_dbz / len_seq, dL_dx / len_seq
 
     def update(self, dL_dWxz, dL_dWyz, dL_dbz, grad_clip=5.0):

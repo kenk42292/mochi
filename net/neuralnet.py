@@ -72,8 +72,8 @@ class NeuralNet:
         :return:
         """
         weight_grads, bias_grads = [], []
-        activations = self.forward_pass_batch([x, ])
-        deltas = utils.softmax(activations) - y
+        activations = self.forward_pass_batch([x])
+        deltas = utils.softmax(activations)[0] - y
         for layer in self.layers[::-1]:
             dL_dWxz, dL_dbz, deltas = layer.get_grads(deltas)
             weight_grads.insert(0, dL_dWxz)

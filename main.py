@@ -45,14 +45,14 @@ if train_from_file:
 # feedforward_net = net.FeedForwardNet(layers, layers_file)
 # feedforward_net.train(training_data, niter=20000, batch_size=50)
 
-"""result, domain_size, index_to_word, word_to_index = load_reddit(use_existing=True,
-                                                                existing_path="data/datasets/training_data.pickle",
-                                                                data_path="data/datasets/reddit_text.csv")"""
+# result, domain_size, index_to_word, word_to_index = load_reddit(use_existing=True,
+#                                                                 existing_path="data/datasets/training_data.pickle",
+#                                                                 data_path="data/datasets/reddit_text.csv")
 
 shakespeare_char_data, domain_size, index_to_word, word_to_index = load_chars("data/datasets/shakespeare.txt")
 
 layers = [
-    layer.VanillaRecurrent([domain_size, 1], [100, 1],
+    layer.VanillaFeedForward([domain_size, 1], [100, 1],
                            optimizer=optimizer.Adagrad(1e-1),
                            activation=(utils.sigmoid, utils.sigmoid_prime)),
     layer.VanillaFeedForward([100, 1], [domain_size, 1],
