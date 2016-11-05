@@ -1,0 +1,147 @@
+
+<mochi-config>
+    <data>
+        <attribute-type>categorical</attribute-type>
+    </data>
+
+    <net>
+        <input-dim>
+            <dim-size>1</dim-size>
+            <dim-size>28</dim-size>
+            <dim-size>28</dim-size>
+        </input-dim>
+        <output-dim>
+            <dim-size>10</dim-size>
+        </output-dim>
+        
+        <layer>
+            <type>convolutional</type>
+            <input-dim>
+                <dim-size>1</dim-size>
+                <dim-size>28</dim-size>
+                <dim-size>28</dim-size>
+            </input-dim>
+            <kernel-dim>
+                <dim-size>32</dim-size>
+                <dim-size>1</dim-size>
+                <dim-size>5</dim-size>
+                <dim-size>5</dim-size>
+            </kernel-size>
+            <output-dim>
+                <dim-size>32</dim-size>
+                <dim-size>24</dim-size>
+                <dim-size>24</dim-size>
+            </output-dim>
+            <optimizer>rmsprop</optimizer>
+        </layer>
+            
+        <layer>
+            <type>maxpool</type>
+            <input-dim>
+                <dim-size>32</dim-size>
+                <dim-size>24</dim-size>
+                <dim-size>24</dim-size>
+            </input-dim>
+            <pool-dim>
+                <dim-size>1</dim-size>
+                <dim-size>2</dim-size>
+                <dim-size>2</dim-size>
+            </pool-dim>
+            <output-dim>
+                <dim-size>32</dim-size>
+                <dim-size>12</dim-size>
+                <dim-size>12</dim-size>
+            </output-dim>
+        </layer>
+        
+        <layer>
+            <type>softplus</type>
+        </layer>
+        
+        <layer>
+            <type>convolutional</type>
+            <input-dim>
+                <dim-size>32</dim-size>
+                <dim-size>12</dim-size>
+                <dim-size>12</dim-size>
+            </input-dim>
+            <kernel-dim>
+                <dim-size>64</dim-size>
+                <dim-size>32</dim-size>
+                <dim-size>3</dim-size>
+                <dim-size>3</dim-size>
+            </kernel-size>
+            <output-dim>
+                <dim-size>64</dim-size>
+                <dim-size>10</dim-size>
+                <dim-size>10</dim-size>
+            </output-dim>
+            <optimizer>rmsprop</optimizer>
+        </layer>
+        
+        <layer>
+            <type>maxpool</type>
+            <input-dim>
+                <dim-size>64</dim-size>
+                <dim-size>10</dim-size>
+                <dim-size>10</dim-size>
+            </input-dim>
+            <pool-dim>
+                <dim-size>1</dim-size>
+                <dim-size>2</dim-size>
+                <dim-size>2</dim-size>
+            </pool-dim>
+            <output-dim>
+                <dim-size>64</dim-size>
+                <dim-size>5</dim-size>
+                <dim-size>5</dim-size>
+            </output-dim>
+        </layer>
+        
+        <layer>
+            <type>softplus</type>
+        </layer>
+        
+        <layer>
+            <type>vanillafeedforward</type>
+            <input-dim>
+                <dim-size>800</dim-size>
+            </input-dim>
+            <output-dim>
+                <dim-size>1000</dim-size>
+            </output-dim>
+            <optimizer>sigmoid</optimizer>
+        </layer>
+        
+        <layer>
+            <type>sigmoid</type>
+        </layer>
+        
+        <layer>
+            <type>vanillafeedforward</type>
+            <input-dim>
+                <dim-size>1000</dim-size>
+            </input-dim>
+            <output-dim>
+                <dim-size>10</dim-size>
+            </output-dim>
+            <optimizer>sigmoid</optimizer>
+        </layer>
+        
+        <layer>
+            <type>softmax</type>
+        </layer>
+        
+        <loss>
+            <type>crossentropy</type>
+            <dim>
+                <dim-size>10</dim-size>
+            </dim>
+        </loss>
+
+    </net>
+
+</mochi-config>
+
+
+
