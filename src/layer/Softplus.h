@@ -1,20 +1,19 @@
 /*
- * Sigmoid.h
+ * Softplus.h
  *
- *  Created on: Dec 8, 2016
+ *  Created on: Dec 11, 2016
  *      Author: ken
  */
 
-#ifndef LAYER_SIGMOID_H_
-#define LAYER_SIGMOID_H_
+#ifndef LAYER_SOFTPLUS_H_
+#define LAYER_SOFTPLUS_H_
 
 #include "Layer.h"
-#include <armadillo>
 
-class Sigmoid: public Layer {
+class Softplus: public Layer {
 public:
-	Sigmoid();
-	virtual ~Sigmoid();
+	Softplus();
+	virtual ~Softplus();
 
 	virtual std::vector<arma::Col<double>> feedForward(const std::vector<arma::Col<double>>& zs);
 	virtual std::vector<arma::Mat<double>> feedForward(const std::vector<arma::Mat<double>>& zs);
@@ -24,4 +23,4 @@ public:
 	virtual std::vector<arma::Cube<double>> backProp(const std::vector<arma::Cube<double>>& deltas);
 };
 
-#endif /* LAYER_SIGMOID_H_ */
+#endif /* LAYER_SOFTPLUS_H_ */
