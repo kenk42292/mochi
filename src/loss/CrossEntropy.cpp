@@ -1,18 +1,18 @@
 /*
- * Loss.cpp
+ * CrossEntropy.cpp
  *
  *  Created on: Dec 11, 2016
  *      Author: ken
  */
 
-#include "Loss.h"
+#include "CrossEntropy.h"
 
-Loss::Loss() {
+CrossEntropy::CrossEntropy() {
 	// TODO Auto-generated constructor stub
 
 }
 
-Loss::~Loss() {
+CrossEntropy::~CrossEntropy() {
 	// TODO Auto-generated destructor stub
 }
 
