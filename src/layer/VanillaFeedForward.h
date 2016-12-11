@@ -1,22 +1,22 @@
 /*
- * Softplus.h
+ * VanillaFeedForward.h
  *
  *  Created on: Dec 11, 2016
  *      Author: ken
  */
 
-#ifndef LAYER_SOFTPLUS_H_
-#define LAYER_SOFTPLUS_H_
+#ifndef LAYER_VANILLAFEEDFORWARD_H_
+#define LAYER_VANILLAFEEDFORWARD_H_
 
 #include "Layer.h"
 
-class Softplus: public Layer {
+class VanillaFeedForward: public Layer {
 public:
-	Softplus();
-	virtual ~Softplus();
+	VanillaFeedForward();
+	virtual ~VanillaFeedForward();
 
 	arma::field<arma::Cube<double>> feedForward(const arma::field<arma::Cube<double>>& zs);
 	arma::field<arma::Cube<double>> backProp(const arma::field<arma::Cube<double>>& deltas);
 };
 
-#endif /* LAYER_SOFTPLUS_H_ */
+#endif /* LAYER_VANILLAFEEDFORWARD_H_ */

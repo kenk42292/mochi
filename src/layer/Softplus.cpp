@@ -17,26 +17,10 @@ Softplus::~Softplus() {
 }
 
 
-std::vector<arma::Col<double>> Softplus::feedForward(const std::vector<arma::Col<double>>& zs) {
+arma::field<arma::Cube<double>> Softplus::feedForward(const arma::field<arma::Cube<double>>& zs) {
 
 }
 
-std::vector<arma::Mat<double>> Softplus::feedForward(const std::vector<arma::Mat<double>>& zs) {
-
-}
-
-std::vector<arma::Cube<double>> Softplus::feedForward(const std::vector<arma::Cube<double>>& zs) {
-
-}
-
-std::vector<arma::Col<double>> Softplus::backProp(const std::vector<arma::Col<double>>& deltas) {
-
-}
-
-std::vector<arma::Mat<double>> Softplus::backProp(const std::vector<arma::Mat<double>>& deltas) {
-
-}
-
-std::vector<arma::Cube<double>> Softplus::backProp(const std::vector<arma::Cube<double>>& deltas) {
+arma::field<arma::Cube<double>> Softplus::backProp(const arma::field<arma::Cube<double>>& deltas) {
 
 }

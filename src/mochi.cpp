@@ -19,24 +19,17 @@ using namespace std;
 int main() {
 	cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
 
-	arma::Mat<double> a(2, 2, arma::fill::randu);
-	arma::Mat<double> b(2, 2, arma::fill::randu);
+	arma::Cube<double> a(1, 4, 1, arma::fill::randu);
+	arma::Mat<double> m(2, 4, arma::fill::randu);
+	arma::Col<double> v = arma::vectorise(a);
 
+	cout << m*v << endl;
 
+	arma::Mat<double> p = m*v;
 
-	std::vector<arma::Mat<double>> zs(2);
-//	zs.push_back(a);
-//	zs.push_back(b);
-	zs[0] = a;
-	zs[1] = b;
+	arma::cube res((const double*) p.begin(), 1, 1, 2);
+	cout << res << endl;
 
-
-	cout << zs[1] << endl;
-
-	Sigmoid s;
-	std::vector<arma::Mat<double>> ys = s.feedForward(zs);
-
-	cout << ys[1] << endl;
 
 	return 0;
 }

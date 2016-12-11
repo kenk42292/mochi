@@ -15,13 +15,8 @@ public:
 	Softmax();
 	virtual ~Softmax();
 
-	/* Batch processing */
-	virtual std::vector<arma::Col<double>> feedForward(const std::vector<arma::Col<double>>& zs);
-	virtual std::vector<arma::Mat<double>> feedForward(const std::vector<arma::Mat<double>>& zs);
-	virtual std::vector<arma::Cube<double>> feedForward(const std::vector<arma::Cube<double>>& zs);
-	virtual std::vector<arma::Col<double>> backProp(const std::vector<arma::Col<double>>& deltas);
-	virtual std::vector<arma::Mat<double>> backProp(const std::vector<arma::Mat<double>>& deltas);
-	virtual std::vector<arma::Cube<double>> backProp(const std::vector<arma::Cube<double>>& deltas);
+	arma::field<arma::Cube<double>> feedForward(const arma::field<arma::Cube<double>>& zs);
+	arma::field<arma::Cube<double>> backProp(const arma::field<arma::Cube<double>>& deltas);
 };
 
 #endif /* LAYER_SOFTMAX_H_ */
