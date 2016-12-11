@@ -14,12 +14,22 @@ class Sigmoid {
 public:
 	Sigmoid();
 	virtual ~Sigmoid();
-	arma::Col<double> feedForward(arma::Col<double> z);
-	arma::Mat<double> feedForward(arma::Mat<double> z);
-	arma::Cube<double> feedForward(arma::Cube<double> z);
-	arma::Col<double> backProp(arma::Col<double> delta);
-	arma::Mat<double> backProp(arma::Mat<double> delta);
-	arma::Cube<double> backProp(arma::Cube<double> delta);
+
+	/* Single samples */
+	arma::Col<double> feedForward(const arma::Col<double>& z);
+	arma::Mat<double> feedForward(const arma::Mat<double>& z);
+	arma::Cube<double> feedForward(const arma::Cube<double>& z);
+	arma::Col<double> backProp(const arma::Col<double>& delta);
+	arma::Mat<double> backProp(const arma::Mat<double>& delta);
+	arma::Cube<double> backProp(const arma::Cube<double>& delta);
+
+	/* Batch processing */
+	std::vector<arma::Col<double>> feedForward(const std::vector<arma::Col<double>>& zs);
+	std::vector<arma::Mat<double>> feedForward(const std::vector<arma::Mat<double>>& zs);
+	std::vector<arma::Cube<double>> feedForward(const std::vector<arma::Cube<double>>& zs);
+	std::vector<arma::Col<double>> backProp(const std::vector<arma::Col<double>>& deltas);
+	std::vector<arma::Mat<double>> backProp(const std::vector<arma::Mat<double>>& deltas);
+	std::vector<arma::Cube<double>> backProp(const std::vector<arma::Cube<double>>& deltas);
 };
 
 #endif /* LAYER_SIGMOID_H_ */
