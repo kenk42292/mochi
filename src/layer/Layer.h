@@ -15,14 +15,6 @@ public:
 	Layer();
 	virtual ~Layer();
 
-	/* Single samples */
-	virtual arma::Col<double> feedForward(const arma::Col<double>& z);
-	virtual arma::Mat<double> feedForward(const arma::Mat<double>& z);
-	virtual arma::Cube<double> feedForward(const arma::Cube<double>& z);
-	virtual arma::Col<double> backProp(const arma::Col<double>& delta);
-	virtual arma::Mat<double> backProp(const arma::Mat<double>& delta);
-	virtual arma::Cube<double> backProp(const arma::Cube<double>& delta);
-
 	/* Batch processing */
 	virtual std::vector<arma::Col<double>> feedForward(const std::vector<arma::Col<double>>& zs);
 	virtual std::vector<arma::Mat<double>> feedForward(const std::vector<arma::Mat<double>>& zs);

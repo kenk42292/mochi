@@ -1,21 +1,21 @@
 /*
- * Sigmoid.h
+ * Softmax.h
  *
- *  Created on: Dec 8, 2016
+ *  Created on: Dec 11, 2016
  *      Author: ken
  */
 
-#ifndef LAYER_SIGMOID_H_
-#define LAYER_SIGMOID_H_
+#ifndef LAYER_SOFTMAX_H_
+#define LAYER_SOFTMAX_H_
 
 #include "Layer.h"
-#include <armadillo>
 
-class Sigmoid: public Layer {
+class Softmax: public Layer {
 public:
-	Sigmoid();
-	virtual ~Sigmoid();
+	Softmax();
+	virtual ~Softmax();
 
+	/* Batch processing */
 	virtual std::vector<arma::Col<double>> feedForward(const std::vector<arma::Col<double>>& zs);
 	virtual std::vector<arma::Mat<double>> feedForward(const std::vector<arma::Mat<double>>& zs);
 	virtual std::vector<arma::Cube<double>> feedForward(const std::vector<arma::Cube<double>>& zs);
@@ -24,4 +24,4 @@ public:
 	virtual std::vector<arma::Cube<double>> backProp(const std::vector<arma::Cube<double>>& deltas);
 };
 
-#endif /* LAYER_SIGMOID_H_ */
+#endif /* LAYER_SOFTMAX_H_ */
