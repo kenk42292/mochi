@@ -8,7 +8,7 @@
 #ifndef NEURALNET_H_
 #define NEURALNET_H_
 
-#include "Loss.h"
+#include "loss/Loss.h"
 #include "layer/Layer.h"
 
 class NeuralNet {

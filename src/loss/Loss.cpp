@@ -18,13 +18,13 @@ Loss::~Loss() {
 
 /** Single Sample Loss*/
 double Loss::loss(arma::Col<double> output, arma::Col<double> y) {
-	throw std::exception("Not Implemented");
+//	throw std::exception("Not Implemented");
 	return 0.0;
 }
 
 arma::Col<double> Loss::loss_prime(arma::Col<double> output, arma::Col<double> y) {
-	throw std::exception("Not Implemented");
-	return 0.0;
+//	throw std::exception("Not Implemented");
+	return arma::Col<double>(1, arma::fill::zeros);
 }
 
 /** Batch Loss */

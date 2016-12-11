@@ -8,6 +8,8 @@
 #ifndef LOSS_H_
 #define LOSS_H_
 
+#include <armadillo>
+
 class Loss {
 public:
 	Loss();
