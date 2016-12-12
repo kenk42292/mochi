@@ -11,6 +11,8 @@ cd pa	 * Layer.h
 #include <armadillo>
 
 class Layer {
+private:
+
 public:
 	Layer();
 	virtual ~Layer();

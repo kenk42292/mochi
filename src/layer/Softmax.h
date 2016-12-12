@@ -15,6 +15,7 @@ public:
 	Softmax();
 	virtual ~Softmax();
 
+	arma::Cube<double> softmax(const arma::Cube<double>& z);
 	arma::field<arma::Cube<double>> feedForward(const arma::field<arma::Cube<double>>& zs);
 	arma::field<arma::Cube<double>> backProp(const arma::field<arma::Cube<double>>& deltas);
 };
