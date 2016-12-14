@@ -11,15 +11,17 @@
 #include "Layer.h"
 
 class VanillaFeedForward: public Layer {
-private:
-	arma::Mat<double> mW;
-	arma::Mat<double> mB;
 public:
-	VanillaFeedForward();
+	arma::Mat<double> mW;
+	arma::Col<double> mB;
+	/** Stored batch inputs for back propagation */
+	arma::field<arma::Cube<double>> mxs;
+public:
+	VanillaFeedForward(unsigned int nIn, unsigned int nOut);
 	virtual ~VanillaFeedForward();
 
-	arma::Cube<double> VanillaFeedForward::feedForward(const arma::Cube<double>& z);
-	arma::field<arma::Cube<double>> feedForward(const arma::field<arma::Cube<double>>& zs);
+	arma::Cube<double> feedForward(const arma::Cube<double>& x);
+	arma::field<arma::Cube<double>> feedForward(const arma::field<arma::Cube<double>>& xs);
 	arma::field<arma::Cube<double>> backProp(const arma::field<arma::Cube<double>>& deltas);
 };
 

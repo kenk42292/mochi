@@ -10,6 +10,7 @@
 
 #include "loss/Loss.h"
 #include "layer/Layer.h"
+#include "loss/Quadratic.h"
 
 class NeuralNet {
 private:
@@ -20,10 +21,10 @@ public:
 	NeuralNet();
 	virtual ~NeuralNet();
 
-	/** */
-	void train(const std::vector<arma::Col<double>>& inputs, const std::vector<arma::Col<double>>& outputs);
-	void train(const std::vector<arma::Mat<double>>& inputs, const std::vector<arma::Col<double>>& outputs);
-	void train(const std::vector<arma::Cube<double>>& inputs, const std::vector<arma::Col<double>>& outputs);
+	arma::field<arma::Cube<double>> forwardPass(const arma::field<arma::Cube<double>>& inputs);
+	arma::field<arma::Cube<double>> backwardPass(arma::field<arma::Cube<double>> deltas);
+	void train(const arma::field<arma::Cube<double>>& inputs,
+			const arma::field<arma::Cube<double>>& outputs);
 
 };
 
