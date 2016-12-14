@@ -17,7 +17,7 @@ Softmax::~Softmax() {
 }
 
 arma::Cube<double> Softmax::softmax(const arma::Cube<double>& z) {
-	arma::Col<double> exp_z = arma::exp(z);
+	arma::Cube<double> exp_z = arma::exp(z);
 	return exp_z / arma::accu(exp_z);
 }
 

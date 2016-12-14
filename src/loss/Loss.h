@@ -15,16 +15,9 @@ public:
 	Loss();
 	virtual ~Loss();
 
-	/** Single Sample Loss*/
-	virtual double loss(arma::Col<double> output, arma::Col<double> y);
-	virtual arma::Col<double> loss_prime(arma::Col<double> output, arma::Col<double> y);
-
-	/** Batch Losses */
-	virtual std::vector<double> loss(std::vector<arma::Col<double>> outputs, std::vector<arma::Col<double>> ys);
-	virtual std::vector<arma::Col<double>> loss_prime(std::vector<arma::Col<double>> outputs, std::vector<arma::Col<double>> ys);
-
-	/** Total Batch Loss */
-	virtual double totalLoss(std::vector<arma::Col<double>> outputs, std::vector<arma::Col<double>> ys);
+	virtual double loss(arma::Cube<double> output, arma::Cube<double> y);
+	virtual arma::Cube<double> loss_prime(const arma::Cube<double>& output, const arma::Cube<double>& y);
+	virtual arma::field<arma::Cube<double>> loss_prime(const arma::field<arma::Cube<double>>& outputs, const arma::field<arma::Cube<double>>& ys);
 };
 
 #endif /* LOSS_H_ */

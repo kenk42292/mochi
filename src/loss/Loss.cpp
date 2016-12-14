@@ -16,40 +16,22 @@ Loss::~Loss() {
 	// TODO Auto-generated destructor stub
 }
 
-/** Single Sample Loss*/
-double Loss::loss(arma::Col<double> output, arma::Col<double> y) {
-//	throw std::exception("Not Implemented");
+double Loss::loss(arma::Cube<double> output, arma::Cube<double> y) {
 	return 0.0;
 }
 
-arma::Col<double> Loss::loss_prime(arma::Col<double> output, arma::Col<double> y) {
-//	throw std::exception("Not Implemented");
-	return arma::Col<double>(1, arma::fill::zeros);
+arma::Cube<double> Loss::loss_prime(const arma::Cube<double>& output,
+		const arma::Cube<double>& y) {
+	return arma::Cube<double>(1, 1, 1, arma::fill::zeros);
 }
 
-/** Batch Loss */
-std::vector<double> Loss::loss(std::vector<arma::Col<double>> outputs, std::vector<arma::Col<double>> ys) {
-	std::vector<double> losses(outputs.size());
+arma::field<arma::Cube<double>> Loss::loss_prime(
+		const arma::field<arma::Cube<double>>& outputs,
+		const arma::field<arma::Cube<double>>& ys) {
+	arma::field<arma::Cube<double>> result(outputs.size());
 	for (unsigned int i=0; i<outputs.size(); ++i) {
-		losses[i] = loss(outputs[i], ys[i]);
+		result[i] = loss_prime(outputs[i], ys[i]);
 	}
-	return losses;
+	return result;
 }
 
-std::vector<arma::Col<double>> Loss::loss_prime(std::vector<arma::Col<double>> outputs, std::vector<arma::Col<double>> ys) {
-	std::vector<arma::Col<double>> deltas(outputs.size());
-	for (unsigned int i=0; i<outputs.size(); ++i) {
-		deltas[i] = loss_prime(outputs[i], ys[i]);
-	}
-	return deltas;
-}
-
-/** Total Batch Loss */
-double Loss::totalLoss(std::vector<arma::Col<double>> outputs,
-		std::vector<arma::Col<double>> ys) {
-	double totalLoss = 0;
-	for (unsigned int i = 0; i < outputs.size(); ++i) {
-		totalLoss += loss(outputs[i], ys[i]);
-	}
-	return totalLoss;
-}
