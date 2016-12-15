@@ -20,7 +20,6 @@ int main() {
 	cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
 
 	/** Load Data */
-	/*
 	MNIST_Loader loader;
 	arma::field<arma::Cube<double>> train_images = loader.load_images(
 			"./data/train-images-idx3-ubyte");
@@ -31,13 +30,13 @@ int main() {
 	arma::field<arma::Cube<double>> val_labels = loader.load_labels(
 			"./data/t10k-labels-idx1-ubyte");
 
-	cout << train_labels[0] << endl;
-
 
 	NeuralNet nn;
 	nn.train(train_images, train_labels);
 
 	cout << "training complete" << endl;
+
+
 
 	cout << "VALIDATING" << endl;
 	double total_correct = 0;
@@ -51,9 +50,9 @@ int main() {
 
 	for (unsigned int i = 0; i < predictions.size(); ++i) {
 
-		cout << "======================================" << endl;
-		cout << "prediction: " << static_cast<int>(arma::vectorise(predictions[i]).index_max()) << endl;
-		cout << "actual: " << static_cast<int>(arma::vectorise(val_labels[i]).index_max()) << endl;
+//		cout << "======================================" << endl;
+//		cout << "prediction: " << static_cast<int>(arma::vectorise(predictions[i]).index_max()) << endl;
+//		cout << "actual: " << static_cast<int>(arma::vectorise(val_labels[i]).index_max()) << endl;
 
 		if (static_cast<int>(arma::vectorise(predictions[i]).index_max())
 				== static_cast<int>(arma::vectorise(val_labels[i]).index_max())) {
@@ -64,23 +63,10 @@ int main() {
 	cout << "fraction correct: "
 			<< static_cast<double>(total_correct / val_images.size()) << endl;
 
-	*/
 
-	arma::field<arma::Cube<double>> f(4);
-	arma::Cube<double> a(1,1,2, arma::fill::randu);
-	arma::Cube<double> b(1,1,2, arma::fill::randu);
-	arma::Cube<double> c(1,1,2, arma::fill::randu);
-	arma::Cube<double> d(1,1,2, arma::fill::randu);
-	f[0]=a;
-	f[1]=b;
-	f[2]=c;
-	f[3]=d;
+//	std::cout << f.rows(0, 2) << std::endl;
 
-	cout << f << endl;
-	cout << "========================" << endl;
 
-//	cout << f[0, 2] << endl;
-	cout << f.rows(0,2) << endl;
 
 	return 0;
 }

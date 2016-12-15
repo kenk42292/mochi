@@ -11,11 +11,17 @@
 #include "loss/Loss.h"
 #include "layer/Layer.h"
 #include "loss/Quadratic.h"
+#include "layer/VanillaFeedForward.h"
+#include "layer/Sigmoid.h"
 
 class NeuralNet {
 private:
-	std::vector<Layer> layers;
-	Loss loss;
+	VanillaFeedForward* vff1;
+	Sigmoid* s1;
+	VanillaFeedForward* vff2;
+	Sigmoid* s2;
+	std::vector<Layer*> layers;
+	Loss* loss;
 	unsigned int batchSize;
 public:
 	NeuralNet();

@@ -22,6 +22,9 @@ arma::field<arma::Cube<double>> Sigmoid::feedForward(const arma::field<arma::Cub
 	for (unsigned int i=0; i<zs.size(); ++i) {
 		ys[i] = ones / (ones+arma::exp(-zs[i]));;
 	}
+//	std::cout << "debug" << std::endl;
+//	std::cout << ys[0] << std::endl;
+//	std::cout << ys[1] << std::endl;
 	return ys;
 }
 
