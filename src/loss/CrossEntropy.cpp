@@ -5,7 +5,7 @@
  *      Author: ken
  */
 
-#include "CrossEntropy.h"
+#include "CrossEntropy.hpp"
 
 CrossEntropy::CrossEntropy() {
 	// TODO Auto-generated constructor stub

@@ -5,8 +5,8 @@
  *      Author: ken
  */
 
-#ifndef MNISTLOADER_H_
-#define MNISTLOADER_H_
+#ifndef MNISTLOADER_HPP_
+#define MNISTLOADER_HPP_
 
 #include <string>
 #include <iostream>
@@ -29,4 +29,4 @@ public:
 	arma::field<arma::Cube<double>> load_labels(string labels_path);	// Return label as 10 long cubes
 };
 
-#endif /* MNISTLOADER_H_ */
+#endif /* MNISTLOADER_HPP_ */

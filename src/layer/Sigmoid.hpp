@@ -5,11 +5,11 @@
  *      Author: ken
  */
 
-#ifndef LAYER_SIGMOID_H_
-#define LAYER_SIGMOID_H_
+#ifndef LAYER_SIGMOID_HPP_
+#define LAYER_SIGMOID_HPP_
 
-#include "Layer.h"
 #include <armadillo>
+#include "Layer.hpp"
 
 class Sigmoid: public Layer {
 public:
@@ -20,4 +20,4 @@ public:
 	arma::field<arma::Cube<double>> backProp(const arma::field<arma::Cube<double>>& deltas);
 };
 
-#endif /* LAYER_SIGMOID_H_ */
+#endif /* LAYER_SIGMOID_HPP_ */

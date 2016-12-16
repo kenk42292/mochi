@@ -5,7 +5,7 @@
  *      Author: ken
  */
 
-#include "MNISTLoader.h"
+#include "MNISTLoader.hpp"
 
 using std::string;
 

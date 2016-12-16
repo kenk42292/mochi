@@ -5,10 +5,10 @@
  *      Author: ken
  */
 
-#ifndef LAYER_VANILLAFEEDFORWARD_H_
-#define LAYER_VANILLAFEEDFORWARD_H_
+#ifndef LAYER_VANILLAFEEDFORWARD_HPP_
+#define LAYER_VANILLAFEEDFORWARD_HPP_
 
-#include "Layer.h"
+#include "Layer.hpp"
 
 class VanillaFeedForward: public Layer {
 public:
@@ -25,4 +25,4 @@ public:
 	arma::field<arma::Cube<double>> backProp(const arma::field<arma::Cube<double>>& deltas);
 };
 
-#endif /* LAYER_VANILLAFEEDFORWARD_H_ */
+#endif /* LAYER_VANILLAFEEDFORWARD_HPP_ */

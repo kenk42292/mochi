@@ -5,7 +5,7 @@
  *      Author: ken
  */
 
-#include "Layer.h"
+#include "Layer.hpp"
 
 Layer::Layer() {
 	// TODO Auto-generated constructor stub

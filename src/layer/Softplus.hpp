@@ -1,23 +1,22 @@
 /*
- * Softmax.h
+ * Softplus.h
  *
  *  Created on: Dec 11, 2016
  *      Author: ken
  */
 
-#ifndef LAYER_SOFTMAX_H_
-#define LAYER_SOFTMAX_H_
+#ifndef LAYER_SOFTPLUS_HPP_
+#define LAYER_SOFTPLUS_HPP_
 
-#include "Layer.h"
+#include "Layer.hpp"
 
-class Softmax: public Layer {
+class Softplus: public Layer {
 public:
-	Softmax();
-	virtual ~Softmax();
+	Softplus();
+	virtual ~Softplus();
 
-	arma::Cube<double> softmax(const arma::Cube<double>& z);
 	arma::field<arma::Cube<double>> feedForward(const arma::field<arma::Cube<double>>& zs);
 	arma::field<arma::Cube<double>> backProp(const arma::field<arma::Cube<double>>& deltas);
 };
 
-#endif /* LAYER_SOFTMAX_H_ */
+#endif /* LAYER_SOFTPLUS_HPP_ */

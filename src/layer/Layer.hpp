@@ -5,8 +5,8 @@ cd pa	 * Layer.h
  *      Author: ken
  */
 
-#ifndef LAYER_LAYER_H_
-#define LAYER_LAYER_H_
+#ifndef LAYER_LAYER_HPP_
+#define LAYER_LAYER_HPP_
 
 #include <armadillo>
 
@@ -21,4 +21,4 @@ public:
 	virtual arma::field<arma::Cube<double>> backProp(const arma::field<arma::Cube<double>>& deltas);
 };
 
-#endif /* LAYER_LAYER_H_ */
+#endif /* LAYER_LAYER_HPP_ */

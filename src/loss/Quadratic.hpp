@@ -5,10 +5,10 @@
  *      Author: ken
  */
 
-#ifndef LOSS_QUADRATIC_H_
-#define LOSS_QUADRATIC_H_
+#ifndef LOSS_QUADRATIC_HPP_
+#define LOSS_QUADRATIC_HPP_
 
-#include "Loss.h"
+#include "Loss.hpp"
 
 class Quadratic: public Loss {
 public:
@@ -22,4 +22,4 @@ public:
 
 };
 
-#endif /* LOSS_QUADRATIC_H_ */
+#endif /* LOSS_QUADRATIC_HPP_ */

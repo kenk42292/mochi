@@ -5,7 +5,7 @@
  *      Author: ken
  */
 
-#include "Loss.h"
+#include "Loss.hpp"
 
 Loss::Loss() {
 	// TODO Auto-generated constructor stub

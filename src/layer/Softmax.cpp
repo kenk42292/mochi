@@ -5,7 +5,7 @@
  *      Author: ken
  */
 
-#include "Softmax.h"
+#include "Softmax.hpp"
 
 Softmax::Softmax() {
 	// TODO Auto-generated constructor stub

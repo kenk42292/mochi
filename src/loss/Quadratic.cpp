@@ -5,7 +5,7 @@
  *      Author: ken
  */
 
-#include "Quadratic.h"
+#include "Quadratic.hpp"
 
 Quadratic::Quadratic() {
 	// TODO Auto-generated constructor stub
