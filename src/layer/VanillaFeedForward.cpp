@@ -5,7 +5,7 @@
  *      Author: ken
  */
 
-#include "VanillaFeedForward.h"
+#include "VanillaFeedForward.hpp"
 
 VanillaFeedForward::VanillaFeedForward(unsigned int nIn, unsigned int nOut) :
 		mW(arma::Mat<double>(nOut, nIn, arma::fill::randn)), mB(

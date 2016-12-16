@@ -5,7 +5,7 @@
  *      Author: ken
  */
 
-#include "Softplus.h"
+#include "Softplus.hpp"
 
 Softplus::Softplus() {
 	// TODO Auto-generated constructor stub

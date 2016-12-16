@@ -5,7 +5,7 @@
  *      Author: ken
  */
 
-#include "Sigmoid.h"
+#include "Sigmoid.hpp"
 
 Sigmoid::Sigmoid() {
 	// TODO Auto-generated constructor stub

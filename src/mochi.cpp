@@ -10,10 +10,10 @@
 #include <armadillo>
 #include <vector>
 
-#include "layer/Sigmoid.h"
-#include "layer/VanillaFeedForward.h"
-#include "MNISTLoader.h"
-#include "NeuralNet.h"
+#include "layer/Sigmoid.hpp"
+#include "layer/VanillaFeedForward.hpp"
+#include "MNISTLoader.hpp"
+#include "NeuralNet.hpp"
 using namespace std;
 
 int main() {

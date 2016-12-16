@@ -5,9 +5,10 @@
  *      Author: ken
  */
 
-#include "NeuralNet.h"
-#include "layer/VanillaFeedForward.h"
-#include "layer/Sigmoid.h"
+#include "NeuralNet.hpp"
+
+#include "layer/Sigmoid.hpp"
+#include "layer/VanillaFeedForward.hpp"
 
 NeuralNet::NeuralNet() {
 	// TODO Auto-generated constructor stub

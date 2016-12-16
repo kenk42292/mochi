@@ -5,14 +5,14 @@
  *      Author: ken
  */
 
-#ifndef NEURALNET_H_
-#define NEURALNET_H_
+#ifndef NEURALNET_HPP_
+#define NEURALNET_HPP_
 
-#include "loss/Loss.h"
-#include "layer/Layer.h"
-#include "loss/Quadratic.h"
-#include "layer/VanillaFeedForward.h"
-#include "layer/Sigmoid.h"
+#include "layer/Layer.hpp"
+#include "layer/Sigmoid.hpp"
+#include "layer/VanillaFeedForward.hpp"
+#include "loss/Loss.hpp"
+#include "loss/Quadratic.hpp"
 
 class NeuralNet {
 private:
@@ -34,4 +34,4 @@ public:
 
 };
 
-#endif /* NEURALNET_H_ */
+#endif /* NEURALNET_HPP_ */
