@@ -11,6 +11,8 @@
 #include "Layer.hpp"
 
 class Softmax: public Layer {
+private:
+	arma::field<arma::Cube<double>> mYs;
 public:
 	Softmax();
 	virtual ~Softmax();

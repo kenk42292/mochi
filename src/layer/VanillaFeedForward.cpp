@@ -53,8 +53,8 @@ arma::field<arma::Cube<double>> VanillaFeedForward::backProp(
 		dxs[i] = arma::Cube<double>(dx.begin(), 1, 1, dx.size()); // do I need to vectorise the delta...?
 	}
 	//TODO: Don't hard-code etas... and make optimizer programmatic
-	mW -= 0.03 * dw / deltas.size();
-	mB -= 0.03 * db / deltas.size();
+	mW -= 0.3 * dw / deltas.size();
+	mB -= 0.3 * db / deltas.size();
 	return dxs;
 }
 

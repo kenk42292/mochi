@@ -27,6 +27,10 @@
 	            <output-dim>10</output-dim>
 	            <optimizer>rmsprop</optimizer>
 	        </layer>
+	        
+	        <layer>
+	        	<type>softmax</type>
+	        </layer>
 
         </layers>
         

@@ -12,11 +12,13 @@
 #include "Layer.hpp"
 
 class Sigmoid: public Layer {
+private:
+	arma::field<arma::Cube<double>> mYs;
 public:
 	Sigmoid();
 	virtual ~Sigmoid();
 
-	arma::field<arma::Cube<double>> feedForward(const arma::field<arma::Cube<double>>& zs);
+	arma::field<arma::Cube<double>> feedForward(const arma::field<arma::Cube<double>>& xs);
 	arma::field<arma::Cube<double>> backProp(const arma::field<arma::Cube<double>>& deltas);
 };
 

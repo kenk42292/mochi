@@ -31,7 +31,8 @@ std::vector<Layer*> LayerFactory::createLayers(Configuration conf) {
 		} else if (layerType.compare("softplus")==0) {
 			//TODO: Implement this
 		} else if (layerType.compare("softmax")==0) {
-			//TODO: Implement this
+			std::cout << "Creating Softmax Layer..." << std::endl;
+			layer = new Softmax();
 		} else {
 			//TODO: Perhaps have this throw an error...?
 			std::cout << "Unimplemented Layer found" << std::endl;
