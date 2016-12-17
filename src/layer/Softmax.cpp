@@ -21,10 +21,12 @@ arma::Cube<double> Softmax::softmax(const arma::Cube<double>& z) {
 	return exp_z / arma::accu(exp_z);
 }
 
-arma::field<arma::Cube<double>> Softmax::feedForward(const arma::field<arma::Cube<double>>& zs) {
-	arma::field<arma::Cube<double>> ys(zs.size());
-	for (unsigned int i=0; i<zs.size(); ++i) {
-		ys[i] = softmax(zs[i]);
+arma::field<arma::Cube<double>> Softmax::feedForward(const arma::field<arma::Cube<double>>& xs) {
+	//TODO: tweak for numerical stability
+	arma::field<arma::Cube<double>> ys(xs.size());
+	for (unsigned int i=0; i<xs.size(); ++i) {
+		arma::Cube<double> exp_x = arma::exp(xs[i]);
+		ys[i] = exp_x / arma::accu(exp_x);
 	}
 	return ys;
 }

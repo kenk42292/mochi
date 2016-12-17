@@ -42,7 +42,7 @@ arma::field<arma::Cube<double>> NeuralNet::backwardPass(arma::field<arma::Cube<d
 void NeuralNet::train(arma::field<arma::Cube<double>>& inputs, arma::field<arma::Cube<double>>& outputs) {
 
 	unsigned int numLayers = 4;
-	unsigned int numEpochs = 5;
+	unsigned int numEpochs = 2;
 	unsigned int batchSize = 100;
 
 	for (unsigned int ep=0; ep<numEpochs; ++ep) {
