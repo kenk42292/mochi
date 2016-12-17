@@ -21,6 +21,7 @@
 							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.base.1721792381" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.base">
 								<option id="gnu.cpp.compiler.option.include.paths.1208612977" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="/home/ken/sw/armadillo-7.500.2/include"/>
+									<listOptionValue builtIn="false" value="/usr/include"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.optimization.level.1583253557" name="Optimization Level" superClass="gnu.cpp.compiler.option.optimization.level" useByScannerDiscovery="false" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.debugging.level.1672785201" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level" useByScannerDiscovery="false" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
@@ -36,11 +37,13 @@
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.base.719709051" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.base">
 								<option id="gnu.cpp.link.option.libs.2001156070" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" useByScannerDiscovery="false" valueType="libs">
 									<listOptionValue builtIn="false" value="armadillo"/>
+									<listOptionValue builtIn="false" value="pugixml"/>
 									<listOptionValue builtIn="false" value="blas"/>
 									<listOptionValue builtIn="false" value="lapack"/>
 								</option>
 								<option id="gnu.cpp.link.option.paths.1379386028" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" useByScannerDiscovery="false" valueType="libPaths">
 									<listOptionValue builtIn="false" value="/home/ken/sw/armadillo-7.500.2"/>
+									<listOptionValue builtIn="false" value="/usr/lib/x86_64-linux-gnu"/>
 									<listOptionValue builtIn="false" value="/usr/lib"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.876653669" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">

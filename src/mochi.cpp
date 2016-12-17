@@ -30,8 +30,22 @@ int main() {
 	arma::field<arma::Cube<double>> val_labels = loader.load_labels(
 			"./data/t10k-labels-idx1-ubyte");
 
+//
+//	const char* confSrc = "config-sample.xml";
+//	Configuration conf(confSrc);
 
-	NeuralNet nn;
+	VanillaFeedForward vff1(784, 300);
+	Sigmoid s1;
+	VanillaFeedForward vff2(300, 10);
+	Sigmoid s2;
+
+	std::vector<Layer*> layers(4);
+	layers[0] = &vff1;
+	layers[1] = &s1;
+	layers[2] = &vff2;
+	layers[3] = &s2;
+
+	NeuralNet nn(layers);
 	nn.train(train_images, train_labels);
 
 	cout << "training complete" << endl;
