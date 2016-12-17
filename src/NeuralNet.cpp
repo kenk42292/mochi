@@ -11,12 +11,15 @@
 #include "layer/VanillaFeedForward.hpp"
 #include "Utils.hpp"
 
-NeuralNet::NeuralNet(std::vector<Layer*> layers) {
+NeuralNet::NeuralNet(std::vector<Layer*> layers, Configuration conf) {
 	mLayers = layers;
 	mLoss = &l;
 }
 
 NeuralNet::~NeuralNet() {
+	for (Layer* lp : mLayers) {
+		delete lp;
+	}
 }
 
 arma::field<arma::Cube<double>> NeuralNet::forwardPass(const arma::field<arma::Cube<double>>& inputs) {

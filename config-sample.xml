@@ -5,7 +5,7 @@
     </data>
 
     <net>
-        <input-dim>1,28,28</input-dim>
+        <input-dim>784</input-dim>
         <output-dim>10</output-dim>
         
         <layers>
@@ -27,14 +27,11 @@
 	            <output-dim>10</output-dim>
 	            <optimizer>rmsprop</optimizer>
 	        </layer>
-	        
-	        <layer>
-	            <type>softmax</type>
-	        </layer>
+
         </layers>
         
         <loss>
-            <type>crossentropy</type>
+            <type>quadratic</type>
             <dim>10</dim>
         </loss>
 

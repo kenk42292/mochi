@@ -32,9 +32,9 @@ void Utils::shuffle(arma::field<arma::Cube<double>>& inputs, arma::field<arma::C
 
 void Utils::printConfig(std::vector<std::map<std::string, std::string>> layersConfig) {
 	for (auto m : layersConfig) {
-		std::cout << "---------LAYER----------------" << std::endl;
+		std::cout << "LAYER---------------------------------------" << std::endl;
 		for (auto const& pair : m) {
-			std::cout << pair.first << " : " << pair.second << std::endl;
+			std::cout << "\t\t" << pair.first << " : " << pair.second << std::endl;
 		}
 	}
 }

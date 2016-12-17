@@ -16,6 +16,7 @@
 #include "layer/Layer.hpp"
 #include "layer/LayerFactory.hpp"
 #include "MNISTLoader.hpp"
+#include "NeuralNet.hpp"
 #include "Utils.hpp"
 
 class LayerFactory;
@@ -42,22 +43,8 @@ int main() {
 
 	std::vector<Layer*> layers = layerFactory.createLayers(conf);
 
-	std::vector<std::map<std::string, std::string>> layerConfigs = conf.layerConfigs();
 
-	Utils::printConfig(layerConfigs);
-
-	/*
-
-	VanillaFeedForward vff1(784, 300);
-	Sigmoid s1;
-	VanillaFeedForward vff2(300, 10);
-
-	std::vector<Layer*> layers(3);
-	layers[0] = &vff1;
-	layers[1] = &s1;
-	layers[2] = &vff2;
-
-	NeuralNet nn(layers);
+	NeuralNet nn(layers, conf);
 	nn.train(train_images, train_labels);
 
 	cout << "training complete" << endl;
@@ -85,8 +72,6 @@ int main() {
 	cout << "fraction correct: "
 			<< static_cast<double>(total_correct / val_images.size()) << endl;
 
-
-	*/
 
 	return 0;
 }
