@@ -6,12 +6,13 @@
  */
 
 #include "VanillaFeedForward.hpp"
+#include <math.h>
 
 VanillaFeedForward::VanillaFeedForward(unsigned int nIn, unsigned int nOut) :
 		mW(arma::Mat<double>(nOut, nIn, arma::fill::randn)), mB(
 				arma::Col<double>(nOut, arma::fill::randn)) {
 	// TODO Auto-generated constructor stub
-
+	mW /= sqrt(nIn);
 }
 
 VanillaFeedForward::~VanillaFeedForward() {
