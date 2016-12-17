@@ -1,0 +1,83 @@
+
+<mochi-config>
+    <data>
+        <attribute-type>categorical</attribute-type>
+    </data>
+
+    <net>
+        <input-dim>1,28,28</input-dim>
+        <output-dim>10</output-dim>
+        
+        <layers>
+	        <layer>
+	            <type>convolutional</type>
+	            <input-dim>1,28,28</input-dim>
+	            <kernel-dim>32,1,5,5</kernel-dim>
+	            <output-dim>32,24,24</output-dim>
+	            <optimizer>rmsprop</optimizer>
+	        </layer>
+	            
+	        <layer>
+	            <type>maxpool</type>
+	            <input-dim>32,24,24</input-dim>
+	            <pool-dim>1,2,2</pool-dim>
+	            <output-dim>32,12,12</output-dim>
+	        </layer>
+	        
+	        <layer>
+	            <type>softplus</type>
+	        </layer>
+	        
+	        <layer>
+	            <type>convolutional</type>
+	            <input-dim>32,12,12</input-dim>
+	            <kernel-dim>64,32,3,3</kernel-dim>
+	            <output-dim>64,10,10</output-dim>
+	            <optimizer>rmsprop</optimizer>
+	        </layer>
+	        
+	        <layer>
+	            <type>maxpool</type>
+	            <input-dim>64,10,10</input-dim>
+	            <pool-dim>1,2,2</pool-dim>
+	            <output-dim>64,5,5</output-dim>
+	        </layer>
+	        
+	        <layer>
+	            <type>softplus</type>
+	        </layer>
+	        
+	        <layer>
+	            <type>vanillafeedforward</type>
+	            <input-dim>800</input-dim>
+	            <output-dim>1000</output-dim>
+	            <optimizer>rmsprop</optimizer>
+	        </layer>
+	        
+	        <layer>
+	            <type>sigmoid</type>
+	        </layer>
+	        
+	        <layer>
+	            <type>vanillafeedforward</type>
+	            <input-dim>1000</input-dim>
+	            <output-dim>10</output-dim>
+	            <optimizer>rmsprop</optimizer>
+	        </layer>
+	        
+	        <layer>
+	            <type>softmax</type>
+	        </layer>
+        </layers>
+        
+        <loss>
+            <type>crossentropy</type>
+            <dim>10</dim>
+        </loss>
+
+    </net>
+
+</mochi-config>
+
+
+
