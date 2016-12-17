@@ -18,7 +18,6 @@ Configuration::Configuration(Configuration& other) {
 }
 
 Configuration::~Configuration() {
-	// TODO Auto-generated destructor stub
 }
 
 const Configuration& Configuration::operator=(const Configuration& other) {

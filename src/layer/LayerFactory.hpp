@@ -11,6 +11,12 @@
 #include <vector>
 #include "Layer.hpp"
 #include "../Configuration.hpp"
+#include "../Utils.hpp"
+#include "../layer/VanillaFeedForward.hpp"
+//#include "../layer/Convolutional.hpp"
+#include "../layer/Sigmoid.hpp"
+#include "../layer/Softplus.hpp"
+#include "../layer/Softmax.hpp"
 
 class LayerFactory {
 public:

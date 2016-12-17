@@ -13,6 +13,7 @@
 #include "layer/VanillaFeedForward.hpp"
 #include "loss/Loss.hpp"
 #include "loss/Quadratic.hpp"
+#include "Configuration.hpp"
 
 class NeuralNet {
 private:
@@ -20,7 +21,7 @@ private:
 	Quadratic l;
 	Loss* mLoss;
 public:
-	NeuralNet(std::vector<Layer*> layers);
+	NeuralNet(std::vector<Layer*> layers, Configuration conf);
 	virtual ~NeuralNet();
 
 	arma::field<arma::Cube<double>> forwardPass(const arma::field<arma::Cube<double>>& inputs);
