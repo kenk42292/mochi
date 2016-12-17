@@ -15,10 +15,13 @@
 
 class Configuration {
 private:
-	pugi::xml_document configDoc;
+	std::string mConfigSrc;
+	pugi::xml_document mConfigDoc;
 public:
 	Configuration(std::string configSrc);
+	Configuration(Configuration& other);
 	virtual ~Configuration();
+	const Configuration& operator=(const Configuration& other);
 
 	std::vector<std::map<std::string, std::string>> layerConfigs();
 };

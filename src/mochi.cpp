@@ -6,16 +6,20 @@
 // Description : Hello World in C++, Ansi-style
 //============================================================================
 
-#include <iostream>
 #include <armadillo>
+#include <iostream>
+#include <map>
+#include <string>
 #include <vector>
 
-#include "layer/Sigmoid.hpp"
-#include "layer/VanillaFeedForward.hpp"
-#include "MNISTLoader.hpp"
-#include "NeuralNet.hpp"
 #include "Configuration.hpp"
+#include "layer/Layer.hpp"
+#include "layer/LayerFactory.hpp"
+#include "MNISTLoader.hpp"
 #include "Utils.hpp"
+
+class LayerFactory;
+
 using namespace std;
 
 int main() {
@@ -34,10 +38,13 @@ int main() {
 
 	std::string confSrc = "config-sample.xml";
 	Configuration conf(confSrc);
+	LayerFactory layerFactory;
 
-	std::vector<std::map<std::string, std::string>> layersConfig = conf.layerConfigs();
+	std::vector<Layer*> layers = layerFactory.createLayers(conf);
 
-	Utils::printConfig(layersConfig);
+	std::vector<std::map<std::string, std::string>> layerConfigs = conf.layerConfigs();
+
+	Utils::printConfig(layerConfigs);
 
 	/*
 

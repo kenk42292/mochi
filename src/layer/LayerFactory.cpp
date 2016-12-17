@@ -16,6 +16,6 @@ LayerFactory::~LayerFactory() {
 	// TODO Auto-generated destructor stub
 }
 
-//std::vector<Layer> LayerFactory::createLayers(Configuration conf) {
-//
-//}
+std::vector<Layer*> LayerFactory::createLayers(Configuration conf) {
+
+}
