@@ -9,6 +9,8 @@
 #define CONFIGURATION_HPP_
 
 #include "pugixml.hpp"
+#include <vector>
+#include <map>
 
 class Configuration {
 private:
@@ -16,6 +18,8 @@ private:
 public:
 	Configuration(const char* configSrc);
 	virtual ~Configuration();
+
+	std::vector<std::map<std::string, std::string>> layerConfigs();
 };
 
 #endif /* CONFIGURATION_HPP_ */

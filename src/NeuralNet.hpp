@@ -17,15 +17,16 @@
 class NeuralNet {
 private:
 	std::vector<Layer*> mLayers;
-	Loss* loss;
+	Quadratic l;
+	Loss* mLoss;
 public:
 	NeuralNet(std::vector<Layer*> layers);
 	virtual ~NeuralNet();
 
 	arma::field<arma::Cube<double>> forwardPass(const arma::field<arma::Cube<double>>& inputs);
 	arma::field<arma::Cube<double>> backwardPass(arma::field<arma::Cube<double>> deltas);
-	void train(const arma::field<arma::Cube<double>>& inputs,
-			const arma::field<arma::Cube<double>>& outputs);
+	void train(arma::field<arma::Cube<double>>& inputs,
+			arma::field<arma::Cube<double>>& outputs);
 
 };
 
