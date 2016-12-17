@@ -43,7 +43,6 @@ int main() {
 
 	std::vector<Layer*> layers = layerFactory.createLayers(conf);
 
-
 	NeuralNet nn(layers, conf);
 	nn.train(train_images, train_labels);
 
