@@ -16,15 +16,10 @@
 
 class NeuralNet {
 private:
-	VanillaFeedForward* vff1;
-	Sigmoid* s1;
-	VanillaFeedForward* vff2;
-	Sigmoid* s2;
-	std::vector<Layer*> layers;
+	std::vector<Layer*> mLayers;
 	Loss* loss;
-	unsigned int batchSize;
 public:
-	NeuralNet();
+	NeuralNet(std::vector<Layer*> layers);
 	virtual ~NeuralNet();
 
 	arma::field<arma::Cube<double>> forwardPass(const arma::field<arma::Cube<double>>& inputs);
