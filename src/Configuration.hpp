@@ -11,12 +11,13 @@
 #include "pugixml.hpp"
 #include <vector>
 #include <map>
+#include <iostream>
 
 class Configuration {
 private:
 	pugi::xml_document configDoc;
 public:
-	Configuration(const char* configSrc);
+	Configuration(std::string configSrc);
 	virtual ~Configuration();
 
 	std::vector<std::map<std::string, std::string>> layerConfigs();

@@ -10,6 +10,8 @@
 
 #include <cstdlib>
 #include <armadillo>
+#include <vector>
+#include <map>
 
 class Utils {
 public:
@@ -17,6 +19,7 @@ public:
 	virtual ~Utils();
 
 	static void shuffle(arma::field<arma::Cube<double>>& inputs, arma::field<arma::Cube<double>>& outputs);
+	static void printConfig(std::vector<std::map<std::string, std::string>> layersConfig);
 };
 
 #endif /* UTILS_HPP_ */

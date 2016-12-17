@@ -14,6 +14,8 @@
 #include "layer/VanillaFeedForward.hpp"
 #include "MNISTLoader.hpp"
 #include "NeuralNet.hpp"
+#include "Configuration.hpp"
+#include "Utils.hpp"
 using namespace std;
 
 int main() {
@@ -30,8 +32,14 @@ int main() {
 	arma::field<arma::Cube<double>> val_labels = loader.load_labels(
 			"./data/t10k-labels-idx1-ubyte");
 
-//	const char* confSrc = "config-sample.xml";
-//	Configuration conf(confSrc);
+	std::string confSrc = "config-sample.xml";
+	Configuration conf(confSrc);
+
+	std::vector<std::map<std::string, std::string>> layersConfig = conf.layerConfigs();
+
+	Utils::printConfig(layersConfig);
+
+	/*
 
 	VanillaFeedForward vff1(784, 300);
 	Sigmoid s1;
@@ -61,10 +69,6 @@ int main() {
 
 	for (unsigned int i = 0; i < predictions.size(); ++i) {
 
-//		cout << "======================================" << endl;
-//		cout << "prediction: " << static_cast<int>(arma::vectorise(predictions[i]).index_max()) << endl;
-//		cout << "actual: " << static_cast<int>(arma::vectorise(val_labels[i]).index_max()) << endl;
-
 		if (static_cast<int>(arma::vectorise(predictions[i]).index_max())
 				== static_cast<int>(arma::vectorise(val_labels[i]).index_max())) {
 			++total_correct;
@@ -75,9 +79,7 @@ int main() {
 			<< static_cast<double>(total_correct / val_images.size()) << endl;
 
 
-//	std::cout << f.rows(0, 2) << std::endl;
-
-
+	*/
 
 	return 0;
 }
