@@ -7,19 +7,16 @@
 
 #include "NeuralNet.hpp"
 
-#include "layer/Sigmoid.hpp"
-#include "layer/VanillaFeedForward.hpp"
-#include "Utils.hpp"
-
 NeuralNet::NeuralNet(std::vector<Layer*> layers, Configuration conf) {
 	mLayers = layers;
-	mLoss = &l;
+	mLoss = new CrossEntropy();
 }
 
 NeuralNet::~NeuralNet() {
 	for (Layer* lp : mLayers) {
 		delete lp;
 	}
+	delete mLoss;
 }
 
 arma::field<arma::Cube<double>> NeuralNet::forwardPass(const arma::field<arma::Cube<double>>& inputs) {
@@ -42,15 +39,15 @@ arma::field<arma::Cube<double>> NeuralNet::backwardPass(arma::field<arma::Cube<d
 void NeuralNet::train(arma::field<arma::Cube<double>>& inputs, arma::field<arma::Cube<double>>& outputs) {
 
 	unsigned int numLayers = 4;
-	unsigned int numEpochs = 2;
-	unsigned int batchSize = 100;
+	unsigned int numEpochs = 5;
+	unsigned int batchSize = 5;
 
 	for (unsigned int ep=0; ep<numEpochs; ++ep) {
 		std::cout << "epoch: " << ep << std::endl;
 		Utils::shuffle(inputs, outputs);
 		for (unsigned int p=0; p<inputs.size()-batchSize; p+=batchSize) {
 			arma::field<arma::Cube<double>> activations = forwardPass(inputs.rows(p, p+batchSize-1));
-			arma::field<arma::Cube<double>> deltas = mLoss->loss_prime(activations, outputs.rows(p, p+batchSize));
+			arma::field<arma::Cube<double>> deltas = mLoss->loss_prime(activations, outputs.rows(p, p+batchSize-1));
 			backwardPass(deltas);
 		}
 	}

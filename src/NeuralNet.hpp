@@ -13,12 +13,15 @@
 #include "layer/VanillaFeedForward.hpp"
 #include "loss/Loss.hpp"
 #include "loss/Quadratic.hpp"
+#include "loss/CrossEntropy.hpp"
 #include "Configuration.hpp"
+#include "layer/Sigmoid.hpp"
+#include "layer/VanillaFeedForward.hpp"
+#include "Utils.hpp"
 
 class NeuralNet {
 private:
 	std::vector<Layer*> mLayers;
-	Quadratic l;
 	Loss* mLoss;
 public:
 	NeuralNet(std::vector<Layer*> layers, Configuration conf);

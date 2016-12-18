@@ -16,7 +16,6 @@ Quadratic::~Quadratic() {
 	// TODO Auto-generated destructor stub
 }
 
-/** Single Sample Loss*/
 double Quadratic::loss(arma::Cube<double> output, arma::Cube<double> y) {
 	return 0.5*arma::accu(arma::square(output-y));
 }

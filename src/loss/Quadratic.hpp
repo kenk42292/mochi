@@ -15,7 +15,6 @@ public:
 	Quadratic();
 	virtual ~Quadratic();
 
-	/** Single Sample Loss*/
 	double loss(arma::Cube<double> output, arma::Cube<double> y);
 	arma::Cube<double> loss_prime(const arma::Cube<double>& output, const arma::Cube<double>& y);
 	arma::field<arma::Cube<double>> loss_prime(const arma::field<arma::Cube<double>>& outputs, const arma::field<arma::Cube<double>>& ys);

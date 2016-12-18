@@ -25,7 +25,6 @@ class LayerFactory;
 using namespace std;
 
 int main() {
-	cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
 
 	/** Load Data */
 	MNIST_Loader loader;

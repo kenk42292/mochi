@@ -14,6 +14,10 @@ class CrossEntropy: public Loss {
 public:
 	CrossEntropy();
 	virtual ~CrossEntropy();
+
+	double loss(arma::Cube<double> output, arma::Cube<double> y);
+	arma::Cube<double> loss_prime(const arma::Cube<double>& output, const arma::Cube<double>& y);
+	arma::field<arma::Cube<double>> loss_prime(const arma::field<arma::Cube<double>>& outputs, const arma::field<arma::Cube<double>>& ys);
 };
 
 #endif /* LOSS_CROSSENTROPY_HPP_ */
