@@ -40,4 +40,8 @@ std::vector<std::map<std::string, std::string>> Configuration::layerConfigs() {
 	return layerConfigs;
 }
 
+std::string Configuration::lossConfig() {
+	std::string lossConfig =mConfigDoc.child("mochi-config").child("net").child("loss").child("type").child_value();
+	return lossConfig;
+}
 

@@ -35,8 +35,7 @@
         </layers>
         
         <loss>
-            <type>quadratic</type>
-            <dim>10</dim>
+            <type>crossentropy</type>
         </loss>
 
     </net>

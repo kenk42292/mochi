@@ -9,7 +9,17 @@
 
 NeuralNet::NeuralNet(std::vector<Layer*> layers, Configuration conf) {
 	mLayers = layers;
-	mLoss = new CrossEntropy();
+	std::string lossConfig = conf.lossConfig();
+	if (lossConfig.compare("quadratic")==0) {
+		std::cout << "Setting to Quadratic Loss function" << std::endl;
+		mLoss = new Quadratic();
+	} else if (lossConfig.compare("crossentropy")==0) {
+		std::cout << "Setting to Cross Entropy Loss function" << std::endl;
+		mLoss = new CrossEntropy();
+	} else {
+		mLoss = new CrossEntropy();
+		std::cout << "No configured loss fxn. Setting to cross entropy" << std::endl;
+	}
 }
 
 NeuralNet::~NeuralNet() {
@@ -39,7 +49,7 @@ arma::field<arma::Cube<double>> NeuralNet::backwardPass(arma::field<arma::Cube<d
 void NeuralNet::train(arma::field<arma::Cube<double>>& inputs, arma::field<arma::Cube<double>>& outputs) {
 
 	unsigned int numLayers = 4;
-	unsigned int numEpochs = 5;
+	unsigned int numEpochs = 2;
 	unsigned int batchSize = 5;
 
 	for (unsigned int ep=0; ep<numEpochs; ++ep) {

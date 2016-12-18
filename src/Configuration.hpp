@@ -24,6 +24,7 @@ public:
 	const Configuration& operator=(const Configuration& other);
 
 	std::vector<std::map<std::string, std::string>> layerConfigs();
+	std::string lossConfig();
 };
 
 #endif /* CONFIGURATION_HPP_ */
