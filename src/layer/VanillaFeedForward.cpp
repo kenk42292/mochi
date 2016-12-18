@@ -9,8 +9,8 @@
 #include <math.h>
 
 VanillaFeedForward::VanillaFeedForward(unsigned int nIn, unsigned int nOut) :
-		mW(arma::Mat<double>(nOut, nIn, arma::fill::randn)), mB(
-				arma::Col<double>(nOut, arma::fill::randn)) {
+		mW(arma::Cube<double>(nOut, nIn, 1, arma::fill::randn)), mB(
+				arma::Cube<double>(1, 1, nOut, arma::fill::randn)) {
 	mW /= sqrt(nIn);
 }
 
@@ -19,8 +19,10 @@ VanillaFeedForward::~VanillaFeedForward() {
 
 arma::Cube<double> VanillaFeedForward::feedForward(
 		const arma::Cube<double>& x) {
-	arma::Col<double> v = arma::vectorise(x);
-	v = arma::vectorise(mW * v) + mB;
+	const arma::Mat<double>& weightVector = mW.slice(0);
+	const arma::Col<double>& xVector = x;
+	const arma::Col<double>& biasVector = mB;
+	arma::Col<double> v = weightVector*xVector + biasVector;
 	return arma::Cube<double>((const double*) v.begin(), 1, 1, v.size());
 }
 
@@ -40,21 +42,21 @@ arma::field<arma::Cube<double>> VanillaFeedForward::backProp(
 	arma::Col<double> db(mB.n_elem, arma::fill::zeros);
 	arma::field<arma::Cube<double>> dxs(deltas.size());
 	for (unsigned int i = 0; i < deltas.size(); ++i) {
-
-		arma::Mat<double> p = arma::Mat<double>(deltas[i].begin(), deltas[i].size(), 1);
-		arma::Mat<double> q = arma::Mat<double>(mxs[i].begin(), 1, mxs[i].size());
-
-		arma::Mat<double> r = p * q;
-
+		const arma::Col<double>& p = deltas[i];
+		const arma::Col<double>& q = mxs[i];
+		arma::Mat<double> r = p*q.t();
 		dw += arma::Mat<double>(deltas[i].begin(), deltas[i].size(), 1)
 				* arma::Mat<double>(mxs[i].begin(), 1, mxs[i].size());
-		db += arma::vectorise(deltas[i]);
-		arma::Mat<double> dx = mW.t() * arma::vectorise(deltas[i]);
+		db += p;
+		arma::Mat<double> dx = mW.slice(0).t() * p;
+		//TODO: below line may be able to be optimized
 		dxs[i] = arma::Cube<double>(dx.begin(), 1, 1, dx.size()); // do I need to vectorise the delta...?
 	}
 	//TODO: Don't hard-code etas... and make optimizer programmatic
-	mW -= 0.3 * dw / deltas.size();
-	mB -= 0.3 * db / deltas.size();
+	const arma::Cube<double>& dwCube = arma::Cube<double>((const double*) dw.begin(), mW.n_rows, mW.n_cols, 1);
+	const arma::Cube<double>& dbCube = arma::Cube<double>((const double*) db.begin(), 1, 1, db.size());
+	mW -= 0.3 * dwCube / deltas.size();
+	mB -= 0.3 * dbCube / deltas.size();
 	return dxs;
 }
 

@@ -12,8 +12,8 @@
 
 class VanillaFeedForward: public Layer {
 public:
-	arma::Mat<double> mW;
-	arma::Col<double> mB;
+	arma::Cube<double> mW;
+	arma::Cube<double> mB;
 	/** Stored batch inputs for back propagation */
 	arma::field<arma::Cube<double>> mxs;
 public:
