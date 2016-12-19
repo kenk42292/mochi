@@ -10,8 +10,9 @@
 
 VanillaFeedForward::VanillaFeedForward(unsigned int nIn, unsigned int nOut) :
 		mW(arma::Cube<double>(nOut, nIn, 1, arma::fill::randn)), mB(
-				arma::Cube<double>(1, 1, nOut, arma::fill::randn)) {
+				arma::Cube<double>(1, 1, nOut, arma::fill::zeros)) {
 	mW /= sqrt(nIn);
+	//	mW /= 100000.0;
 }
 
 VanillaFeedForward::~VanillaFeedForward() {
@@ -44,9 +45,7 @@ arma::field<arma::Cube<double>> VanillaFeedForward::backProp(
 	for (unsigned int i = 0; i < deltas.size(); ++i) {
 		const arma::Col<double>& p = deltas[i];
 		const arma::Col<double>& q = mxs[i];
-		arma::Mat<double> r = p*q.t();
-		dw += arma::Mat<double>(deltas[i].begin(), deltas[i].size(), 1)
-				* arma::Mat<double>(mxs[i].begin(), 1, mxs[i].size());
+		dw += p*q.t();
 		db += p;
 		arma::Mat<double> dx = mW.slice(0).t() * p;
 		//TODO: below line may be able to be optimized
@@ -55,8 +54,9 @@ arma::field<arma::Cube<double>> VanillaFeedForward::backProp(
 	//TODO: Don't hard-code etas... and make optimizer programmatic
 	const arma::Cube<double>& dwCube = arma::Cube<double>((const double*) dw.begin(), mW.n_rows, mW.n_cols, 1);
 	const arma::Cube<double>& dbCube = arma::Cube<double>((const double*) db.begin(), 1, 1, db.size());
-	mW -= 0.3 * dwCube / deltas.size();
-	mB -= 0.3 * dbCube / deltas.size();
+	mW -= 0.03 * dwCube / deltas.size();
+	mB -= 0.03 * dbCube / deltas.size();
+
 	return dxs;
 }
 

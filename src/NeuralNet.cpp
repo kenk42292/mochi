@@ -40,7 +40,7 @@ arma::field<arma::Cube<double>> NeuralNet::forwardPass(const arma::field<arma::C
 
 arma::field<arma::Cube<double>> NeuralNet::backwardPass(arma::field<arma::Cube<double>> deltas) {
 	unsigned int numLayers = mLayers.size();
-	for (int i=numLayers-1; i>=0; --i) {
+	for (int i=numLayers-1; i>=0; --i) { //TODO: Remember to change this back...
 		deltas = mLayers[i]->backProp(deltas);
 	}
 	return deltas;
@@ -49,7 +49,7 @@ arma::field<arma::Cube<double>> NeuralNet::backwardPass(arma::field<arma::Cube<d
 void NeuralNet::train(arma::field<arma::Cube<double>>& inputs, arma::field<arma::Cube<double>>& outputs) {
 
 	unsigned int numLayers = 4;
-	unsigned int numEpochs = 2;
+	unsigned int numEpochs = 5;
 	unsigned int batchSize = 5;
 
 	for (unsigned int ep=0; ep<numEpochs; ++ep) {

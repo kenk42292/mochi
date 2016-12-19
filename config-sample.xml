@@ -18,7 +18,7 @@
 	        </layer>
 	        
 	        <layer>
-	            <type>sigmoid</type>
+	            <type>softplus</type>
 	        </layer>
 	        
 	        <layer>

@@ -11,11 +11,14 @@
 #include "Layer.hpp"
 
 class Softplus: public Layer {
+private:
+	/* Needed for back-propagation */
+	arma::field<arma::Cube<double>> mxs;
 public:
 	Softplus();
 	virtual ~Softplus();
 
-	arma::field<arma::Cube<double>> feedForward(const arma::field<arma::Cube<double>>& zs);
+	arma::field<arma::Cube<double>> feedForward(const arma::field<arma::Cube<double>>& xs);
 	arma::field<arma::Cube<double>> backProp(const arma::field<arma::Cube<double>>& deltas);
 };
 

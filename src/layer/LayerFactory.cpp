@@ -29,7 +29,8 @@ std::vector<Layer*> LayerFactory::createLayers(Configuration conf) {
 			std::cout << "Creating Sigmoid Layer..." << std::endl;
 			layer = new Sigmoid();
 		} else if (layerType.compare("softplus")==0) {
-			//TODO: Implement this
+			std::cout << "Creating Softplus Layer..." << std::endl;
+			layer = new Softplus();
 		} else if (layerType.compare("softmax")==0) {
 			std::cout << "Creating Softmax Layer..." << std::endl;
 			layer = new Softmax();
