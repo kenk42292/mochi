@@ -31,7 +31,7 @@ public:
 	arma::field<arma::Cube<double>> forwardPass(const arma::field<arma::Cube<double>>& inputs);
 	arma::field<arma::Cube<double>> backwardPass(arma::field<arma::Cube<double>> deltas);
 	void train(arma::field<arma::Cube<double>>& inputs,
-			arma::field<arma::Cube<double>>& outputs, unsigned int batchSize);
+			arma::field<arma::Cube<double>>& outputs, unsigned int batchSize, unsigned int numEpochs);
 
 };
 

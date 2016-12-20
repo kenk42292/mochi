@@ -30,6 +30,10 @@ unsigned int Configuration::getTrainingBatchSize() {
 	return std::stoi(mConfigDoc.child("mochi-config").child("training-params").child("batch-size").child_value());
 }
 
+unsigned int Configuration::getNumEpochs() {
+	return std::stoi(mConfigDoc.child("mochi-config").child("training-params").child("num-epochs").child_value());
+}
+
 std::vector<std::map<std::string, std::string>> Configuration::layerConfigs() {
 	std::vector<std::map<std::string, std::string>> layerConfigs;
 	pugi::xml_node layers = mConfigDoc.child("mochi-config").child("net").child("layers");

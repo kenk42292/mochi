@@ -10,15 +10,16 @@
 NeuralNet::NeuralNet(std::vector<Layer*> layers, Configuration conf) {
 	mLayers = layers;
 	std::string lossConfig = conf.lossConfig();
-	if (lossConfig.compare("quadratic")==0) {
+	if (lossConfig.compare("quadratic") == 0) {
 		std::cout << "Setting to Quadratic Loss function" << std::endl;
 		mLoss = new Quadratic();
-	} else if (lossConfig.compare("crossentropy")==0) {
+	} else if (lossConfig.compare("crossentropy") == 0) {
 		std::cout << "Setting to Cross Entropy Loss function" << std::endl;
 		mLoss = new CrossEntropy();
 	} else {
 		mLoss = new CrossEntropy();
-		std::cout << "No configured loss fxn. Setting to cross entropy" << std::endl;
+		std::cout << "No configured loss fxn. Setting to cross entropy"
+				<< std::endl;
 	}
 }
 
@@ -29,39 +30,44 @@ NeuralNet::~NeuralNet() {
 	delete mLoss;
 }
 
-arma::field<arma::Cube<double>> NeuralNet::forwardPass(const arma::field<arma::Cube<double>>& inputs) {
+arma::field<arma::Cube<double>> NeuralNet::forwardPass(
+		const arma::field<arma::Cube<double>>& inputs) {
 	unsigned int numLayers = mLayers.size();
 	arma::field<arma::Cube<double>> activations = inputs;
-	for (unsigned int i=0; i<numLayers; ++i) {
+	for (unsigned int i = 0; i < numLayers; ++i) {
 		activations = mLayers[i]->feedForward(activations);
 	}
 	return activations;
 }
 
-arma::field<arma::Cube<double>> NeuralNet::backwardPass(arma::field<arma::Cube<double>> deltas) {
+arma::field<arma::Cube<double>> NeuralNet::backwardPass(
+		arma::field<arma::Cube<double>> deltas) {
 	unsigned int numLayers = mLayers.size();
-	for (int i=numLayers-1; i>=0; --i) { //TODO: Remember to change this back...
+	for (int i = numLayers - 1; i >= 0; --i) { //TODO: Remember to change this back...
 		deltas = mLayers[i]->backProp(deltas);
 	}
 	return deltas;
 }
 
-void NeuralNet::train(arma::field<arma::Cube<double>>& inputs, arma::field<arma::Cube<double>>& outputs, unsigned int batchSize) {
-
-	unsigned int numEpochs = 12;
+void NeuralNet::train(arma::field<arma::Cube<double>>& inputs,
+		arma::field<arma::Cube<double>>& outputs, unsigned int batchSize,
+		unsigned int numEpochs) {
 
 //	long ff(0);
 //	long l(0);
 //	long bp(0);
 
-	for (unsigned int ep=0; ep<numEpochs; ++ep) {
+	for (unsigned int ep = 0; ep < numEpochs; ++ep) {
 		std::cout << "epoch: " << ep << std::endl;
 		Utils::shuffle(inputs, outputs);
-		for (unsigned int p=0; p<inputs.size()-batchSize; p+=batchSize) {
+		for (unsigned int p = 0; p < inputs.size() - batchSize; p +=
+				batchSize) {
 //			std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
-			arma::field<arma::Cube<double>> activations = forwardPass(inputs.rows(p, p+batchSize-1));
+			arma::field<arma::Cube<double>> activations = forwardPass(
+					inputs.rows(p, p + batchSize - 1));
 //			std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
-			arma::field<arma::Cube<double>> deltas = mLoss->loss_prime(activations, outputs.rows(p, p+batchSize-1));
+			arma::field<arma::Cube<double>> deltas = mLoss->loss_prime(
+					activations, outputs.rows(p, p + batchSize - 1));
 //			std::chrono::high_resolution_clock::time_point t3 = std::chrono::high_resolution_clock::now();
 			backwardPass(deltas);
 //			std::chrono::high_resolution_clock::time_point t4 = std::chrono::high_resolution_clock::now();
@@ -78,10 +84,4 @@ void NeuralNet::train(arma::field<arma::Cube<double>>& inputs, arma::field<arma:
 //	std::cout << "bp time: " << bp/1000000 << std::endl;
 
 }
-
-
-
-
-
-
 

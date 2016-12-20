@@ -24,6 +24,7 @@ public:
 	const Configuration& operator=(const Configuration& other);
 
 	unsigned int getTrainingBatchSize();
+	unsigned int getNumEpochs();
 	std::vector<std::map<std::string, std::string>> layerConfigs();
 	std::string lossConfig();
 };
