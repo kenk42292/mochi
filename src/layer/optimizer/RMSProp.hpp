@@ -13,9 +13,13 @@
 class RMSProp: public Optimizer {
 private:
 	double mEta;
+	double mGamma;
+	bool cacheInitialized;
+	arma::field<arma::Cube<double>> mCache;
+	double eps;
 
 public:
-	RMSProp(double eta);
+	RMSProp(double eta, double gamma);
 	virtual ~RMSProp();
 	arma::field<arma::Cube<double>> delta(const arma::field<arma::Cube<double>>& gradients, unsigned int batchSize);
 };

@@ -35,5 +35,5 @@ arma::field<arma::Cube<double>> Adagrad::delta(
 	}
 	return paramChange;
 }
-;
+
 
