@@ -13,9 +13,11 @@
 class RMSProp: public Optimizer {
 private:
 	double mEta;
+
 public:
 	RMSProp(double eta);
 	virtual ~RMSProp();
+	arma::field<arma::Cube<double>> delta(const arma::field<arma::Cube<double>>& gradients, unsigned int batchSize);
 };
 
 #endif /* LAYER_OPTIMIZER_RMSPROP_HPP_ */

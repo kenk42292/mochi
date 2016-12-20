@@ -14,8 +14,8 @@
 	            <type>vanillafeedforward</type>
 	            <input-dim>784</input-dim>
 	            <output-dim>300</output-dim>
-	            <optimizer>gradientdescent</optimizer>
-	            <eta>0.1</eta>
+	            <optimizer>adagrad</optimizer>
+	            <eta>2</eta>
 	        </layer>
 	        
 	        <layer>
@@ -27,7 +27,7 @@
 	            <input-dim>300</input-dim>
 	            <output-dim>10</output-dim>
 	            <optimizer>gradientdescent</optimizer>
-	            <eta>0.1</eta>
+	            <eta>2</eta>
 	        </layer>
 	        
 	        <layer>
