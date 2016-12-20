@@ -14,7 +14,8 @@
 	            <type>vanillafeedforward</type>
 	            <input-dim>784</input-dim>
 	            <output-dim>300</output-dim>
-	            <optimizer>rmsprop</optimizer>
+	            <optimizer>gradientdescent</optimizer>
+	            <eta>0.1</eta>
 	        </layer>
 	        
 	        <layer>
@@ -25,7 +26,8 @@
 	            <type>vanillafeedforward</type>
 	            <input-dim>300</input-dim>
 	            <output-dim>10</output-dim>
-	            <optimizer>rmsprop</optimizer>
+	            <optimizer>gradientdescent</optimizer>
+	            <eta>0.1</eta>
 	        </layer>
 	        
 	        <layer>
