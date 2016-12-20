@@ -5,8 +5,8 @@
  *      Author: ken
  */
 
-#ifndef LAYER_LOGSOFTMAX_H_
-#define LAYER_LOGSOFTMAX_H_
+#ifndef LAYER_LOGSOFTMAX_HPP_
+#define LAYER_LOGSOFTMAX_HPP_
 
 #include "Layer.hpp"
 
@@ -16,4 +16,4 @@ public:
 	virtual ~LogSoftmax();
 };
 
-#endif /* LAYER_LOGSOFTMAX_H_ */
+#endif /* LAYER_LOGSOFTMAX_HPP_ */

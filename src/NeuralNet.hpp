@@ -18,6 +18,7 @@
 #include "layer/Sigmoid.hpp"
 #include "layer/VanillaFeedForward.hpp"
 #include "Utils.hpp"
+#include <chrono>
 
 class NeuralNet {
 private:

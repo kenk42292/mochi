@@ -17,13 +17,16 @@
 #include "../layer/Sigmoid.hpp"
 #include "../layer/Softplus.hpp"
 #include "../layer/Softmax.hpp"
+#include "optimizer/Optimizer.hpp"
+#include "optimizer/GradientDescent.hpp"
+#include "optimizer/RMSProp.hpp"
 
 class LayerFactory {
 public:
 	LayerFactory();
 	virtual ~LayerFactory();
-
 	std::vector<Layer*> createLayers(Configuration conf);
+	Optimizer* createOptimizer(std::map<std::string, std::string> layerConfig);
 };
 
 #endif /* LAYER_LAYERFACTORY_HPP_ */

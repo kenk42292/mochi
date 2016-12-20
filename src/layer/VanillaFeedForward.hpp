@@ -9,15 +9,18 @@
 #define LAYER_VANILLAFEEDFORWARD_HPP_
 
 #include "Layer.hpp"
+#include "optimizer/Optimizer.hpp"
 
 class VanillaFeedForward: public Layer {
-public:
+private:
 	arma::Cube<double> mW;
 	arma::Cube<double> mB;
 	/** Stored batch inputs for back propagation */
 	arma::field<arma::Cube<double>> mxs;
+	Optimizer* mOptimizer;
+	arma::field<arma::Cube<double>> mdwdb;
 public:
-	VanillaFeedForward(unsigned int nIn, unsigned int nOut);
+	VanillaFeedForward(unsigned int nIn, unsigned int nOut, Optimizer* optimizer);
 	virtual ~VanillaFeedForward();
 
 	arma::Cube<double> feedForward(const arma::Cube<double>& x);

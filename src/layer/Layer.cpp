@@ -7,14 +7,9 @@
 
 #include "Layer.hpp"
 
-Layer::Layer() {
-	// TODO Auto-generated constructor stub
+Layer::Layer() {}
 
-}
-
-Layer::~Layer() {
-	// TODO Auto-generated destructor stub
-}
+Layer::~Layer() {}
 
 arma::field<arma::Cube<double>> Layer::feedForward(const arma::field<arma::Cube<double>>& zs) {
 	std::cout << "Layer base class feedforward called..." << std::endl;

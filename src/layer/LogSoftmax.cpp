@@ -5,7 +5,7 @@
  *      Author: ken
  */
 
-#include "LogSoftmax.h"
+#include "LogSoftmax.hpp"
 
 LogSoftmax::LogSoftmax() {
 	// TODO Auto-generated constructor stub
