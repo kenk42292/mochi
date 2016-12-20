@@ -46,10 +46,9 @@ arma::field<arma::Cube<double>> NeuralNet::backwardPass(arma::field<arma::Cube<d
 	return deltas;
 }
 
-void NeuralNet::train(arma::field<arma::Cube<double>>& inputs, arma::field<arma::Cube<double>>& outputs) {
+void NeuralNet::train(arma::field<arma::Cube<double>>& inputs, arma::field<arma::Cube<double>>& outputs, unsigned int batchSize) {
 
 	unsigned int numEpochs = 12;
-	unsigned int batchSize = 20;
 
 //	long ff(0);
 //	long l(0);

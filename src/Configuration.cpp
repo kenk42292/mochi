@@ -26,6 +26,9 @@ const Configuration& Configuration::operator=(const Configuration& other) {
 	return *this;
 }
 
+unsigned int Configuration::getTrainingBatchSize() {
+	return std::stoi(mConfigDoc.child("mochi-config").child("training-params").child("batch-size").child_value());
+}
 
 std::vector<std::map<std::string, std::string>> Configuration::layerConfigs() {
 	std::vector<std::map<std::string, std::string>> layerConfigs;

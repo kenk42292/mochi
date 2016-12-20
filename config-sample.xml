@@ -4,6 +4,10 @@
         <attribute-type>categorical</attribute-type>
     </data>
 
+	<training-params>
+		<batch-size>50</batch-size>
+	</training-params>
+
     <net>
         <input-dim>784</input-dim>
         <output-dim>10</output-dim>
@@ -15,7 +19,8 @@
 	            <input-dim>784</input-dim>
 	            <output-dim>300</output-dim>
 	            <optimizer>adagrad</optimizer>
-	            <eta>2</eta>
+	            <eta>0.5</eta>
+	            <gamma>0.9</gamma>
 	        </layer>
 	        
 	        <layer>
@@ -26,8 +31,9 @@
 	            <type>vanillafeedforward</type>
 	            <input-dim>300</input-dim>
 	            <output-dim>10</output-dim>
-	            <optimizer>gradientdescent</optimizer>
-	            <eta>2</eta>
+	            <optimizer>adagrad</optimizer>
+	            <eta>0.5</eta>
+	            <gamma>0.9</gamma>
 	        </layer>
 	        
 	        <layer>

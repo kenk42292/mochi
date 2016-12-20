@@ -23,6 +23,7 @@ public:
 	virtual ~Configuration();
 	const Configuration& operator=(const Configuration& other);
 
+	unsigned int getTrainingBatchSize();
 	std::vector<std::map<std::string, std::string>> layerConfigs();
 	std::string lossConfig();
 };

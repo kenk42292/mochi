@@ -44,8 +44,9 @@ int main() {
 	std::vector<Layer*> layers = layerFactory.createLayers(conf);
 
 	NeuralNet nn(layers, conf);
+	unsigned int batchSize = conf.getTrainingBatchSize();
 	std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
-	nn.train(train_images, train_labels);
+	nn.train(train_images, train_labels, batchSize);
 	std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
 
 	auto duration = std::chrono::duration_cast<std::chrono::seconds>(t2-t1).count();
