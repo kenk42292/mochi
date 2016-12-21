@@ -16,6 +16,7 @@ public:
 	virtual ~CrossEntropy();
 
 	double loss(arma::Cube<double> output, arma::Cube<double> y);
+	double loss(arma::field<arma::Cube<double>> outputs, arma::field<arma::Cube<double>> ys);
 	arma::Cube<double> loss_prime(const arma::Cube<double>& output, const arma::Cube<double>& y);
 	arma::field<arma::Cube<double>> loss_prime(const arma::field<arma::Cube<double>>& outputs, const arma::field<arma::Cube<double>>& ys);
 };

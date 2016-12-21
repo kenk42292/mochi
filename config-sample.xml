@@ -6,7 +6,7 @@
 
 	<training-params>
 		<batch-size>10</batch-size>
-		<num-epochs>10</num-epochs>
+		<num-epochs>13</num-epochs>
 	</training-params>
 
     <net>
@@ -20,7 +20,7 @@
 	            <input-dim>784</input-dim>
 	            <output-dim>300</output-dim>
 	            <optimizer>adagrad</optimizer>
-	            <eta>0.8</eta>
+	            <eta>0.9</eta>
 	            <gamma>0.9</gamma>
 	        </layer>
 	        

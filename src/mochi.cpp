@@ -47,7 +47,7 @@ int main() {
 	unsigned int batchSize = conf.getTrainingBatchSize();
 	unsigned int numEpochs = conf.getNumEpochs();
 	std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
-	nn.train(train_images, train_labels, batchSize, numEpochs);
+	nn.train(train_images, train_labels, batchSize, numEpochs, true);
 	std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
 
 	auto duration = std::chrono::duration_cast<std::chrono::seconds>(t2-t1).count();
@@ -57,27 +57,21 @@ int main() {
 
 
 
-	cout << "VALIDATING" << endl;
+	cout << "validating..." << endl;
 	double total_correct = 0;
 	unsigned char prediction;
 	arma::Cube<double> output;
 
 	arma::field<arma::Cube<double>> predictions = nn.forwardPass(val_images);
-	cout << "number of predictions: " << predictions.size() << endl;
-
-	cout << "==================================" << endl;
 
 	for (unsigned int i = 0; i < predictions.size(); ++i) {
-
 		if (static_cast<int>(arma::vectorise(predictions[i]).index_max())
 				== static_cast<int>(arma::vectorise(val_labels[i]).index_max())) {
 			++total_correct;
 		}
 	}
-
 	cout << "fraction correct: "
 			<< static_cast<double>(total_correct / val_images.size()) << endl;
-
 
 	return 0;
 }

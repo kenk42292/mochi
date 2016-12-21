@@ -20,6 +20,14 @@ double Quadratic::loss(arma::Cube<double> output, arma::Cube<double> y) {
 	return 0.5*arma::accu(arma::square(output-y));
 }
 
+double Quadratic::loss(arma::field<arma::Cube<double>> outputs, arma::field<arma::Cube<double>> ys) {
+	double total = 0.0;
+	for (unsigned int i=0; i<outputs.size(); ++i) {
+		total += loss(outputs[i], ys[i]);
+	}
+	return total;
+}
+
 arma::Cube<double> Quadratic::loss_prime(const arma::Cube<double>& output, const arma::Cube<double>& y) {
 	return output-y;
 }

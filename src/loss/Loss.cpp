@@ -20,6 +20,10 @@ double Loss::loss(arma::Cube<double> output, arma::Cube<double> y) {
 	return 0.0;
 }
 
+double Loss::loss(arma::field<arma::Cube<double>> outputs, arma::field<arma::Cube<double>> ys) {
+	return 0.0;
+}
+
 arma::Cube<double> Loss::loss_prime(const arma::Cube<double>& output,
 		const arma::Cube<double>& y) {
 	return arma::Cube<double>(1, 1, 1, arma::fill::zeros);

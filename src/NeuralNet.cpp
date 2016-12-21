@@ -51,7 +51,7 @@ arma::field<arma::Cube<double>> NeuralNet::backwardPass(
 
 void NeuralNet::train(arma::field<arma::Cube<double>>& inputs,
 		arma::field<arma::Cube<double>>& outputs, unsigned int batchSize,
-		unsigned int numEpochs) {
+		unsigned int numEpochs, bool report) {
 
 //	long ff(0);
 //	long l(0);
@@ -75,8 +75,12 @@ void NeuralNet::train(arma::field<arma::Cube<double>>& inputs,
 //			ff += std::chrono::duration_cast<std::chrono::microseconds>(t2-t1).count();
 //			l += std::chrono::duration_cast<std::chrono::microseconds>(t3-t2).count();
 //			bp += std::chrono::duration_cast<std::chrono::microseconds>(t4-t3).count();
-
 		}
+		if (report) {
+			arma::field<arma::Cube<double>> activations = forwardPass(inputs.rows(0, batchSize - 1));
+			std::cout << "Single Batch Loss: " << mLoss->loss(activations, outputs.rows(0, batchSize-1))<<std::endl;
+		}
+
 	}
 //
 //	std::cout << "feedforward time: " << ff/1000000 << std::endl;

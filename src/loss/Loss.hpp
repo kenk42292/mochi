@@ -16,6 +16,7 @@ public:
 	virtual ~Loss();
 
 	virtual double loss(arma::Cube<double> output, arma::Cube<double> y);
+	virtual double loss(arma::field<arma::Cube<double>> outputs, arma::field<arma::Cube<double>> ys);
 	virtual arma::Cube<double> loss_prime(const arma::Cube<double>& output, const arma::Cube<double>& y);
 	virtual arma::field<arma::Cube<double>> loss_prime(const arma::field<arma::Cube<double>>& outputs, const arma::field<arma::Cube<double>>& ys);
 };
