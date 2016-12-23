@@ -56,9 +56,12 @@ void NeuralNet::train(arma::field<arma::Cube<double>>& inputs,
 //	long ff(0);
 //	long l(0);
 //	long bp(0);
-
+	double epochLoss;
+	std::chrono::high_resolution_clock::time_point t0;
 	for (unsigned int ep = 0; ep < numEpochs; ++ep) {
 		std::cout << "epoch: " << ep << std::endl;
+		t0 = std::chrono::high_resolution_clock::now();
+		epochLoss = 0;
 		Utils::shuffle(inputs, outputs);
 		for (unsigned int p = 0; p < inputs.size() - batchSize; p +=
 				batchSize) {
@@ -75,10 +78,18 @@ void NeuralNet::train(arma::field<arma::Cube<double>>& inputs,
 //			ff += std::chrono::duration_cast<std::chrono::microseconds>(t2-t1).count();
 //			l += std::chrono::duration_cast<std::chrono::microseconds>(t3-t2).count();
 //			bp += std::chrono::duration_cast<std::chrono::microseconds>(t4-t3).count();
+			if (report) {
+				epochLoss += mLoss->loss(activations,
+						outputs.rows(p, p + batchSize - 1));
+			}
 		}
 		if (report) {
-			arma::field<arma::Cube<double>> activations = forwardPass(inputs.rows(0, batchSize - 1));
-			std::cout << "Single Batch Loss: " << mLoss->loss(activations, outputs.rows(0, batchSize-1))<<std::endl;
+			std::chrono::high_resolution_clock::time_point t =
+					std::chrono::high_resolution_clock::now();
+			std::cout << "\tEpoch Duration: "
+					<< std::chrono::duration_cast<std::chrono::seconds>(t - t0).count()
+					<< std::endl;
+			std::cout << "\tEpoch Loss: " << epochLoss << std::endl;
 		}
 
 	}
