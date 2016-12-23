@@ -20,7 +20,9 @@ This configuration file can be used to configure settings that include:
 
 The project is highly dependent on two external libraries:
 
-*   The Armadillo library is used extensively in processing mathematical computations efficiently and quickly. The library depends on BLAS and LAPACK, or their high-performance replacements: MKL, OpenBLAS.
+*   Armadillo: The Armadillo library is used extensively in processing mathematical computations efficiently and quickly. The library depends on BLAS and LAPACK, or their high-performance replacements: MKL, OpenBLAS.
+
+   * Note: Be sure to use Armadillo v7.600.2 or above. Versions below this have a memory-leak issue with arma::field, which is used throughout the project.
 
 > Conrad Sanderson and Ryan Curtin.
 
