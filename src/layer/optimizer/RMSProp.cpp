@@ -7,7 +7,7 @@
 
 #include "RMSProp.hpp"
 
-RMSProp::RMSProp(double eta, double gamma): mEta(eta), mGamma(gamma), cacheInitialized(false), eps(0.00001) {}
+RMSProp::RMSProp(double eta, double gamma): mEta(eta), mGamma(gamma), cacheInitialized(false), eps(0.000001) {}
 
 RMSProp::~RMSProp() {}
 

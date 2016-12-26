@@ -17,7 +17,7 @@ public:
 	Layer();
 	virtual ~Layer();
 
-	virtual arma::field<arma::Cube<double>> feedForward(const arma::field<arma::Cube<double>>& zs);
+	virtual arma::field<arma::Cube<double>> feedForward(const arma::field<arma::Cube<double>>& xs);
 	virtual arma::field<arma::Cube<double>> backProp(const arma::field<arma::Cube<double>>& deltas);
 };
 
