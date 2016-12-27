@@ -16,14 +16,13 @@ Convolutional::Convolutional(std::vector<unsigned int> inputDim,
 				patternDim[0]), mPatternHeight(patternDim[1]), mPatternWidth(
 				patternDim[2]) {
 	mws = arma::field<arma::Cube<double>>(mNumPatterns);
-	mbs = arma::field<arma::Cube<double>>(mNumPatterns);
-	mOptimizer = optimizer;
 	for (unsigned int i = 0; i < mNumPatterns; ++i) {
 		mws[i] = arma::Cube<double>(mPatternHeight, mPatternWidth,
 				mPatternDepth, arma::fill::randn);
-		mbs[i] = arma::Cube<double>(mPatternHeight, mPatternWidth,
-				mPatternDepth, arma::fill::zeros);
 	}
+	mbs = arma::Cube<double>(mInHeight - mPatternHeight + 1,
+			mInWidth - mPatternWidth + 1, mNumPatterns, arma::fill::zeros);
+	mOptimizer = optimizer;
 }
 
 Convolutional::~Convolutional() {
@@ -44,8 +43,7 @@ arma::Cube<double> Convolutional::feedForward(const arma::Cube<double>& x,
 		y.slice(i) = ySlice.submat(mPatternHeight - 1, mPatternWidth - 1,
 				x.n_rows - 1, x.n_cols - 1);
 	}
-	// TODO: Add the bias term
-	return y;
+	return y + mbs;
 }
 
 arma::field<arma::Cube<double>> Convolutional::feedForward(
