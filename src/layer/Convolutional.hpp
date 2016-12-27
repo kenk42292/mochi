@@ -27,7 +27,7 @@ private:
 	Optimizer* mOptimizer;
 	arma::field<arma::Cube<double>> mxs;
 	arma::field<arma::Cube<double>> mws;
-	arma::field<arma::Cube<double>> mbs;
+	arma::Cube<double> mbs;
 public:
 	Convolutional(std::vector<unsigned int> inputDim,
 			unsigned int numPatterns,
