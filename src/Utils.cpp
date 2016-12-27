@@ -7,13 +7,33 @@
 
 #include "Utils.hpp"
 
-Utils::Utils() {
-	// TODO Auto-generated constructor stub
+Utils::Utils() {}
 
+Utils::~Utils() {}
+
+std::vector<unsigned int> Utils::parseDims(std::string s) {
+    std::vector<unsigned int> result;
+    std::stringstream ss(s);
+    unsigned int dim;
+    while (ss >> dim) {
+        while (ss.peek()==',' || ss.peek()==' ') {
+            ss.ignore();
+        }
+        result.push_back(dim);
+    }
+    return result;
 }
 
-Utils::~Utils() {
-	// TODO Auto-generated destructor stub
+arma::field<arma::Cube<double>> Utils::flipCubes(const arma::field<arma::Cube<double>>& f) {
+	arma::field<arma::Cube<double>> flipped(f.size());
+	for (unsigned int i=0; i<f.size(); ++i) {
+		arma::Cube<double> flippedCube(f[i].n_rows, f[i].n_cols, f[i].n_slices);
+		for (unsigned int j=0; j<f[i].n_slices; ++j) {
+			flippedCube.slice(j) = arma::fliplr(arma::flipud(f[i].slice(j)));
+		}
+		flipped[i] = flippedCube;
+	}
+	return flipped;
 }
 
 void Utils::shuffle(arma::field<arma::Cube<double>>& inputs, arma::field<arma::Cube<double>>& outputs) {

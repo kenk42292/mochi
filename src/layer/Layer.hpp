@@ -9,6 +9,7 @@ cd pa	 * Layer.h
 #define LAYER_LAYER_HPP_
 
 #include <armadillo>
+#include "optimizer/Optimizer.hpp"
 
 class Layer {
 private:

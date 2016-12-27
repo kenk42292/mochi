@@ -11,9 +11,7 @@ Adagrad::Adagrad(double eta) :
 		mEta(eta), cacheInitialized(false), eps(0.00001) {
 }
 
-Adagrad::~Adagrad() {
-	// TODO Auto-generated destructor stub
-}
+Adagrad::~Adagrad() {}
 
 arma::field<arma::Cube<double>> Adagrad::delta(
 		const arma::field<arma::Cube<double>>& gradients,

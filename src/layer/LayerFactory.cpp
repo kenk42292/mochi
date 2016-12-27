@@ -25,7 +25,17 @@ std::vector<Layer*> LayerFactory::createLayers(Configuration conf) {
 			Optimizer* optimizer = createOptimizer(layerConfig);
 			layer = new VanillaFeedForward(dimIn, dimOut, optimizer);
 		} else if (layerType.compare("convolutional")==0) {
-			//TODO: Implement this
+			std::vector<unsigned int> inDim = Utils::parseDims(layerConfig["input-dim"]);
+			std::cout << "here1" << std::endl;
+			unsigned int numPatterns = stoi(layerConfig["num-kernels"]);
+			std::cout << "here2" << std::endl;
+			std::vector<unsigned int> kernelDim = Utils::parseDims(layerConfig["kernel-dim"]);
+			std::vector<unsigned int> outDim = Utils::parseDims(layerConfig["output-dim"]);
+			std::cout << "here3" << std::endl;
+			Optimizer* optimizer = createOptimizer(layerConfig);
+			std::cout << "here4" << std::endl;
+			layer = new Convolutional(inDim, numPatterns, kernelDim, outDim, optimizer);
+			std::cout << "here5" << std::endl;
 		} else if (layerType.compare("sigmoid")==0) {
 			layer = new Sigmoid();
 		} else if (layerType.compare("softplus")==0) {

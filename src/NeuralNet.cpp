@@ -32,6 +32,7 @@ NeuralNet::~NeuralNet() {
 
 arma::field<arma::Cube<double>> NeuralNet::forwardPass(
 		const arma::field<arma::Cube<double>>& inputs) {
+//	std::cout << "NEURALNET FORWARDPASS" << std::endl;
 	unsigned int numLayers = mLayers.size();
 	arma::field<arma::Cube<double>> activations = inputs;
 	for (unsigned int i = 0; i < numLayers; ++i) {
@@ -42,6 +43,7 @@ arma::field<arma::Cube<double>> NeuralNet::forwardPass(
 
 arma::field<arma::Cube<double>> NeuralNet::backwardPass(
 		arma::field<arma::Cube<double>> deltas) {
+//	std::cout << "NEURALNET BACKWARDPASS" << std::endl;
 	unsigned int numLayers = mLayers.size();
 	for (int i = numLayers - 1; i >= 0; --i) { //TODO: Remember to change this back...
 		deltas = mLayers[i]->backProp(deltas);

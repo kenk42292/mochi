@@ -9,18 +9,31 @@
 #define LAYER_CONVOLUTIONAL_HPP_
 
 #include "Layer.hpp"
+#include "../Utils.hpp"
 
 class Convolutional: public Layer {
 private:
+	// TODO: This code is ugly. At least make constructor args const vect. refs
+	unsigned int mInDepth;
+	unsigned int mInHeight;
+	unsigned int mInWidth;
 	unsigned int mNumPatterns;
 	unsigned int mPatternDepth;
 	unsigned int mPatternHeight;
 	unsigned int mPatternWidth;
-	arma::field<arma::Cube<double>> mWs;
-	arma::field<arma::Cube<double>> mBs;
+	unsigned int mOutDepth;
+	unsigned int mOutHeight;
+	unsigned int mOutWidth;
+	Optimizer* mOptimizer;
+	arma::field<arma::Cube<double>> mxs;
+	arma::field<arma::Cube<double>> mws;
+	arma::field<arma::Cube<double>> mbs;
 public:
-	Convolutional(unsigned int numPatterns, unsigned int patternDepth,
-			unsigned int patternHeight, unsigned int patternWidth);
+	Convolutional(std::vector<unsigned int> inputDim,
+			unsigned int numPatterns,
+			std::vector<unsigned int> patternDim,
+			std::vector<unsigned int> outputDim,
+			Optimizer* optimizer);
 	virtual ~Convolutional();
 
 	/** Correlate all xs through a specific pattern */
