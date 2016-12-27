@@ -37,6 +37,15 @@ int main() {
 	arma::field<arma::Cube<double>> val_labels = loader.load_labels(
 			"./data/t10k-labels-idx1-ubyte");
 
+	/* For passing in to convolutional net - comment out as necessary */
+	/*for (unsigned int i=0; i<train_images.size(); ++i) {
+		train_images[i] = arma::Cube<double>((const double*) train_images[i].begin(), 28, 28, 1);
+	}
+	for (unsigned int i=0; i<val_images.size(); ++i) {
+		train_images[i] = arma::Cube<double>((const double*) val_images[i].begin(), 28, 28, 1);
+	}*/
+
+
 	std::string confSrc = "config-sample.xml";
 	Configuration conf(confSrc);
 	LayerFactory layerFactory;

@@ -1,0 +1,69 @@
+
+<mochi-config>
+    <data>
+        <attribute-type>categorical</attribute-type>
+    </data>
+    
+    <training-params>
+		<batch-size>20</batch-size>
+		<num-epochs>10</num-epochs>
+	</training-params>
+
+    <net>
+        <input-dim>1,28,28</input-dim>
+        <output-dim>10</output-dim>
+        
+        <layers>
+	        <layer>
+	            <type>convolutional</type>
+	            <input-dim>1,28,28</input-dim>
+	            <num-kernels>10</num-kernels>
+	            <kernel-dim>1,9,9</kernel-dim>
+	            <output-dim>10,20,20</output-dim>
+	            <optimizer>rmsprop</optimizer>
+	            <eta>0.001</eta>
+	            <gamma>0.9</gamma>
+	        </layer>
+	        
+	        <layer>
+	            <type>softplus</type>
+	        </layer>
+	        
+	        <layer>
+	            <type>vanillafeedforward</type>
+	            <input-dim>4000</input-dim>
+	            <output-dim>300</output-dim>
+	            <optimizer>adagrad</optimizer>
+	            <eta>0.1</eta>
+	            <gamma>0.9</gamma>
+	        </layer>
+	        
+	        <layer>
+	            <type>sigmoid</type>
+	        </layer>
+	        
+	        <layer>
+	            <type>vanillafeedforward</type>
+	            <input-dim>300</input-dim>
+	            <output-dim>10</output-dim>
+	            <optimizer>adagrad</optimizer>
+	            <eta>0.01</eta>
+	            <gamma>0.9</gamma>
+	        </layer>
+	        
+	        <layer>
+	            <type>softmax</type>
+	        </layer>
+        </layers>
+        
+        <loss>
+            <type>crossentropy</type>
+            <dim>10</dim>
+        </loss>
+
+    </net>
+
+</mochi-config>
+
+
+

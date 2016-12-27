@@ -18,6 +18,8 @@ public:
 	Utils();
 	virtual ~Utils();
 
+	static std::vector<unsigned int> parseDims(std::string s);
+	static arma::field<arma::Cube<double>> flipCubes(const arma::field<arma::Cube<double>>& f);
 	static void shuffle(arma::field<arma::Cube<double>>& inputs, arma::field<arma::Cube<double>>& outputs);
 	static void printConfig(std::vector<std::map<std::string, std::string>> layersConfig);
 };

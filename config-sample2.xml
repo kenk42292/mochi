@@ -3,6 +3,11 @@
     <data>
         <attribute-type>categorical</attribute-type>
     </data>
+    
+	<training-params>
+		<batch-size>10</batch-size>
+		<num-epochs>100</num-epochs>
+	</training-params>
 
     <net>
         <input-dim>1,28,28</input-dim>
@@ -12,9 +17,12 @@
 	        <layer>
 	            <type>convolutional</type>
 	            <input-dim>1,28,28</input-dim>
-	            <kernel-dim>32,1,5,5</kernel-dim>
+	            <num-kernels>32</num-kernels>
+	            <kernel-dim>1,5,5</kernel-dim>
 	            <output-dim>32,24,24</output-dim>
 	            <optimizer>rmsprop</optimizer>
+	            <eta>0.001</eta>
+	            <gamma>0.9</gamma>
 	        </layer>
 	            
 	        <layer>
@@ -31,9 +39,12 @@
 	        <layer>
 	            <type>convolutional</type>
 	            <input-dim>32,12,12</input-dim>
-	            <kernel-dim>64,32,3,3</kernel-dim>
+	            <num-kernels>64</num-kernels>
+	            <kernel-dim>32,3,3</kernel-dim>
 	            <output-dim>64,10,10</output-dim>
 	            <optimizer>rmsprop</optimizer>
+	            <eta>0.01</eta>
+	            <gamma>0.9</gamma>
 	        </layer>
 	        
 	        <layer>
@@ -52,6 +63,8 @@
 	            <input-dim>800</input-dim>
 	            <output-dim>1000</output-dim>
 	            <optimizer>rmsprop</optimizer>
+	            <eta>0.01</eta>
+	            <gamma>0.9</gamma>
 	        </layer>
 	        
 	        <layer>
@@ -63,6 +76,8 @@
 	            <input-dim>1000</input-dim>
 	            <output-dim>10</output-dim>
 	            <optimizer>rmsprop</optimizer>
+	            <eta>0.01</eta>
+	            <gamma>0.9</gamma>
 	        </layer>
 	        
 	        <layer>
