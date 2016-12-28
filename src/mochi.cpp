@@ -42,7 +42,7 @@ int main() {
 		train_images[i] = arma::Cube<double>((const double*) train_images[i].begin(), 28, 28, 1);
 	}
 	for (unsigned int i=0; i<val_images.size(); ++i) {
-		train_images[i] = arma::Cube<double>((const double*) val_images[i].begin(), 28, 28, 1);
+		val_images[i] = arma::Cube<double>((const double*) val_images[i].begin(), 28, 28, 1);
 	}
 
 
