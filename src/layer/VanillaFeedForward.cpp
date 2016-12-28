@@ -8,7 +8,8 @@
 #include "VanillaFeedForward.hpp"
 #include <math.h>
 
-VanillaFeedForward::VanillaFeedForward(unsigned int nIn, unsigned int nOut, Optimizer* optimizer) :
+VanillaFeedForward::VanillaFeedForward(unsigned int nIn, unsigned int nOut,
+		Optimizer* optimizer) :
 		mW(arma::Cube<double>(nOut, nIn, 1, arma::fill::randn)), mB(
 				arma::Cube<double>(1, 1, nOut, arma::fill::zeros)) {
 	mW /= sqrt(nIn);
@@ -23,9 +24,11 @@ VanillaFeedForward::~VanillaFeedForward() {
 arma::Cube<double> VanillaFeedForward::feedForward(
 		const arma::Cube<double>& x) {
 	const arma::Mat<double>& weightVector = mW.slice(0);
-	const arma::Col<double>& xVector = x;
+	const arma::Col<double>& xVector = arma::Col<double>(
+			(const double*) x.begin(), x.size());
+	;
 	const arma::Col<double>& biasVector = mB;
-	arma::Col<double> v = weightVector*xVector + biasVector;
+	arma::Col<double> v = weightVector * xVector + biasVector;
 	return arma::Cube<double>((const double*) v.begin(), 1, 1, v.size());
 }
 
@@ -46,20 +49,25 @@ arma::field<arma::Cube<double>> VanillaFeedForward::backProp(
 	arma::field<arma::Cube<double>> dxs(deltas.size());
 	for (unsigned int i = 0; i < deltas.size(); ++i) {
 		const arma::Col<double>& p = deltas[i];
-		const arma::Col<double>& q = mxs[i];
-		dw += p*q.t();
+		const arma::Col<double>& q = arma::Col<double>(
+				(const double*) mxs[i].begin(),
+				mxs[i].size());
+		dw += p * q.t();
 		db += p;
 		const arma::Mat<double>& dx = mW.slice(0).t() * p;
 		//TODO: below line may be able to be optimized
 		dxs[i] = arma::Cube<double>(dx.begin(), 1, 1, dx.size()); // do I need to vectorise the delta...?
 	}
 	//TODO: const in line below shoudln't work...
-	mdwdb[0] = arma::Cube<double>((const double*) dw.begin(), mW.n_rows, mW.n_cols, 1);
+	mdwdb[0] = arma::Cube<double>((const double*) dw.begin(), mW.n_rows,
+			mW.n_cols, 1);
 	mdwdb[1] = arma::Cube<double>((const double*) db.begin(), 1, 1, db.size());
-	const arma::field<arma::Cube<double>>& paramChange = mOptimizer->delta(mdwdb, deltas.size());
+	const arma::field<arma::Cube<double>>& paramChange = mOptimizer->delta(
+			mdwdb, deltas.size());
 	mW -= paramChange[0];
 	mB -= paramChange[1];
 
+//	std::cout << "FINISHED VFF BACKPROP" << std::endl;
 	return dxs;
 }
 

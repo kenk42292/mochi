@@ -6,7 +6,7 @@
     
     <training-params>
 		<batch-size>20</batch-size>
-		<num-epochs>10</num-epochs>
+		<num-epochs>5</num-epochs>
 	</training-params>
 
     <net>
@@ -17,8 +17,23 @@
 	        <layer>
 	            <type>convolutional</type>
 	            <input-dim>1,28,28</input-dim>
+	            <num-kernels>20</num-kernels>
+	            <kernel-dim>1,5,5</kernel-dim>
+	            <output-dim>20,24,24</output-dim>
+	            <optimizer>rmsprop</optimizer>
+	            <eta>0.001</eta>
+	            <gamma>0.9</gamma>
+	        </layer>
+	        
+	        <layer>
+	            <type>softplus</type>
+	        </layer>
+	        
+	      	<layer>
+	            <type>convolutional</type>
+	            <input-dim>20,24,24</input-dim>
 	            <num-kernels>10</num-kernels>
-	            <kernel-dim>1,9,9</kernel-dim>
+	            <kernel-dim>20,5,5</kernel-dim>
 	            <output-dim>10,20,20</output-dim>
 	            <optimizer>rmsprop</optimizer>
 	            <eta>0.001</eta>

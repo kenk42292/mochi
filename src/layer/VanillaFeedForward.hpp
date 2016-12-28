@@ -9,7 +9,6 @@
 #define LAYER_VANILLAFEEDFORWARD_HPP_
 
 #include "Layer.hpp"
-#include "optimizer/Optimizer.hpp"
 
 class VanillaFeedForward: public Layer {
 private:
