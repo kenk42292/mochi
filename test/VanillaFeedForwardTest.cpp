@@ -5,7 +5,7 @@
  *      Author: ken
  */
 
-#include "VanillaFeedForwardTest.hpp"
+#include "../test/VanillaFeedForwardTest.hpp"
 
 void VanillaFeedForwardTest::feedForwardTest1() {
 	Optimizer* optimizer = new GradientDescent(0.1);

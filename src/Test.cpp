@@ -5,6 +5,7 @@
 
 // TODO #include the headers for the code you want to test
 #include "../test/VanillaFeedForwardTest.hpp"
+#include "../test/SigmoidTest.hpp"
 
 // TODO Add your test functions
 
@@ -15,6 +16,7 @@ bool runAllTests(int argc, char const *argv[]) {
     s.push_back(CUTE(VanillaFeedForwardTest::feedForwardTest1));
     s.push_back(CUTE(VanillaFeedForwardTest::feedForwardTest2));
     s.push_back(CUTE(VanillaFeedForwardTest::backPropTest1));
+    s.push_back(CUTE(SigmoidTest::feedForwardTest1));
     cute::xml_file_opener xmlfile(argc, argv);
     cute::xml_listener<cute::ide_listener<>> lis(xmlfile.out);
     auto runner = cute::makeRunner(lis, argc, argv);
