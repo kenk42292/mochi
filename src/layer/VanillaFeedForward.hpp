@@ -17,13 +17,15 @@ private:
 	/** Stored batch inputs for back propagation */
 	arma::field<arma::Cube<double>> mxs;
 	Optimizer* mOptimizer;
-	arma::field<arma::Cube<double>> mdwdb;
+	friend class VanillaFeedForwardTest;
 public:
 	VanillaFeedForward(unsigned int nIn, unsigned int nOut, Optimizer* optimizer);
 	virtual ~VanillaFeedForward();
 
 	arma::Cube<double> feedForward(const arma::Cube<double>& x);
 	arma::field<arma::Cube<double>> feedForward(const arma::field<arma::Cube<double>>& xs);
+	/** Returns field of 2+deltas.size() gradient elements: dw, db, and rest are dxs */
+	arma::field<arma::Cube<double>> getGrads(const arma::field<arma::Cube<double>>& deltas);
 	arma::field<arma::Cube<double>> backProp(const arma::field<arma::Cube<double>>& deltas);
 };
 

@@ -14,7 +14,6 @@ VanillaFeedForward::VanillaFeedForward(unsigned int nIn, unsigned int nOut,
 				arma::Cube<double>(1, 1, nOut, arma::fill::zeros)) {
 	mW /= sqrt(nIn);
 	mOptimizer = optimizer;
-	mdwdb = arma::field<arma::Cube<double>>(2);
 }
 
 VanillaFeedForward::~VanillaFeedForward() {
@@ -42,11 +41,10 @@ arma::field<arma::Cube<double>> VanillaFeedForward::feedForward(
 	return ys;
 }
 
-arma::field<arma::Cube<double>> VanillaFeedForward::backProp(
-		const arma::field<arma::Cube<double>>& deltas) {
+arma::field<arma::Cube<double>> VanillaFeedForward::getGrads(const arma::field<arma::Cube<double>>& deltas) {
 	arma::Mat<double> dw(mW.n_rows, mW.n_cols, arma::fill::zeros);
 	arma::Col<double> db(mB.n_elem, arma::fill::zeros);
-	arma::field<arma::Cube<double>> dxs(deltas.size());
+	arma::field<arma::Cube<double>> grads(2+deltas.size());
 	for (unsigned int i = 0; i < deltas.size(); ++i) {
 		const arma::Col<double>& p = deltas[i];
 		const arma::Col<double>& q = arma::Col<double>(
@@ -55,19 +53,24 @@ arma::field<arma::Cube<double>> VanillaFeedForward::backProp(
 		dw += p * q.t();
 		db += p;
 		const arma::Mat<double>& dx = mW.slice(0).t() * p;
-		//TODO: below line may be able to be optimized
-		dxs[i] = arma::Cube<double>(dx.begin(), 1, 1, dx.size()); // do I need to vectorise the delta...?
+		grads[i+2] = arma::Cube<double>(dx.begin(), 1, 1, dx.size());
 	}
-	//TODO: const in line below shoudln't work...
-	mdwdb[0] = arma::Cube<double>((const double*) dw.begin(), mW.n_rows,
+	grads[0] = arma::Cube<double>((const double*) dw.begin(), mW.n_rows,
 			mW.n_cols, 1);
-	mdwdb[1] = arma::Cube<double>((const double*) db.begin(), 1, 1, db.size());
+	grads[1] = arma::Cube<double>((const double*) db.begin(), 1, 1, db.size());
+	return grads;
+}
+
+arma::field<arma::Cube<double>> VanillaFeedForward::backProp(
+		const arma::field<arma::Cube<double>>& deltas) {
+
+	arma::field<arma::Cube<double>> grads = getGrads(deltas);
 	const arma::field<arma::Cube<double>>& paramChange = mOptimizer->delta(
-			mdwdb, deltas.size());
+			grads.rows(0, 1), deltas.size());
 	mW -= paramChange[0];
 	mB -= paramChange[1];
 
 //	std::cout << "FINISHED VFF BACKPROP" << std::endl;
-	return dxs;
+	return grads.rows(2, grads.size()-1);
 }
 
