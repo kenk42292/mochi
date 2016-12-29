@@ -47,3 +47,5 @@ The design is expected to change (perhaps significantly) over time.
 
 ![If UML class diagram image is not visible, the same diagram as a png file is availabe under the project root folder as mochi-uml-classdiagram.png](mochi-uml-classdiagram.png) 
 
+# Testing
+The project is tested via the eclipse plug-in for CUTE (C++ Unit Testing Easier). To run the unit-tests in Eclipse, create a build configuration excluding the main mochi.cpp file. Note that building the project for running requires creating a build configuration excluding the main Test.cpp file.
