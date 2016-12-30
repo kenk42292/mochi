@@ -17,6 +17,9 @@ bool runAllTests(int argc, char const *argv[]) {
     s.push_back(CUTE(VanillaFeedForwardTest::feedForwardTest2));
     s.push_back(CUTE(VanillaFeedForwardTest::backPropTest1));
     s.push_back(CUTE(SigmoidTest::feedForwardTest1));
+    s.push_back(CUTE(SigmoidTest::feedForwardTest2));
+    s.push_back(CUTE(SigmoidTest::backPropTest1));
+    s.push_back(CUTE(SigmoidTest::backPropTest2));
     cute::xml_file_opener xmlfile(argc, argv);
     cute::xml_listener<cute::ide_listener<>> lis(xmlfile.out);
     auto runner = cute::makeRunner(lis, argc, argv);

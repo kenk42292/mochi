@@ -161,3 +161,4 @@ void VanillaFeedForwardTest::backPropTest1() {
 	}
 
 }
+
