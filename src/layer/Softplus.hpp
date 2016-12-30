@@ -14,6 +14,7 @@ class Softplus: public Layer {
 private:
 	/* Needed for back-propagation */
 	arma::field<arma::Cube<double>> mxs;
+	friend class SoftplusTest;
 public:
 	Softplus();
 	virtual ~Softplus();

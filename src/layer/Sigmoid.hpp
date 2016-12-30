@@ -14,6 +14,7 @@
 class Sigmoid: public Layer {
 private:
 	arma::field<arma::Cube<double>> mYs;
+	friend class SigmoidTest;
 public:
 	Sigmoid();
 	virtual ~Sigmoid();
