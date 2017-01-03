@@ -29,6 +29,7 @@ private:
 	arma::field<arma::Cube<double>> mws;
 	arma::Cube<double> mbs;
 	arma::field<arma::Cube<double>> mdwdb;
+	friend class ConvolutionalTest;
 public:
 	Convolutional(std::vector<unsigned int> inputDim,
 			unsigned int numPatterns,

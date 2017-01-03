@@ -29,8 +29,12 @@ Convolutional::~Convolutional() {
 	delete mOptimizer;
 }
 
-arma::Cube<double> Convolutional::feedForward(const arma::Cube<double>& x,
+arma::Cube<double> Convolutional::feedForward(const arma::Cube<double>& rawx,
 		const arma::field<arma::Cube<double>>& flippedWeights) {
+	arma::Cube<double> x = rawx;
+	if (rawx.n_slices!=mInDepth || rawx.n_rows!=mInHeight || rawx.n_cols!=mInWidth) {
+		x = arma::Cube<double>(rawx.begin(), mInHeight, mInWidth, mInDepth);
+	}
 	arma::Cube<double> y(x.n_rows - mPatternHeight + 1,
 			x.n_cols - mPatternWidth + 1, mNumPatterns);
 	for (unsigned int i = 0; i < mNumPatterns; ++i) {

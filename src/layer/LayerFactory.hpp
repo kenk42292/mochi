@@ -14,6 +14,7 @@
 #include "../Utils.hpp"
 #include "../layer/VanillaFeedForward.hpp"
 #include "../layer/Convolutional.hpp"
+#include "../layer/MaxPool.hpp"
 #include "../layer/Sigmoid.hpp"
 #include "../layer/Softplus.hpp"
 #include "../layer/Softmax.hpp"

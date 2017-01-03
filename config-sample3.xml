@@ -6,7 +6,7 @@
     
     <training-params>
 		<batch-size>20</batch-size>
-		<num-epochs>5</num-epochs>
+		<num-epochs>10</num-epochs>
 	</training-params>
 
     <net>
@@ -26,18 +26,32 @@
 	        </layer>
 	        
 	        <layer>
+	        	<type>maxpool</type>
+	        	<input-dim>20,24,24</input-dim>
+	        	<field-dim>2,2</field-dim>
+	        	<output-dim>20,12,12</output-dim>
+	        </layer>
+	        
+	        <layer>
 	            <type>softplus</type>
 	        </layer>
 	        
 	      	<layer>
 	            <type>convolutional</type>
-	            <input-dim>20,24,24</input-dim>
-	            <num-kernels>10</num-kernels>
-	            <kernel-dim>20,5,5</kernel-dim>
-	            <output-dim>10,20,20</output-dim>
+	            <input-dim>20,12,12</input-dim>
+	            <num-kernels>20</num-kernels>
+	            <kernel-dim>20,3,3</kernel-dim>
+	            <output-dim>20,10,10</output-dim>
 	            <optimizer>rmsprop</optimizer>
 	            <eta>0.001</eta>
 	            <gamma>0.9</gamma>
+	        </layer>
+	        
+	        <layer>
+	        	<type>maxpool</type>
+	        	<input-dim>20,10,10</input-dim>
+	        	<field-dim>2,2</field-dim>
+	        	<output-dim>20,5,5</output-dim>
 	        </layer>
 	        
 	        <layer>
@@ -46,7 +60,7 @@
 	        
 	        <layer>
 	            <type>vanillafeedforward</type>
-	            <input-dim>4000</input-dim>
+	            <input-dim>500</input-dim>
 	            <output-dim>300</output-dim>
 	            <optimizer>adagrad</optimizer>
 	            <eta>0.1</eta>

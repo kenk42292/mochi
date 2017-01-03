@@ -8,6 +8,7 @@
 #include "../test/SigmoidTest.hpp"
 #include "../test/SoftplusTest.hpp"
 #include "../test/MaxPoolTest.hpp"
+#include "../test/ConvolutionalTest.hpp"
 
 // TODO Add your test functions
 
@@ -28,6 +29,8 @@ bool runAllTests(int argc, char const *argv[]) {
     s.push_back(CUTE(SoftplusTest::backPropTest2));
     s.push_back(CUTE(MaxPoolTest::feedForwardTest1));
     s.push_back(CUTE(MaxPoolTest::backPropTest1));
+    s.push_back(CUTE(ConvolutionalTest::feedForwardTest1));
+    s.push_back(CUTE(ConvolutionalTest::feedForwardTest2));
     cute::xml_file_opener xmlfile(argc, argv);
     cute::xml_listener<cute::ide_listener<>> lis(xmlfile.out);
     auto runner = cute::makeRunner(lis, argc, argv);
