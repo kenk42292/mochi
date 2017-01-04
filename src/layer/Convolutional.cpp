@@ -21,7 +21,7 @@ Convolutional::Convolutional(std::vector<unsigned int> inputDim,
 				mPatternDepth, arma::fill::randn);
 	}
 	mbs = arma::Cube<double>(1, 1, mNumPatterns, arma::fill::zeros);
-	mdwdb = arma::field<arma::Cube<double>>(mNumPatterns+1);
+	mdwdb = arma::field<arma::Cube<double>>(mNumPatterns + 1);
 	mOptimizer = optimizer;
 }
 
@@ -32,7 +32,8 @@ Convolutional::~Convolutional() {
 arma::Cube<double> Convolutional::feedForward(const arma::Cube<double>& rawx,
 		const arma::field<arma::Cube<double>>& flippedWeights) {
 	arma::Cube<double> x = rawx;
-	if (rawx.n_slices!=mInDepth || rawx.n_rows!=mInHeight || rawx.n_cols!=mInWidth) {
+	if (rawx.n_slices != mInDepth || rawx.n_rows != mInHeight
+			|| rawx.n_cols != mInWidth) {
 		x = arma::Cube<double>(rawx.begin(), mInHeight, mInWidth, mInDepth);
 	}
 	arma::Cube<double> y(x.n_rows - mPatternHeight + 1,
@@ -65,46 +66,67 @@ arma::field<arma::Cube<double>> Convolutional::feedForward(
 	return ys;
 }
 
-arma::field<arma::Cube<double>> Convolutional::backProp(
-		const arma::field<arma::Cube<double>>& deltas) {
+/**
+ * Returns the gradients in a single field of cubes, in the order:
+ * dw1, dw2, dw3...
+ * db
+ * dx1, dx2, dx3...
+ */
+arma::field<arma::Cube<double>> Convolutional::getGrads(
+		const arma::field<arma::Cube<double>>& rawDeltas) {
 
-	arma::field<arma::Cube<double>> dws(mNumPatterns);
-	arma::field<arma::Cube<double>> dxs(deltas.size());
-	arma::Cube<double> dbs(1, 1, mNumPatterns, arma::fill::zeros);
-
-	for (unsigned int k=0; k<mNumPatterns; ++k) {
-		dws[k] = arma::Cube<double>(mPatternHeight, mPatternWidth,
-						mPatternDepth, arma::fill::zeros);
+	arma::field<arma::Cube<double>> deltas = rawDeltas;
+	if (rawDeltas(0).n_slices!=mOutDepth || rawDeltas(0).n_rows!=mOutHeight || rawDeltas(0).n_cols!=mOutWidth) {
+		for (unsigned int i=0; i<rawDeltas.size(); ++i) {
+			deltas(i) = arma::Cube<double>(rawDeltas(i).begin(), mOutHeight, mOutWidth, mOutDepth);
+		}
 	}
-	for (unsigned int i=0; i<deltas.size(); ++i) {
-		dxs[i] = arma::Cube<double>(mInHeight, mInWidth, mInDepth, arma::fill::zeros);
-	}
 
+	arma::field<arma::Cube<double>> grads(mNumPatterns + 1 + deltas.size());
+	for (unsigned int k = 0; k < mNumPatterns; ++k) {
+		grads[k] = arma::Cube<double>(mPatternHeight, mPatternWidth,
+				mPatternDepth, arma::fill::zeros);
+	}
+	grads(mNumPatterns) = arma::Cube<double>(1, 1, mNumPatterns,
+			arma::fill::zeros);
+	for (unsigned int i = 0; i < deltas.size(); ++i) {
+		grads[i + mNumPatterns + 1] = arma::Cube<double>(mInHeight, mInWidth,
+				mInDepth, arma::fill::zeros);
+	}
 	/** Flipped deltas for cross-correlation */
 	arma::field<arma::Cube<double>> flippedDeltas = Utils::flipCubes(deltas);
 
 	for (unsigned int i = 0; i < deltas.size(); ++i) { // Iterate through batch
+		arma::Cube<double> x = mxs[i];
+		if (x.n_slices!=mInDepth || x.n_rows!=mInHeight || x.n_cols!=mInWidth) {
+			x = arma::Cube<double>(x.begin(), mInHeight, mInWidth, mInDepth);
+		}
 		for (unsigned int k = 0; k < mNumPatterns; ++k) { // Iterate through patterns
-			for (unsigned int c = 0; c < mxs[i].n_slices; ++c) { // Iterate through x slices
-				const arma::Mat<double>& fullConv = arma::conv2(mxs[i].slice(c),
+			for (unsigned int c = 0; c < x.n_slices; ++c) { // Iterate through x slices
+				const arma::Mat<double>& fullConv = arma::conv2(x.slice(c),
 						flippedDeltas[i].slice(k), "full");
-				dws[k].slice(c) += fullConv.submat(flippedDeltas[i].n_rows - 1,
-						flippedDeltas[i].n_cols - 1, mxs[i].n_rows - 1,
-						mxs[i].n_cols - 1);
-				dxs[i].slice(c) += arma::conv2(deltas[i].slice(k), mws[k].slice(c), "full");
+				grads[k].slice(c) += fullConv.submat(
+						flippedDeltas[i].n_rows - 1,
+						flippedDeltas[i].n_cols - 1, x.n_rows - 1,
+						x.n_cols - 1);
+				grads[i + mNumPatterns + 1].slice(c) += arma::conv2(
+						deltas[i].slice(k), mws[k].slice(c), "full");
 			}
 		}
-		dbs += arma::sum(arma::sum(deltas[i], 0), 1);
+		grads[mNumPatterns] += arma::sum(arma::sum(deltas[i], 0), 1);
 	}
-	for (unsigned int i=0; i<mNumPatterns; ++i) {
-		mdwdb[i] = dws[i];
-	}
-	mdwdb[mNumPatterns] = dbs;
-	arma::field<arma::Cube<double>> paramChanges = mOptimizer->delta(mdwdb, deltas.size());
+	return grads;
+}
+
+arma::field<arma::Cube<double>> Convolutional::backProp(
+		const arma::field<arma::Cube<double>>& deltas) {
+	arma::field<arma::Cube<double>> grads = getGrads(deltas);
+	arma::field<arma::Cube<double>> paramChanges = mOptimizer->delta(
+			grads.rows(0, mNumPatterns), deltas.size());
 	for (unsigned int i = 0; i < mws.size(); ++i) {
 		mws[i] -= paramChanges[i];
 	}
 	mbs -= paramChanges[mNumPatterns];
-	return dxs;
+	return grads.rows(mNumPatterns+1, grads.size()-1);
 }
 

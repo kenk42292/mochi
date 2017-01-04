@@ -43,6 +43,7 @@ public:
 			const arma::field<arma::Cube<double>>& flippedWeights);
 	virtual arma::field<arma::Cube<double>> feedForward(
 			const arma::field<arma::Cube<double>>& xs);
+	arma::field<arma::Cube<double>> getGrads(const arma::field<arma::Cube<double>>& deltas);
 	virtual arma::field<arma::Cube<double>> backProp(
 			const arma::field<arma::Cube<double>>& deltas);
 };
