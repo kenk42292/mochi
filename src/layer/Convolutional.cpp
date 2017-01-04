@@ -75,11 +75,13 @@ arma::field<arma::Cube<double>> Convolutional::feedForward(
 arma::field<arma::Cube<double>> Convolutional::getGrads(
 		const arma::field<arma::Cube<double>>& rawDeltas) {
 
-	arma::field<arma::Cube<double>> deltas = rawDeltas;
+	arma::field<arma::Cube<double>> deltas;
 	if (rawDeltas(0).n_slices!=mOutDepth || rawDeltas(0).n_rows!=mOutHeight || rawDeltas(0).n_cols!=mOutWidth) {
 		for (unsigned int i=0; i<rawDeltas.size(); ++i) {
 			deltas(i) = arma::Cube<double>(rawDeltas(i).begin(), mOutHeight, mOutWidth, mOutDepth);
 		}
+	} else {
+		deltas = rawDeltas;
 	}
 
 	arma::field<arma::Cube<double>> grads(mNumPatterns + 1 + deltas.size());
@@ -94,12 +96,14 @@ arma::field<arma::Cube<double>> Convolutional::getGrads(
 				mInDepth, arma::fill::zeros);
 	}
 	/** Flipped deltas for cross-correlation */
-	arma::field<arma::Cube<double>> flippedDeltas = Utils::flipCubes(deltas);
+	const arma::field<arma::Cube<double>>& flippedDeltas = Utils::flipCubes(deltas);
 
 	for (unsigned int i = 0; i < deltas.size(); ++i) { // Iterate through batch
-		arma::Cube<double> x = mxs[i];
-		if (x.n_slices!=mInDepth || x.n_rows!=mInHeight || x.n_cols!=mInWidth) {
+		arma::Cube<double> x;
+		if (mxs[i].n_slices!=mInDepth || mxs[i].n_rows!=mInHeight || mxs[i].n_cols!=mInWidth) {
 			x = arma::Cube<double>(x.begin(), mInHeight, mInWidth, mInDepth);
+		} else {
+			x = mxs[i];
 		}
 		for (unsigned int k = 0; k < mNumPatterns; ++k) { // Iterate through patterns
 			for (unsigned int c = 0; c < x.n_slices; ++c) { // Iterate through x slices
@@ -120,8 +124,8 @@ arma::field<arma::Cube<double>> Convolutional::getGrads(
 
 arma::field<arma::Cube<double>> Convolutional::backProp(
 		const arma::field<arma::Cube<double>>& deltas) {
-	arma::field<arma::Cube<double>> grads = getGrads(deltas);
-	arma::field<arma::Cube<double>> paramChanges = mOptimizer->delta(
+	const arma::field<arma::Cube<double>>& grads = getGrads(deltas);
+	const arma::field<arma::Cube<double>>& paramChanges = mOptimizer->delta(
 			grads.rows(0, mNumPatterns), deltas.size());
 	for (unsigned int i = 0; i < mws.size(); ++i) {
 		mws[i] -= paramChanges[i];
