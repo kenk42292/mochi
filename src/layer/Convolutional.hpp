@@ -25,7 +25,8 @@ private:
 	unsigned int mOutHeight;
 	unsigned int mOutWidth;
 	Optimizer* mOptimizer;
-	arma::field<arma::Cube<double>> mxs;
+	arma::field<arma::Mat<double>> mxs;
+	arma::field<arma::Cube<double>> rawmxs;
 	arma::field<arma::Cube<double>> mws;
 	arma::Cube<double> mbs;
 	arma::field<arma::Cube<double>> mdwdb;
@@ -39,13 +40,16 @@ public:
 	virtual ~Convolutional();
 
 	/** Correlate all xs through a specific pattern */
-	arma::Cube<double> feedForward(const arma::Cube<double>& x,
-			const arma::field<arma::Cube<double>>& flippedWeights);
-	virtual arma::field<arma::Cube<double>> feedForward(
+	arma::Cube<double> feedForward(const arma::Mat<double>& x,
+			const arma::Mat<double>& ws);
+	arma::field<arma::Cube<double>> feedForward(
 			const arma::field<arma::Cube<double>>& xs);
 	arma::field<arma::Cube<double>> getGrads(const arma::field<arma::Cube<double>>& deltas);
-	virtual arma::field<arma::Cube<double>> backProp(
+	arma::field<arma::Cube<double>> backProp(
 			const arma::field<arma::Cube<double>>& deltas);
+	arma::Mat<double> im2col(const arma::Cube<double>& x, unsigned int h, unsigned int w, unsigned int d);
+	arma::Mat<double> w2row(const arma::field<arma::Cube<double>>& w);
+	arma::Mat<double> d2row(const arma::Cube<double>& delta);
 };
 
 #endif /* LAYER_CONVOLUTIONAL_HPP_ */

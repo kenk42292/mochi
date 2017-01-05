@@ -29,39 +29,28 @@ Convolutional::~Convolutional() {
 	delete mOptimizer;
 }
 
-arma::Cube<double> Convolutional::feedForward(const arma::Cube<double>& rawx,
-		const arma::field<arma::Cube<double>>& flippedWeights) {
-	arma::Cube<double> x = rawx;
-	if (rawx.n_slices != mInDepth || rawx.n_rows != mInHeight
-			|| rawx.n_cols != mInWidth) {
-		x = arma::Cube<double>(rawx.begin(), mInHeight, mInWidth, mInDepth);
-	}
-	arma::Cube<double> y(x.n_rows - mPatternHeight + 1,
-			x.n_cols - mPatternWidth + 1, mNumPatterns);
-	for (unsigned int i = 0; i < mNumPatterns; ++i) {
-		arma::Mat<double> ySlice(x.n_rows + mPatternHeight - 1,
-				x.n_cols + mPatternWidth - 1, arma::fill::zeros);
-		for (unsigned int j = 0; j < x.n_slices; ++j) {
-			ySlice += arma::conv2(x.slice(j), flippedWeights[i].slice(j),
-					"full");
-		}
-		y.slice(i) = ySlice.submat(mPatternHeight - 1, mPatternWidth - 1,
-				x.n_rows - 1, x.n_cols - 1) + mbs(0, 0, i);
+arma::Cube<double> Convolutional::feedForward(const arma::Mat<double>& x,
+		const arma::Mat<double>& ws) {
+	arma::Mat<double> yMat = (ws*x).t();
+	arma::Cube<double> y(yMat.begin(), mOutHeight, mOutWidth, mOutDepth);
+	for (unsigned int i=0; i<y.n_slices; ++i) {
+		y.slice(i) += (double) mbs(0,0,i);
 	}
 	return y;
 }
 
 arma::field<arma::Cube<double>> Convolutional::feedForward(
 		const arma::field<arma::Cube<double>>& xs) {
-
-	mxs = xs;
 	arma::field<arma::Cube<double>> ys(xs.size());
 
-	/** For cross-correlation, must use flipped weights and convolution. */
-	arma::field<arma::Cube<double>> flippedWeights = Utils::flipCubes(mws);
+	rawmxs = xs;
+
+	mxs = arma::field<arma::Mat<double>>(xs.size());
+	arma::Mat<double> ws = w2row(mws);
 
 	for (unsigned int i = 0; i < xs.size(); ++i) {
-		ys[i] = feedForward(xs[i], flippedWeights);
+		mxs[i] = im2col(xs[i], mPatternHeight, mPatternWidth, mPatternDepth);
+		ys[i] = feedForward(mxs[i], ws);
 	}
 	return ys;
 }
@@ -76,9 +65,11 @@ arma::field<arma::Cube<double>> Convolutional::getGrads(
 		const arma::field<arma::Cube<double>>& rawDeltas) {
 
 	arma::field<arma::Cube<double>> deltas;
-	if (rawDeltas(0).n_slices!=mOutDepth || rawDeltas(0).n_rows!=mOutHeight || rawDeltas(0).n_cols!=mOutWidth) {
-		for (unsigned int i=0; i<rawDeltas.size(); ++i) {
-			deltas(i) = arma::Cube<double>(rawDeltas(i).begin(), mOutHeight, mOutWidth, mOutDepth);
+	if (rawDeltas(0).n_slices != mOutDepth || rawDeltas(0).n_rows != mOutHeight
+			|| rawDeltas(0).n_cols != mOutWidth) {
+		for (unsigned int i = 0; i < rawDeltas.size(); ++i) {
+			deltas(i) = arma::Cube<double>(rawDeltas(i).begin(), mOutHeight,
+					mOutWidth, mOutDepth);
 		}
 	} else {
 		deltas = rawDeltas;
@@ -96,14 +87,16 @@ arma::field<arma::Cube<double>> Convolutional::getGrads(
 				mInDepth, arma::fill::zeros);
 	}
 	/** Flipped deltas for cross-correlation */
-	const arma::field<arma::Cube<double>>& flippedDeltas = Utils::flipCubes(deltas);
+	const arma::field<arma::Cube<double>>& flippedDeltas = Utils::flipCubes(
+			deltas);
 
 	for (unsigned int i = 0; i < deltas.size(); ++i) { // Iterate through batch
 		arma::Cube<double> x;
-		if (mxs[i].n_slices!=mInDepth || mxs[i].n_rows!=mInHeight || mxs[i].n_cols!=mInWidth) {
+		if (rawmxs[i].n_slices != mInDepth || rawmxs[i].n_rows != mInHeight
+				|| rawmxs[i].n_cols != mInWidth) {
 			x = arma::Cube<double>(x.begin(), mInHeight, mInWidth, mInDepth);
 		} else {
-			x = mxs[i];
+			x = rawmxs[i];
 		}
 		for (unsigned int k = 0; k < mNumPatterns; ++k) { // Iterate through patterns
 			for (unsigned int c = 0; c < x.n_slices; ++c) { // Iterate through x slices
@@ -131,6 +124,48 @@ arma::field<arma::Cube<double>> Convolutional::backProp(
 		mws[i] -= paramChanges[i];
 	}
 	mbs -= paramChanges[mNumPatterns];
-	return grads.rows(mNumPatterns+1, grads.size()-1);
+	return grads.rows(mNumPatterns + 1, grads.size() - 1);
+}
+
+/** Converts a single input cube to an appropriate matrix.
+ * The matrix's columns are vectorized subcubes of length h*w*d*/
+arma::Mat<double> Convolutional::im2col(const arma::Cube<double>& x,
+		unsigned int h, unsigned int w, unsigned int d) {
+	unsigned int nHShifts = mInHeight - h + 1;
+	unsigned int nWShifts = mInWidth - w + 1;
+	unsigned int nDShifts = mInDepth - d + 1;
+	arma::Mat<double> xMat(h * w * d,
+			(mInDepth - d + 1) * (mInHeight - h + 1) * (mInWidth - w + 1));
+	for (unsigned int k = 0; k < nDShifts; ++k) {
+		for (unsigned int j = 0; j < nWShifts; ++j) {
+			for (unsigned int i = 0; i < nHShifts; ++i) {
+				xMat.col(k * nWShifts * nHShifts + j * nHShifts + i) =
+						arma::vectorise(
+								x.subcube(i, j, k, i + h - 1, j + w - 1,
+										k + d - 1));
+			}
+		}
+	}
+	return xMat;
+}
+
+/** Converts ALL weight cubes into a single matrix - each w_k is a row in this matrix */
+arma::Mat<double> Convolutional::w2row(
+		const arma::field<arma::Cube<double>>& ws) {
+	arma::Mat<double> wMat(mNumPatterns,
+			mPatternHeight * mPatternWidth * mPatternDepth);
+	for (unsigned int i = 0; i < mNumPatterns; ++i) {
+		wMat.row(i) = arma::Mat<double>(ws(i).begin(), 1, ws(i).size());
+	}
+	return wMat;
+}
+
+/** Converts each slice of a delta cube into a row in a resultant matrix */
+arma::Mat<double> Convolutional::d2row(const arma::Cube<double>& delta) {
+	arma::Mat<double> dMat(mNumPatterns, mOutHeight * mOutWidth);
+	for (unsigned int k = 0; k < mNumPatterns; ++k) {
+		dMat.row(k) = arma::Mat<double>(delta.slice(k).begin(), 1, delta.n_cols*delta.n_rows);
+	}
+	return dMat;
 }
 
