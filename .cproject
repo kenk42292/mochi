@@ -60,6 +60,7 @@
 					</folderInfo>
 					<sourceEntries>
 						<entry excluding="Test.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="test"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -106,6 +107,7 @@
 					</folderInfo>
 					<sourceEntries>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="test"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -168,11 +170,9 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
-					<fileInfo id="cdt.managedbuild.config.gnu.mingw.exe.debug.1717777365.1723202325.1707685830" name="mochi.cpp" rcbsApplicability="disable" resourcePath="src/mochi.cpp" toolsToInvoke="cdt.managedbuild.tool.gnu.cpp.compiler.base.626126441.1325583657">
-						<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.base.626126441.1325583657" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.base.626126441"/>
-					</fileInfo>
 					<sourceEntries>
 						<entry excluding="mochi.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="test"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

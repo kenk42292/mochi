@@ -25,7 +25,7 @@ private:
 	unsigned int mOutHeight;
 	unsigned int mOutWidth;
 	Optimizer* mOptimizer;
-	arma::field<arma::Mat<double>> mxs;
+	arma::field<arma::Cube<double>> mxs;
 	arma::field<arma::Cube<double>> rawmxs;
 	arma::field<arma::Cube<double>> mws;
 	arma::Cube<double> mbs;
