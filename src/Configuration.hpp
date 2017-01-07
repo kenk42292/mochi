@@ -26,7 +26,7 @@ public:
 	unsigned int getTrainingBatchSize();
 	unsigned int getNumEpochs();
 	std::vector<std::map<std::string, std::string>> layerConfigs();
-	std::string lossConfig();
+	std::map<std::string, std::string> lossConfig();
 };
 
 #endif /* CONFIGURATION_HPP_ */

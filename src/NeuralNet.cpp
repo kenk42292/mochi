@@ -7,21 +7,7 @@
 
 #include "NeuralNet.hpp"
 
-NeuralNet::NeuralNet(std::vector<Layer*> layers, Configuration conf) {
-	mLayers = layers;
-	std::string lossConfig = conf.lossConfig();
-	if (lossConfig.compare("quadratic") == 0) {
-		std::cout << "Setting to Quadratic Loss function" << std::endl;
-		mLoss = new Quadratic();
-	} else if (lossConfig.compare("crossentropy") == 0) {
-		std::cout << "Setting to Cross Entropy Loss function" << std::endl;
-		mLoss = new CrossEntropy();
-	} else {
-		mLoss = new CrossEntropy();
-		std::cout << "No configured loss fxn. Setting to cross entropy"
-				<< std::endl;
-	}
-}
+NeuralNet::NeuralNet(std::vector<Layer*> layers, Loss* loss): mLayers(layers), mLoss(loss) {}
 
 NeuralNet::~NeuralNet() {
 	for (Layer* lp : mLayers) {
@@ -67,6 +53,7 @@ void NeuralNet::train(arma::field<arma::Cube<double>>& inputs,
 		Utils::shuffle(inputs, outputs);
 		for (unsigned int p = 0; p < inputs.size() - batchSize; p +=
 				batchSize) {
+//		for (unsigned int p = 0; p < 600; p += batchSize) {
 //			std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
 			arma::field<arma::Cube<double>> activations = forwardPass(
 					inputs.rows(p, p + batchSize - 1));

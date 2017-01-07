@@ -14,8 +14,8 @@
 #include <vector>
 
 #include "Configuration.hpp"
-#include "layer/Layer.hpp"
 #include "layer/LayerFactory.hpp"
+#include "loss/LossFactory.hpp"
 #include "MNISTLoader.hpp"
 #include "NeuralNet.hpp"
 #include "Utils.hpp"
@@ -49,10 +49,12 @@ int main() {
 	std::string confSrc = "config-sample3.xml";
 	Configuration conf(confSrc);
 	LayerFactory layerFactory;
+	LossFactory lossFactory;
 
 	std::vector<Layer*> layers = layerFactory.createLayers(conf);
+	Loss* loss = lossFactory.createLoss(conf);
 
-	NeuralNet nn(layers, conf);
+	NeuralNet nn(layers, loss);
 	unsigned int batchSize = conf.getTrainingBatchSize();
 	unsigned int numEpochs = conf.getNumEpochs();
 	std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();

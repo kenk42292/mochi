@@ -25,7 +25,7 @@ private:
 	std::vector<Layer*> mLayers;
 	Loss* mLoss;
 public:
-	NeuralNet(std::vector<Layer*> layers, Configuration conf);
+	NeuralNet(std::vector<Layer*> layers, Loss* loss);
 	virtual ~NeuralNet();
 
 	arma::field<arma::Cube<double>> forwardPass(const arma::field<arma::Cube<double>>& inputs);

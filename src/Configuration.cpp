@@ -47,8 +47,15 @@ std::vector<std::map<std::string, std::string>> Configuration::layerConfigs() {
 	return layerConfigs;
 }
 
-std::string Configuration::lossConfig() {
-	std::string lossConfig =mConfigDoc.child("mochi-config").child("net").child("loss").child("type").child_value();
+std::map<std::string, std::string> Configuration::lossConfig() {
+	std::map<std::string, std::string> lossConfig;
+	pugi::xml_node loss = mConfigDoc.child("mochi-config").child("net").child("loss");
+	for (pugi::xml_node_iterator config_iter = loss.begin(); config_iter != loss.end(); ++config_iter) {
+		lossConfig[config_iter->name()] = config_iter->child_value();
+	}
 	return lossConfig;
 }
+
+
+
 
