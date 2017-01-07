@@ -89,10 +89,10 @@ arma::field<arma::Cube<double>> Convolutional::getGrads(
 	for (unsigned int i = 0; i < deltas.size(); ++i) { // Iterate through batch
 		arma::Cube<double>& x = mxs[i];
 		arma::Mat<double> xMat = im2col(mxs[i], deltas[i].n_rows, deltas[i].n_cols, 1);
-		arma::Mat<double> deltasMat = d2row(deltas(i));
+		arma::Mat<double> deltaMat = d2row(deltas(i));
 		for (unsigned int k = 0; k < mNumPatterns; ++k) { // Iterate through patterns
-			arma::Mat<double> corrMat = deltasMat.row(k)*xMat;
-			grads[k] = arma::Cube<double>(corrMat.begin(), mPatternHeight, mPatternWidth, mPatternDepth);
+			arma::Mat<double> corrMat = deltaMat.row(k)*xMat;
+			grads[k] += arma::Cube<double>(corrMat.begin(), mPatternHeight, mPatternWidth, mPatternDepth);
 			for (unsigned int c = 0; c < x.n_slices; ++c) { // Iterate through x slices
 				grads[i + mNumPatterns + 1].slice(c) += arma::conv2(
 						deltas[i].slice(k), mws[k].slice(c), "full");
