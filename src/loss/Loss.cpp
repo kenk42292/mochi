@@ -21,7 +21,11 @@ double Loss::loss(arma::Cube<double> output, arma::Cube<double> y) {
 }
 
 double Loss::loss(arma::field<arma::Cube<double>> outputs, arma::field<arma::Cube<double>> ys) {
-	return 0.0;
+	double total = 0.0;
+	for (unsigned int i=0; i<outputs.size(); ++i) {
+		total += loss(outputs[i], ys[i]);
+	}
+	return total;
 }
 
 arma::Cube<double> Loss::loss_prime(const arma::Cube<double>& output,
@@ -32,10 +36,9 @@ arma::Cube<double> Loss::loss_prime(const arma::Cube<double>& output,
 arma::field<arma::Cube<double>> Loss::loss_prime(
 		const arma::field<arma::Cube<double>>& outputs,
 		const arma::field<arma::Cube<double>>& ys) {
-	arma::field<arma::Cube<double>> result(outputs.size());
-	for (unsigned int i=0; i<outputs.size(); ++i) {
-		result[i] = loss_prime(outputs[i], ys[i]);
+	arma::field<arma::Cube<double>> deltas(outputs.size());
+	for (unsigned int i = 0; i < outputs.size(); ++i) {
+		deltas[i] = loss_prime(outputs[i], ys[i]);
 	}
-	return result;
+	return deltas;
 }
-
