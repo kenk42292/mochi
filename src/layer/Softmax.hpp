@@ -8,6 +8,7 @@
 #ifndef LAYER_SOFTMAX_HPP_
 #define LAYER_SOFTMAX_HPP_
 
+#include <math.h>
 #include "Layer.hpp"
 
 class Softmax: public Layer {
