@@ -7,12 +7,7 @@
 
 #include "LogSoftmax.hpp"
 
-LogSoftmax::LogSoftmax() {
-	// TODO Auto-generated constructor stub
+LogSoftmax::LogSoftmax() {}
 
-}
-
-LogSoftmax::~LogSoftmax() {
-	// TODO Auto-generated destructor stub
-}
+LogSoftmax::~LogSoftmax() {}
 

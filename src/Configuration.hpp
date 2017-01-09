@@ -23,10 +23,10 @@ public:
 	virtual ~Configuration();
 	const Configuration& operator=(const Configuration& other);
 
-	unsigned int getTrainingBatchSize();
-	unsigned int getNumEpochs();
+	unsigned int batchSize();
+	unsigned int numEpochs();
 	std::vector<std::map<std::string, std::string>> layerConfigs();
-	std::map<std::string, std::string> lossConfig();
+	std::map<std::string, std::string> lossConfig() const;
 };
 
 #endif /* CONFIGURATION_HPP_ */

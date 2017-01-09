@@ -12,14 +12,16 @@
 
 class VanillaFeedForward: public Layer {
 private:
+	unsigned int mBatchSize;
 	arma::Cube<double> mW;
 	arma::Cube<double> mB;
 	/** Stored batch inputs for back propagation */
 	arma::field<arma::Cube<double>> mxs;
 	Optimizer* mOptimizer;
+	double mWdecay;
 	friend class VanillaFeedForwardTest;
 public:
-	VanillaFeedForward(unsigned int nIn, unsigned int nOut, Optimizer* optimizer);
+	VanillaFeedForward(unsigned int batchSize, unsigned int nIn, unsigned int nOut, Optimizer* optimizer, double wdecay);
 	virtual ~VanillaFeedForward();
 
 	arma::Cube<double> feedForward(const arma::Cube<double>& x);

@@ -9,6 +9,7 @@
 #define LOSS_H_
 
 #include <armadillo>
+#include "../layer/Layer.hpp"
 
 /**
  * While the accumulating methods, LOSS and LOSS_PRIME for fields should stay fixed, over-ride

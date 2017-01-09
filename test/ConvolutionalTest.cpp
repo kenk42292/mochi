@@ -77,7 +77,7 @@ void ConvolutionalTest::feedForwardTest1() {
 	outDim[2] = 2;
 	Optimizer* optimizer = new GradientDescent(0.1);
 
-	Convolutional c(inDim, numPatterns, patternDim, outDim, optimizer);
+	Convolutional c(1, inDim, numPatterns, patternDim, outDim, optimizer, 0.0);
 
 	c.mws = mockWeights();
 	c.mbs = mockBias();
@@ -163,7 +163,7 @@ void ConvolutionalTest::feedForwardTest2() {
 	outDim[2] = 2;
 	Optimizer* optimizer = new GradientDescent(0.1);
 
-	Convolutional c(inDim, numPatterns, patternDim, outDim, optimizer);
+	Convolutional c(1, inDim, numPatterns, patternDim, outDim, optimizer, 0.0);
 
 	c.mws = mockWeights();
 	c.mbs = mockBias();
@@ -233,7 +233,7 @@ void ConvolutionalTest::backPropTest1() {
 	outDim[2] = 2;
 	Optimizer* optimizer = new GradientDescent(0.1);
 
-	Convolutional c(inDim, numPatterns, patternDim, outDim, optimizer);
+	Convolutional c(1, inDim, numPatterns, patternDim, outDim, optimizer, 0.0);
 
 	c.mws = mockWeights();
 	c.mbs = mockBias();
@@ -397,7 +397,7 @@ void ConvolutionalTest::backPropTest2() {
 	outDim[2] = 2;
 	Optimizer* optimizer = new GradientDescent(0.1);
 
-	Convolutional c(inDim, numPatterns, patternDim, outDim, optimizer);
+	Convolutional c(1, inDim, numPatterns, patternDim, outDim, optimizer, 0.0);
 
 	c.mws = mockWeights();
 	c.mbs = mockBias();

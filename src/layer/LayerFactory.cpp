@@ -13,24 +13,34 @@ LayerFactory::~LayerFactory() {}
 
 std::vector<Layer*> LayerFactory::createLayers(Configuration conf) {
 	std::vector<std::map<std::string, std::string>> layerConfigs = conf.layerConfigs();
+//	std::map<std::string, std::string> lossConfig = conf.lossConfig();
+
+
+
+	unsigned int batchSize = conf.batchSize();
+
 	Utils::printConfig(layerConfigs);
 	std::vector<Layer*> layers;
 	for (std::map<std::string, std::string> layerConfig : layerConfigs) {
 		std::string layerType = layerConfig["type"];
 		Layer* layer;
+		double wdecay = 0.0;
+		if (layerConfig.count("wdecay")==1) {
+			wdecay = std::stod(layerConfig["wdecay"]);
+		}
 		std::cout << "Creating Layer: " << layerType << std::endl;
 		if (layerType.compare("vanillafeedforward")==0) {
 			unsigned int dimIn = stoi(layerConfig["input-dim"]);
 			unsigned int dimOut = stoi(layerConfig["output-dim"]);
 			Optimizer* optimizer = createOptimizer(layerConfig);
-			layer = new VanillaFeedForward(dimIn, dimOut, optimizer);
+			layer = new VanillaFeedForward(batchSize, dimIn, dimOut, optimizer, wdecay);
 		} else if (layerType.compare("convolutional")==0) {
 			std::vector<unsigned int> inDim = Utils::parseDims(layerConfig["input-dim"]);
 			unsigned int numPatterns = stoi(layerConfig["num-kernels"]);
 			std::vector<unsigned int> kernelDim = Utils::parseDims(layerConfig["kernel-dim"]);
 			std::vector<unsigned int> outDim = Utils::parseDims(layerConfig["output-dim"]);
 			Optimizer* optimizer = createOptimizer(layerConfig);
-			layer = new Convolutional(inDim, numPatterns, kernelDim, outDim, optimizer);
+			layer = new Convolutional(batchSize, inDim, numPatterns, kernelDim, outDim, optimizer, wdecay);
 		} else if (layerType.compare("maxpool")==0) {
 			std::vector<unsigned int> inDim = Utils::parseDims(layerConfig["input-dim"]);
 			std::vector<unsigned int> fieldDim = Utils::parseDims(layerConfig["field-dim"]);

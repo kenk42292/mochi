@@ -7,14 +7,9 @@
 
 #include "Loss.hpp"
 
-Loss::Loss() {
-	// TODO Auto-generated constructor stub
+Loss::Loss() {}
 
-}
-
-Loss::~Loss() {
-	// TODO Auto-generated destructor stub
-}
+Loss::~Loss() {}
 
 double Loss::loss(arma::Cube<double> output, arma::Cube<double> y) {
 	return 0.0;

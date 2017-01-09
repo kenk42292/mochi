@@ -26,11 +26,11 @@ const Configuration& Configuration::operator=(const Configuration& other) {
 	return *this;
 }
 
-unsigned int Configuration::getTrainingBatchSize() {
+unsigned int Configuration::batchSize() {
 	return std::stoi(mConfigDoc.child("mochi-config").child("training-params").child("batch-size").child_value());
 }
 
-unsigned int Configuration::getNumEpochs() {
+unsigned int Configuration::numEpochs() {
 	return std::stoi(mConfigDoc.child("mochi-config").child("training-params").child("num-epochs").child_value());
 }
 
@@ -47,7 +47,7 @@ std::vector<std::map<std::string, std::string>> Configuration::layerConfigs() {
 	return layerConfigs;
 }
 
-std::map<std::string, std::string> Configuration::lossConfig() {
+std::map<std::string, std::string> Configuration::lossConfig() const {
 	std::map<std::string, std::string> lossConfig;
 	pugi::xml_node loss = mConfigDoc.child("mochi-config").child("net").child("loss");
 	for (pugi::xml_node_iterator config_iter = loss.begin(); config_iter != loss.end(); ++config_iter) {

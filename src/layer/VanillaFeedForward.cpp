@@ -8,10 +8,12 @@
 #include "VanillaFeedForward.hpp"
 #include <math.h>
 
-VanillaFeedForward::VanillaFeedForward(unsigned int nIn, unsigned int nOut,
-		Optimizer* optimizer) :
+VanillaFeedForward::VanillaFeedForward(unsigned int batchSize, unsigned int nIn, unsigned int nOut,
+		Optimizer* optimizer, double wdecay) :
+		mBatchSize(batchSize),
 		mW(arma::Cube<double>(nOut, nIn, 1, arma::fill::randn)), mB(
-				arma::Cube<double>(1, 1, nOut, arma::fill::zeros)) {
+				arma::Cube<double>(1, 1, nOut, arma::fill::zeros)),
+				mWdecay(wdecay) {
 	mW /= sqrt(nIn);
 	mOptimizer = optimizer;
 }
@@ -56,7 +58,7 @@ arma::field<arma::Cube<double>> VanillaFeedForward::getGrads(const arma::field<a
 		grads[i+2] = arma::Cube<double>(dx.begin(), 1, 1, dx.size());
 	}
 	grads[0] = arma::Cube<double>((const double*) dw.begin(), mW.n_rows,
-			mW.n_cols, 1);
+			mW.n_cols, 1) + mWdecay*mW;
 	grads[1] = arma::Cube<double>((const double*) db.begin(), 1, 1, db.size());
 	return grads;
 }
@@ -70,7 +72,6 @@ arma::field<arma::Cube<double>> VanillaFeedForward::backProp(
 	mW -= paramChange[0];
 	mB -= paramChange[1];
 
-//	std::cout << "FINISHED VFF BACKPROP" << std::endl;
 	return grads.rows(2, grads.size()-1);
 }
 

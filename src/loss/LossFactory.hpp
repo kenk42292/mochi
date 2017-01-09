@@ -20,7 +20,7 @@ class LossFactory {
 public:
 	LossFactory();
 	virtual ~LossFactory();
-	Loss* createLoss(Configuration conf);
+	Loss* createLoss(const Configuration& conf);
 };
 
 #endif /* LOSS_LOSSFACTORY_HPP_ */

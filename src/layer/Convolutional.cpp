@@ -7,14 +7,15 @@
 
 #include "Convolutional.hpp"
 
-Convolutional::Convolutional(std::vector<unsigned int> inputDim,
+Convolutional::Convolutional(unsigned int batchSize, std::vector<unsigned int> inputDim,
 		unsigned int numPatterns, std::vector<unsigned int> patternDim,
-		std::vector<unsigned int> outputDim, Optimizer* optimizer) :
-		mNumPatterns(numPatterns), mInDepth(inputDim[0]), mInHeight(
-				inputDim[1]), mInWidth(inputDim[2]), mOutDepth(outputDim[0]), mOutHeight(
-				outputDim[1]), mOutWidth(outputDim[2]), mPatternDepth(
-				patternDim[0]), mPatternHeight(patternDim[1]), mPatternWidth(
-				patternDim[2]) {
+		std::vector<unsigned int> outputDim, Optimizer* optimizer, double wdecay) :
+		mBatchSize(batchSize),
+		mInDepth(inputDim[0]), mInHeight(inputDim[1]), mInWidth(inputDim[2]),
+		mNumPatterns(numPatterns),
+		mPatternDepth(patternDim[0]), mPatternHeight(patternDim[1]), mPatternWidth(patternDim[2]),
+		mOutDepth(outputDim[0]), mOutHeight(outputDim[1]), mOutWidth(outputDim[2]),
+		mWdecay(wdecay) {
 	mws = arma::field<arma::Cube<double>>(mNumPatterns);
 	for (unsigned int i = 0; i < mNumPatterns; ++i) {
 		mws[i] = arma::Cube<double>(mPatternHeight, mPatternWidth,
@@ -100,6 +101,10 @@ arma::field<arma::Cube<double>> Convolutional::getGrads(
 		}
 		grads[mNumPatterns] += arma::sum(arma::sum(deltas[i], 0), 1);
 	}
+	/*weight decay*/
+	for (unsigned int k=0; k<mNumPatterns; ++k) {
+		grads[k] += mWdecay*mws[k];
+	}
 	return grads;
 }
 
@@ -111,6 +116,7 @@ arma::field<arma::Cube<double>> Convolutional::backProp(
 	for (unsigned int i = 0; i < mws.size(); ++i) {
 		mws[i] -= paramChanges[i];
 	}
+
 	mbs -= paramChanges[mNumPatterns];
 	return grads.rows(mNumPatterns + 1, grads.size() - 1);
 }
@@ -158,3 +164,5 @@ arma::Mat<double> Convolutional::d2row(const arma::Cube<double>& delta) {
 	}
 	return dMat;
 }
+
+
