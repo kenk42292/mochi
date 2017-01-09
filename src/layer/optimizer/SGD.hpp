@@ -5,19 +5,19 @@
  *      Author: ken
  */
 
-#ifndef LAYER_OPTIMIZER_GRADIENTDESCENT_HPP_
-#define LAYER_OPTIMIZER_GRADIENTDESCENT_HPP_
+#ifndef LAYER_OPTIMIZER_SGD_HPP_
+#define LAYER_OPTIMIZER_SGD_HPP_
 
 #include "Optimizer.hpp"
 #include <armadillo>
 
-class GradientDescent: public Optimizer {
+class SGD: public Optimizer {
 private:
 	double mEta;
 public:
-	GradientDescent(double eta);
-	virtual ~GradientDescent();
+	SGD(double eta);
+	virtual ~SGD();
 	arma::field<arma::Cube<double>> delta(const arma::field<arma::Cube<double>>& gradients, unsigned int batchSize);
 };
 
-#endif /* LAYER_OPTIMIZER_GRADIENTDESCENT_HPP_ */
+#endif /* LAYER_OPTIMIZER_SGD_HPP_ */

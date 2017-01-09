@@ -75,7 +75,7 @@ void ConvolutionalTest::feedForwardTest1() {
 	outDim[0] = 3;
 	outDim[1] = 2;
 	outDim[2] = 2;
-	Optimizer* optimizer = new GradientDescent(0.1);
+	Optimizer* optimizer = new SGD(0.1);
 
 	Convolutional c(1, inDim, numPatterns, patternDim, outDim, optimizer, 0.0);
 
@@ -161,7 +161,7 @@ void ConvolutionalTest::feedForwardTest2() {
 	outDim[0] = 3;
 	outDim[1] = 2;
 	outDim[2] = 2;
-	Optimizer* optimizer = new GradientDescent(0.1);
+	Optimizer* optimizer = new SGD(0.1);
 
 	Convolutional c(1, inDim, numPatterns, patternDim, outDim, optimizer, 0.0);
 
@@ -231,7 +231,7 @@ void ConvolutionalTest::backPropTest1() {
 	outDim[0] = 3;
 	outDim[1] = 2;
 	outDim[2] = 2;
-	Optimizer* optimizer = new GradientDescent(0.1);
+	Optimizer* optimizer = new SGD(0.1);
 
 	Convolutional c(1, inDim, numPatterns, patternDim, outDim, optimizer, 0.0);
 
@@ -395,7 +395,7 @@ void ConvolutionalTest::backPropTest2() {
 	outDim[0] = 3;
 	outDim[1] = 2;
 	outDim[2] = 2;
-	Optimizer* optimizer = new GradientDescent(0.1);
+	Optimizer* optimizer = new SGD(0.1);
 
 	Convolutional c(1, inDim, numPatterns, patternDim, outDim, optimizer, 0.0);
 

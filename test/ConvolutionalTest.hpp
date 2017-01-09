@@ -15,8 +15,8 @@
 #include <armadillo>
 #include <iostream>
 
-#include "../src/layer/optimizer/GradientDescent.hpp"
 #include "../src/layer/Convolutional.hpp"
+#include "../src/layer/optimizer/SGD.hpp"
 
 class ConvolutionalTest {
 public:

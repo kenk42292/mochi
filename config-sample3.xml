@@ -67,7 +67,7 @@
 	            <optimizer>rmsprop</optimizer>
 	            <eta>0.005</eta>
 	            <gamma>0.9</gamma>
-	            <wdecay>0.005</wdecay>
+	            <wdecay>0.05</wdecay>
 	        </layer>
 	        
 	        <layer>
@@ -81,7 +81,7 @@
 	            <optimizer>rmsprop</optimizer>
 	            <eta>0.005</eta>
 	            <gamma>0.9</gamma>
-	            <wdecay>0.005</wdecay>
+	            <wdecay>0.05</wdecay>
 	        </layer>
 	        
 	        <layer>

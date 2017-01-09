@@ -19,9 +19,9 @@
 #include "../layer/Softplus.hpp"
 #include "../layer/Softmax.hpp"
 #include "optimizer/Optimizer.hpp"
-#include "optimizer/GradientDescent.hpp"
 #include "optimizer/Adagrad.hpp"
 #include "optimizer/RMSProp.hpp"
+#include "optimizer/SGD.hpp"
 
 class LayerFactory {
 public:

@@ -65,8 +65,8 @@ Optimizer* LayerFactory::createOptimizer(std::map<std::string, std::string> laye
 	Optimizer* optimizer;
 	std::string optimizerType = layerConfig["optimizer"];
 	std::cout << "\t" << "Adding optimizer: " << optimizerType << std::endl;
-	if (optimizerType.compare("gradientdescent")==0) {
-		optimizer = new GradientDescent(stod(layerConfig["eta"]));
+	if (optimizerType.compare("sgd")==0) {
+		optimizer = new SGD(stod(layerConfig["eta"]));
 	} else if (optimizerType.compare("adagrad")==0) {
 		optimizer = new Adagrad(stod(layerConfig["eta"]));
 	} else if (optimizerType.compare("rmsprop")==0) {
