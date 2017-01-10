@@ -49,7 +49,12 @@ arma::field<arma::Cube<double>> Convolutional::feedForward(
 		mxs[i] = arma::Cube<double>(xs[i].begin(), mInHeight, mInWidth, mInDepth);
 	}
 	for (unsigned int i = 0; i < mxs.size(); ++i) {
-		arma::Mat<double> xMat = im2col(mxs[i], mPatternHeight, mPatternWidth, mPatternDepth);
+		arma::Mat<double> xMat;
+		if (mode.compare("valid")==0) {
+			xMat = im2col(mxs[i], mPatternHeight, mPatternWidth, mPatternDepth);
+		} else if (mode.compare("same")==0) {
+			xMat = im2colPadded(mxs[i], mPatternHeight, mPatternWidth, mPatternDepth);
+		}
 		ys[i] = feedForward(xMat, ws);
 	}
 	return ys;
@@ -144,6 +149,62 @@ arma::Mat<double> Convolutional::im2col(const arma::Cube<double>& x,
 	}
 	return xMat;
 }
+
+/** Converts a single input cube to an appropriate matrix, adding zero-paddings along the way.
+ * The matrix's columns are vectorized subcubes of length h*w*d*/
+arma::Mat<double> Convolutional::im2colPadded(const arma::Cube<double>& x,
+		unsigned int h, unsigned int w, unsigned int d) {
+
+	unsigned int tpad = (h%2==1) ? (h-1)/2 : (h-1)/2+1;
+	unsigned int lpad = (w%2==1) ? (w-1)/2 : (w-1)/2+1;
+	unsigned int dpad = (h%2==1) ? (h-1)/2 : (h-1)/2-1;
+	unsigned int rpad = (w%2==1) ? (w-1)/2 : (w-1)/2-1;
+
+	unsigned int paddedHeight = mInHeight+h-1;
+	unsigned int paddedWidth = mInWidth+w-1;
+
+	unsigned int nHShifts = mInHeight;
+	unsigned int nWShifts = mInWidth;
+	unsigned int nDShifts = mInDepth-d+1;
+
+	/*
+	 * In this case, nHShifts==mInHeight, nWShiftsmInWidth==mInWidth.
+	 * HOWEVER: nDShifts == mInDepth-d+1
+	 * */
+
+	std::cout << "x:\n" << std::endl;
+	std::cout << x << std::endl;
+
+	arma::Mat<double> xMat(h * w * d, nHShifts*nWShifts*nDShifts);
+
+	for (unsigned int k = 0; k < nDShifts; ++k) {
+		for (unsigned int j = 0; j < nWShifts; ++j) {
+			for (unsigned int i = 0; i < nHShifts; ++i) {
+				arma::Col<double> tmp(h*w*d, arma::fill::zeros);
+				for (unsigned r=0; r<d; ++r) {
+					for (unsigned q=0; q<w; ++q) {
+						if (j+q<lpad || j+q>=paddedWidth-rpad) {
+							continue;
+						}
+						for (unsigned p=0; p<h; ++p) {
+							if (i+p<tpad || i+p>=paddedHeight-dpad) {
+								continue;
+							}
+							tmp[r*w*h+q*h+p] = x(i+p-tpad, j+q-lpad, k+r);
+						}
+					}
+				}
+				xMat.col(k * nWShifts * nHShifts + j * nHShifts + i) = tmp;
+			}
+		}
+	}
+
+	std::cout << "xMat:\n" << std::endl;
+	std::cout << xMat << std::endl;
+
+	return xMat;
+}
+
 
 /** Converts ALL weight cubes into a single matrix - each w_k is a row in this matrix */
 arma::Mat<double> Convolutional::w2row(

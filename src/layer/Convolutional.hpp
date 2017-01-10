@@ -53,6 +53,7 @@ public:
 	arma::field<arma::Cube<double>> backProp(
 			const arma::field<arma::Cube<double>>& deltas);
 	arma::Mat<double> im2col(const arma::Cube<double>& x, unsigned int h, unsigned int w, unsigned int d);
+	arma::Mat<double> im2colPadded(const arma::Cube<double>& x, unsigned int h, unsigned int w, unsigned int d);
 	arma::Mat<double> w2row(const arma::field<arma::Cube<double>>& w);
 	arma::Mat<double> d2row(const arma::Cube<double>& delta);
 
