@@ -23,7 +23,9 @@ public:
 	virtual ~MaxPoolTest();
 
 	static void feedForwardTest1();
+	static void feedForwardTest2();
 	static void backPropTest1();
+	static void backPropTest2();
 };
 
 #endif /* MAXPOOLTEST_HPP_ */
