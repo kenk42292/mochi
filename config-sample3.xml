@@ -20,6 +20,7 @@
 	            <num-kernels>32</num-kernels>
 	            <kernel-dim>1,5,5</kernel-dim>
 	            <output-dim>32,24,24</output-dim>
+	            <mode>valid</mode>
 	            <optimizer>rmsprop</optimizer>
 	            <eta>0.01</eta>
 	            <gamma>0.9</gamma>
@@ -43,6 +44,7 @@
 	            <num-kernels>64</num-kernels>
 	            <kernel-dim>32,3,3</kernel-dim>
 	            <output-dim>64,10,10</output-dim>
+	            <mode>valid</mode>
 	            <optimizer>rmsprop</optimizer>
 	            <eta>0.01</eta>
 	            <gamma>0.9</gamma>

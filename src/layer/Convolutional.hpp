@@ -25,6 +25,7 @@ private:
 	unsigned int mOutDepth;
 	unsigned int mOutHeight;
 	unsigned int mOutWidth;
+	std::string mode;
 	Optimizer* mOptimizer;
 	arma::field<arma::Cube<double>> mxs;
 	arma::field<arma::Cube<double>> rawmxs;
@@ -39,6 +40,7 @@ public:
 			unsigned int numPatterns,
 			std::vector<unsigned int> patternDim,
 			std::vector<unsigned int> outputDim,
+			std::string mode,
 			Optimizer* optimizer, double wdecay);
 	virtual ~Convolutional();
 

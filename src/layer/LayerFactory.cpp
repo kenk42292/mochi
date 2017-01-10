@@ -39,8 +39,9 @@ std::vector<Layer*> LayerFactory::createLayers(Configuration conf) {
 			unsigned int numPatterns = stoi(layerConfig["num-kernels"]);
 			std::vector<unsigned int> kernelDim = Utils::parseDims(layerConfig["kernel-dim"]);
 			std::vector<unsigned int> outDim = Utils::parseDims(layerConfig["output-dim"]);
+			std::string mode = layerConfig["mode"];
 			Optimizer* optimizer = createOptimizer(layerConfig);
-			layer = new Convolutional(batchSize, inDim, numPatterns, kernelDim, outDim, optimizer, wdecay);
+			layer = new Convolutional(batchSize, inDim, numPatterns, kernelDim, outDim, mode, optimizer, wdecay);
 		} else if (layerType.compare("maxpool")==0) {
 			std::vector<unsigned int> inDim = Utils::parseDims(layerConfig["input-dim"]);
 			std::vector<unsigned int> fieldDim = Utils::parseDims(layerConfig["field-dim"]);

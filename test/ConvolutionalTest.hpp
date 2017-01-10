@@ -27,8 +27,10 @@ public:
 	static arma::Cube<double> mockBias();
 	static void feedForwardTest1();
 	static void feedForwardTest2();
+	static void feedForwardTest3();
 	static void backPropTest1();
 	static void backPropTest2();
+	static void backPropTest3();
 };
 
 #endif /* CONVOLUTIONALTEST_HPP_ */

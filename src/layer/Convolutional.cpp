@@ -9,12 +9,12 @@
 
 Convolutional::Convolutional(unsigned int batchSize, std::vector<unsigned int> inputDim,
 		unsigned int numPatterns, std::vector<unsigned int> patternDim,
-		std::vector<unsigned int> outputDim, Optimizer* optimizer, double wdecay) :
+		std::vector<unsigned int> outputDim, std::string mode, Optimizer* optimizer, double wdecay) :
 		mBatchSize(batchSize),
 		mInDepth(inputDim[0]), mInHeight(inputDim[1]), mInWidth(inputDim[2]),
 		mNumPatterns(numPatterns),
 		mPatternDepth(patternDim[0]), mPatternHeight(patternDim[1]), mPatternWidth(patternDim[2]),
-		mOutDepth(outputDim[0]), mOutHeight(outputDim[1]), mOutWidth(outputDim[2]),
+		mOutDepth(outputDim[0]), mOutHeight(outputDim[1]), mOutWidth(outputDim[2]), mode(mode),
 		mWdecay(wdecay) {
 	mws = arma::field<arma::Cube<double>>(mNumPatterns);
 	for (unsigned int i = 0; i < mNumPatterns; ++i) {
