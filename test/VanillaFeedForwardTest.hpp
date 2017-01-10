@@ -16,7 +16,7 @@
 #include <iostream>
 
 #include "../src/layer/VanillaFeedForward.hpp"
-#include "../src/layer/optimizer/GradientDescent.hpp"
+#include "../src/layer/optimizer/SGD.hpp"
 
 class VanillaFeedForwardTest {
 public:

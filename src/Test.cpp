@@ -28,7 +28,9 @@ bool runAllTests(int argc, char const *argv[]) {
     s.push_back(CUTE(SoftplusTest::backPropTest1));
     s.push_back(CUTE(SoftplusTest::backPropTest2));
     s.push_back(CUTE(MaxPoolTest::feedForwardTest1));
+    s.push_back(CUTE(MaxPoolTest::feedForwardTest2));
     s.push_back(CUTE(MaxPoolTest::backPropTest1));
+    s.push_back(CUTE(MaxPoolTest::backPropTest2));
     s.push_back(CUTE(ConvolutionalTest::feedForwardTest1));
     s.push_back(CUTE(ConvolutionalTest::feedForwardTest2));
     s.push_back(CUTE(ConvolutionalTest::backPropTest1));

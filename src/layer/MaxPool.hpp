@@ -20,7 +20,7 @@ private:
 	unsigned int mOutDepth;
 	unsigned int mOutHeight;
 	unsigned int mOutWidth;
-	arma::field<arma::Cube<double>> mBackPropCubes;
+	arma::field<arma::Col<unsigned int>> mBackpropIndices;
 	friend class MaxPoolTest;
 public:
 	MaxPool(std::vector<unsigned int> inputDim,

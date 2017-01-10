@@ -8,7 +8,7 @@
 #include "../test/VanillaFeedForwardTest.hpp"
 
 void VanillaFeedForwardTest::feedForwardTest1() {
-	Optimizer* optimizer = new GradientDescent(0.1);
+	Optimizer* optimizer = new SGD(0.1);
 	VanillaFeedForward vff(1, 3, 2, optimizer, 0.0);
 	arma::Cube<double> w(2, 3, 1);
 	for (unsigned int i = 0; i < 2; ++i) {
@@ -48,7 +48,7 @@ void VanillaFeedForwardTest::feedForwardTest1() {
 }
 
 void VanillaFeedForwardTest::feedForwardTest2() {
-	Optimizer* optimizer = new GradientDescent(0.1);
+	Optimizer* optimizer = new SGD(0.1);
 	VanillaFeedForward vff(1, 8, 4, optimizer, 0.0);
 	arma::Cube<double> w(4, 8, 2);
 	for (unsigned int i = 0; i < 4; ++i) {
@@ -91,7 +91,7 @@ void VanillaFeedForwardTest::feedForwardTest2() {
 
 void VanillaFeedForwardTest::backPropTest1() {
 
-	Optimizer* optimizer = new GradientDescent(0.1);
+	Optimizer* optimizer = new SGD(0.1);
 	VanillaFeedForward vff(1, 3, 2, optimizer, 0.0);
 	arma::Cube<double> w(2, 3, 1);
 	for (unsigned int i = 0; i < 2; ++i) {
