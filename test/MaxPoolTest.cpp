@@ -13,14 +13,14 @@ MaxPoolTest::~MaxPoolTest() {}
 
 void MaxPoolTest::feedForwardTest1() {
 	std::vector<unsigned int> inDim(3);
-	inDim[0] = 3;
+	inDim[0] = 2;
 	inDim[1] = 6;
 	inDim[2] = 6;
 	std::vector<unsigned int> fieldDim(2);
 	fieldDim[0] = 2;
 	fieldDim[1] = 2;
 	std::vector<unsigned int> outDim(3);
-	outDim[0] = 3;
+	outDim[0] = 2;
 	outDim[1] = 3;
 	outDim[2] = 3;
 	MaxPool m(inDim, fieldDim, outDim);
