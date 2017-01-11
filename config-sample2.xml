@@ -4,9 +4,9 @@
         <attribute-type>categorical</attribute-type>
     </data>
     
-	<training-params>
-		<batch-size>10</batch-size>
-		<num-epochs>100</num-epochs>
+    <training-params>
+		<batch-size>20</batch-size>
+		<num-epochs>50</num-epochs>
 	</training-params>
 
     <net>
@@ -19,39 +19,43 @@
 	            <input-dim>1,28,28</input-dim>
 	            <num-kernels>32</num-kernels>
 	            <kernel-dim>1,5,5</kernel-dim>
-	            <output-dim>32,24,24</output-dim>
+	            <output-dim>32,28,28</output-dim>
+	            <mode>same</mode>
 	            <optimizer>rmsprop</optimizer>
-	            <eta>0.001</eta>
+	            <eta>0.01</eta>
 	            <gamma>0.9</gamma>
+	            <wdecay>3e-5</wdecay>
 	        </layer>
-	            
+	        
 	        <layer>
-	            <type>maxpool</type>
-	            <input-dim>32,24,24</input-dim>
-	            <pool-dim>1,2,2</pool-dim>
-	            <output-dim>32,12,12</output-dim>
+	        	<type>maxpool</type>
+	        	<input-dim>32,28,28</input-dim>
+	        	<field-dim>2,2</field-dim>
+	        	<output-dim>32,14,14</output-dim>
 	        </layer>
 	        
 	        <layer>
 	            <type>softplus</type>
 	        </layer>
 	        
-	        <layer>
+	      	<layer>
 	            <type>convolutional</type>
-	            <input-dim>32,12,12</input-dim>
+	            <input-dim>32,14,14</input-dim>
 	            <num-kernels>64</num-kernels>
-	            <kernel-dim>32,3,3</kernel-dim>
-	            <output-dim>64,10,10</output-dim>
+	            <kernel-dim>32,5,5</kernel-dim>
+	            <output-dim>64,14,14</output-dim>
+	            <mode>same</mode>
 	            <optimizer>rmsprop</optimizer>
 	            <eta>0.01</eta>
 	            <gamma>0.9</gamma>
+	            <wdecay>3e-5</wdecay>
 	        </layer>
 	        
 	        <layer>
-	            <type>maxpool</type>
-	            <input-dim>64,10,10</input-dim>
-	            <pool-dim>1,2,2</pool-dim>
-	            <output-dim>64,5,5</output-dim>
+	        	<type>maxpool</type>
+	        	<input-dim>64,14,14</input-dim>
+	        	<field-dim>2,2</field-dim>
+	        	<output-dim>64,7,7</output-dim>
 	        </layer>
 	        
 	        <layer>
@@ -60,11 +64,12 @@
 	        
 	        <layer>
 	            <type>vanillafeedforward</type>
-	            <input-dim>800</input-dim>
+	            <input-dim>3136</input-dim>
 	            <output-dim>1000</output-dim>
 	            <optimizer>rmsprop</optimizer>
-	            <eta>0.01</eta>
+	            <eta>0.005</eta>
 	            <gamma>0.9</gamma>
+	            <wdecay>3e-5</wdecay>
 	        </layer>
 	        
 	        <layer>
@@ -76,8 +81,9 @@
 	            <input-dim>1000</input-dim>
 	            <output-dim>10</output-dim>
 	            <optimizer>rmsprop</optimizer>
-	            <eta>0.01</eta>
+	            <eta>0.005</eta>
 	            <gamma>0.9</gamma>
+	            <wdecay>3e-5</wdecay>
 	        </layer>
 	        
 	        <layer>

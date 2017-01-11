@@ -93,15 +93,25 @@ arma::field<arma::Cube<double>> Convolutional::getGrads(
 	}
 
 	for (unsigned int i = 0; i < deltas.size(); ++i) { // Iterate through batch
-		arma::Cube<double>& x = mxs[i];
-		arma::Mat<double> xMat = im2col(mxs[i], deltas[i].n_rows, deltas[i].n_cols, 1);
-		arma::Mat<double> deltaMat = d2row(deltas(i));
+		const arma::Cube<double>& x = mxs[i];
+		arma::Mat<double> xMat;
+		if (mode.compare("valid")==0) {
+			xMat = im2col(mxs[i], deltas[i].n_rows, deltas[i].n_cols, 1);
+		} else if(mode.compare("same")==0) {
+			xMat = im2colPadded(mxs[i], deltas[i].n_rows, deltas[i].n_cols, 1);
+		}
+		const arma::Mat<double>& deltaMat = d2row(deltas(i));
 		for (unsigned int k = 0; k < mNumPatterns; ++k) { // Iterate through patterns
-			arma::Mat<double> corrMat = deltaMat.row(k)*xMat;
+			const arma::Mat<double>& corrMat = deltaMat.row(k)*xMat;
 			grads[k] += arma::Cube<double>(corrMat.begin(), mPatternHeight, mPatternWidth, mPatternDepth);
 			for (unsigned int c = 0; c < x.n_slices; ++c) { // Iterate through x slices
-				grads[i + mNumPatterns + 1].slice(c) += arma::conv2(
-						deltas[i].slice(k), mws[k].slice(c), "full");
+				if (mode.compare("valid")==0) {
+					grads[i + mNumPatterns + 1].slice(c) += arma::conv2(
+							deltas[i].slice(k), mws[k].slice(c), "full");
+				} else if (mode.compare("same")==0) {
+					grads[i + mNumPatterns + 1].slice(c) += arma::conv2(
+							deltas[i].slice(k), mws[k].slice(c), "same");
+				}
 			}
 		}
 		grads[mNumPatterns] += arma::sum(arma::sum(deltas[i], 0), 1);
@@ -155,25 +165,17 @@ arma::Mat<double> Convolutional::im2col(const arma::Cube<double>& x,
 arma::Mat<double> Convolutional::im2colPadded(const arma::Cube<double>& x,
 		unsigned int h, unsigned int w, unsigned int d) {
 
-	unsigned int tpad = (h%2==1) ? (h-1)/2 : (h-1)/2+1;
-	unsigned int lpad = (w%2==1) ? (w-1)/2 : (w-1)/2+1;
-	unsigned int dpad = (h%2==1) ? (h-1)/2 : (h-1)/2-1;
-	unsigned int rpad = (w%2==1) ? (w-1)/2 : (w-1)/2-1;
+	unsigned int tpad = (mPatternHeight%2==1) ? (mPatternHeight-1)/2 : (mPatternHeight-1)/2-1;
+	unsigned int lpad = (mPatternWidth%2==1) ? (mPatternWidth-1)/2 : (mPatternWidth-1)/2-1;
+	unsigned int dpad = (mPatternHeight%2==1) ? (mPatternHeight-1)/2 : (mPatternHeight-1)/2+1;
+	unsigned int rpad = (mPatternWidth%2==1) ? (mPatternWidth-1)/2 : (mPatternWidth-1)/2+1;
 
-	unsigned int paddedHeight = mInHeight+h-1;
-	unsigned int paddedWidth = mInWidth+w-1;
+	unsigned int paddedHeight = mInHeight+mPatternHeight-1;
+	unsigned int paddedWidth = mInWidth+mPatternWidth-1;
 
-	unsigned int nHShifts = mInHeight;
-	unsigned int nWShifts = mInWidth;
+	unsigned int nHShifts = mInHeight+mPatternHeight-h;
+	unsigned int nWShifts = mInWidth+mPatternWidth-w;
 	unsigned int nDShifts = mInDepth-d+1;
-
-	/*
-	 * In this case, nHShifts==mInHeight, nWShiftsmInWidth==mInWidth.
-	 * HOWEVER: nDShifts == mInDepth-d+1
-	 * */
-
-	std::cout << "x:\n" << std::endl;
-	std::cout << x << std::endl;
 
 	arma::Mat<double> xMat(h * w * d, nHShifts*nWShifts*nDShifts);
 
@@ -198,9 +200,6 @@ arma::Mat<double> Convolutional::im2colPadded(const arma::Cube<double>& x,
 			}
 		}
 	}
-
-	std::cout << "xMat:\n" << std::endl;
-	std::cout << xMat << std::endl;
 
 	return xMat;
 }

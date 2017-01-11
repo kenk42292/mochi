@@ -28,7 +28,6 @@ private:
 	std::string mode;
 	Optimizer* mOptimizer;
 	arma::field<arma::Cube<double>> mxs;
-	arma::field<arma::Cube<double>> rawmxs;
 	arma::field<arma::Cube<double>> mws;
 	arma::Cube<double> mbs;
 	arma::field<arma::Cube<double>> mdwdb;

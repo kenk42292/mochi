@@ -699,7 +699,7 @@ void ConvolutionalTest::backPropTest3() {
 	double deltaA[] = {2,5,2,1,4,3,5,1,1,6,6,7,6,2,1,3,
 					   6,4,7,4,1,1,6,5,5,2,4,2,5,1,8,7,
 					   3,2,5,1,4,5,5,7,8,1,3,8,8,2,4,9};
-	arma::Cube<double> delta(deltaA, 1, 1, 48); //should properly be cast to 4x4x3 within conv. layer
+	arma::Cube<double> delta(deltaA, 4,4,3); //should properly be cast to 4x4x3 within conv. layer
 
 	arma::field<arma::Cube<double>> deltas(1);
 	deltas(0) = delta;

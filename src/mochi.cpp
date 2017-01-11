@@ -46,7 +46,7 @@ int main() {
 	}
 
 
-	std::string confSrc = "config-sample3.xml";
+	std::string confSrc = "config-sample2.xml";
 	Configuration conf(confSrc);
 	LayerFactory layerFactory;
 	LossFactory lossFactory;
