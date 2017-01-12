@@ -73,11 +73,44 @@ int main() {
 	unsigned char prediction;
 	arma::Cube<double> output;
 
-	arma::field<arma::Cube<double>> predictions = nn.forwardPass(val_images);
+	arma::field<arma::Cube<double>> predictions1 = nn.forwardPass(val_images);
+	arma::field<arma::Cube<double>> predictions2 = nn.forwardPass(val_images);
+	arma::field<arma::Cube<double>> predictions3 = nn.forwardPass(val_images);
 
-	for (unsigned int i = 0; i < predictions.size(); ++i) {
-		if (static_cast<int>(arma::vectorise(predictions[i]).index_max())
-				== static_cast<int>(arma::vectorise(val_labels[i]).index_max())) {
+	for (unsigned int i = 0; i < predictions1.size(); ++i) {
+		unsigned int actual = static_cast<unsigned int>(arma::vectorise(val_labels[i]).index_max());
+
+		unsigned int p1 = static_cast<unsigned int>(arma::vectorise(predictions1[i]).index_max());
+		double p1p = arma::vectorise(predictions1[i]).max();
+
+		unsigned int p2 = static_cast<unsigned int>(arma::vectorise(predictions2[i]).index_max());
+		double p2p = arma::vectorise(predictions2[i]).max();
+
+		unsigned int p3 = static_cast<unsigned int>(arma::vectorise(predictions3[i]).index_max());
+		double p3p = arma::vectorise(predictions3[i]).max();
+
+		unsigned int guess = p1;
+		if (p2==p3) {
+			guess = p2;
+		}
+
+		if (p1!=p2 && p2!=p3 && p3!=p1) {
+			guess = p1;
+			if (p2p>p1p && p2p>p3p) {
+				guess = p2;
+			}
+			if (p3p>p2p && p3p>p1p) {
+				guess = p3;
+			}
+		}
+
+//		std::cout << "----------------------------------------" << std::endl;
+//		std::cout << "guesss: " << p1 << ", " << p2 << ", " << p3 << std::endl;
+//		std::cout << "probs: " << p1p << ", " << p2p << ", " << p3p << std::endl;
+//		std::cout << "final guess: " << guess << std::endl;
+//		std::cout << "actual: " << actual << std::endl;
+
+		if (guess == actual) {
 			++total_correct;
 		}
 	}

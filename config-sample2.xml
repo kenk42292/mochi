@@ -6,7 +6,7 @@
     
     <training-params>
 		<batch-size>20</batch-size>
-		<num-epochs>50</num-epochs>
+		<num-epochs>200</num-epochs>
 	</training-params>
 
     <net>
@@ -14,12 +14,19 @@
         <output-dim>10</output-dim>
         
         <layers>
+        
+        	<layer>
+        		<type>subimage</type>
+        		<input-dim>1,28,28</input-dim>
+        		<output-dim>1,24,24</output-dim>
+        	</layer>
+        
 	        <layer>
 	            <type>convolutional</type>
-	            <input-dim>1,28,28</input-dim>
-	            <num-kernels>32</num-kernels>
+	            <input-dim>1,24,24</input-dim>
+	            <num-kernels>8</num-kernels>
 	            <kernel-dim>1,5,5</kernel-dim>
-	            <output-dim>32,28,28</output-dim>
+	            <output-dim>8,24,24</output-dim>
 	            <mode>same</mode>
 	            <optimizer>rmsprop</optimizer>
 	            <eta>0.01</eta>
@@ -29,9 +36,9 @@
 	        
 	        <layer>
 	        	<type>maxpool</type>
-	        	<input-dim>32,28,28</input-dim>
+	        	<input-dim>8,24,24</input-dim>
 	        	<field-dim>2,2</field-dim>
-	        	<output-dim>32,14,14</output-dim>
+	        	<output-dim>8,12,12</output-dim>
 	        </layer>
 	        
 	        <layer>
@@ -40,10 +47,10 @@
 	        
 	      	<layer>
 	            <type>convolutional</type>
-	            <input-dim>32,14,14</input-dim>
-	            <num-kernels>64</num-kernels>
-	            <kernel-dim>32,5,5</kernel-dim>
-	            <output-dim>64,14,14</output-dim>
+	            <input-dim>8,12,12</input-dim>
+	            <num-kernels>16</num-kernels>
+	            <kernel-dim>8,5,5</kernel-dim>
+	            <output-dim>16,12,12</output-dim>
 	            <mode>same</mode>
 	            <optimizer>rmsprop</optimizer>
 	            <eta>0.01</eta>
@@ -53,9 +60,9 @@
 	        
 	        <layer>
 	        	<type>maxpool</type>
-	        	<input-dim>64,14,14</input-dim>
-	        	<field-dim>2,2</field-dim>
-	        	<output-dim>64,7,7</output-dim>
+	        	<input-dim>16,12,12</input-dim>
+	        	<field-dim>3,3</field-dim>
+	        	<output-dim>16,4,4</output-dim>
 	        </layer>
 	        
 	        <layer>
@@ -64,21 +71,7 @@
 	        
 	        <layer>
 	            <type>vanillafeedforward</type>
-	            <input-dim>3136</input-dim>
-	            <output-dim>1000</output-dim>
-	            <optimizer>rmsprop</optimizer>
-	            <eta>0.005</eta>
-	            <gamma>0.9</gamma>
-	            <wdecay>3e-5</wdecay>
-	        </layer>
-	        
-	        <layer>
-	            <type>sigmoid</type>
-	        </layer>
-	        
-	        <layer>
-	            <type>vanillafeedforward</type>
-	            <input-dim>1000</input-dim>
+	            <input-dim>256</input-dim>
 	            <output-dim>10</output-dim>
 	            <optimizer>rmsprop</optimizer>
 	            <eta>0.005</eta>

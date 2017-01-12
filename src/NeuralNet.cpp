@@ -51,9 +51,9 @@ void NeuralNet::train(arma::field<arma::Cube<double>>& inputs,
 		t0 = std::chrono::high_resolution_clock::now();
 		epochLoss = 0;
 		Utils::shuffle(inputs, outputs);
-//		for (unsigned int p = 0; p < inputs.size() - batchSize; p +=
-//				batchSize) {
-		for (unsigned int p = 0; p < 600; p += batchSize) {
+		for (unsigned int p = 0; p < inputs.size() - batchSize; p +=
+				batchSize) {
+//		for (unsigned int p = 0; p < 600; p += batchSize) {
 //			std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
 			arma::field<arma::Cube<double>> activations = forwardPass(
 					inputs.rows(p, p + batchSize - 1));

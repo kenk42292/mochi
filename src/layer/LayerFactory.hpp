@@ -12,6 +12,7 @@
 #include "Layer.hpp"
 #include "../Configuration.hpp"
 #include "../Utils.hpp"
+#include "../layer/SubImage.hpp"
 #include "../layer/VanillaFeedForward.hpp"
 #include "../layer/Convolutional.hpp"
 #include "../layer/MaxPool.hpp"

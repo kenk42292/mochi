@@ -29,7 +29,11 @@ std::vector<Layer*> LayerFactory::createLayers(Configuration conf) {
 			wdecay = std::stod(layerConfig["wdecay"]);
 		}
 		std::cout << "Creating Layer: " << layerType << std::endl;
-		if (layerType.compare("vanillafeedforward")==0) {
+		if (layerType.compare("subimage")==0) {
+			std::vector<unsigned int> inDim = Utils::parseDims(layerConfig["input-dim"]);
+			std::vector<unsigned int> outDim = Utils::parseDims(layerConfig["output-dim"]);
+			layer = new SubImage(inDim[1], inDim[2], outDim[1], outDim[2]);
+		} else if (layerType.compare("vanillafeedforward")==0) {
 			unsigned int dimIn = stoi(layerConfig["input-dim"]);
 			unsigned int dimOut = stoi(layerConfig["output-dim"]);
 			Optimizer* optimizer = createOptimizer(layerConfig);
