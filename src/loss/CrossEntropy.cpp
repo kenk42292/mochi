@@ -17,6 +17,8 @@ double CrossEntropy::loss(arma::Cube<double> output, arma::Cube<double> y) {
 }
 
 arma::Cube<double> CrossEntropy::loss_prime(const arma::Cube<double>& output, const arma::Cube<double>& y) {
-	return -y/output;
+	arma::Cube<double> tmp = -y/output;
+	tmp(arma::find_nonfinite(tmp)).fill(0);
+	return tmp;
 }
 
