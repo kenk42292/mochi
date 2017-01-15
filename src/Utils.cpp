@@ -40,7 +40,7 @@ void Utils::shuffle(arma::field<arma::Cube<double>>& inputs, arma::field<arma::C
 	unsigned int swapIndex;
 	unsigned int n = inputs.size();
 	for (unsigned int i=0; i<inputs.size(); ++i) {
-		swapIndex = i + (rand()*(int)(n-1-i)/RAND_MAX);
+		swapIndex = i + (rand()%(n-i));
 		arma::Cube<double>& tempIn = inputs[i];
 		arma::Cube<double>& tempOut = outputs[i];
 		inputs[i] = inputs[swapIndex];
