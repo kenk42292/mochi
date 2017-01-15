@@ -39,10 +39,10 @@ arma::field<arma::Cube<double>> Utils::flipCubes(const arma::field<arma::Cube<do
 void Utils::shuffle(arma::field<arma::Cube<double>>& inputs, arma::field<arma::Cube<double>>& outputs) {
 	unsigned int swapIndex;
 	unsigned int n = inputs.size();
-	for (unsigned int i=0; i<inputs.size(); ++i) {
+	for (unsigned int i=0; i<n; ++i) {
 		swapIndex = i + (rand()%(n-i));
-		arma::Cube<double>& tempIn = inputs[i];
-		arma::Cube<double>& tempOut = outputs[i];
+		arma::Cube<double> tempIn = inputs[i];
+		arma::Cube<double> tempOut = outputs[i];
 		inputs[i] = inputs[swapIndex];
 		outputs[i] = outputs[swapIndex];
 		inputs[swapIndex] = tempIn;
