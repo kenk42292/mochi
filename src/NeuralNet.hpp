@@ -28,10 +28,16 @@ public:
 	NeuralNet(std::vector<Layer*> layers, Loss* loss);
 	virtual ~NeuralNet();
 
-	arma::field<arma::Cube<double>> forwardPass(const arma::field<arma::Cube<double>>& inputs);
-	arma::field<arma::Cube<double>> backwardPass(arma::field<arma::Cube<double>> deltas);
-	void train(arma::field<arma::Cube<double>>& inputs,
-			arma::field<arma::Cube<double>>& outputs, unsigned int batchSize, unsigned int numEpochs, bool report);
+	arma::field<arma::Cube<double>> forwardPass(
+			const arma::field<arma::Cube<double>>& inputs);
+	arma::field<arma::Cube<double>> backwardPass(
+			arma::field<arma::Cube<double>> deltas);
+	void train(const arma::field<arma::Cube<double>>& inputs,
+			const arma::field<arma::Cube<double>>& outputs,
+			unsigned int batchSize, unsigned int numEpochs, bool report);
+	double validate(arma::field<arma::Cube<double>> inputs,
+			arma::field<arma::Cube<double>> outputs, unsigned int k);
+	unsigned int voteCategory(std::vector<arma::Cube<double>> probs);
 
 };
 
