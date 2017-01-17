@@ -24,6 +24,7 @@
 #include "optimizer/RMSProp.hpp"
 #include "optimizer/SGD.hpp"
 #include "optimizer/Momentum.hpp"
+#include "optimizer/NAG.hpp"
 
 class LayerFactory {
 public:

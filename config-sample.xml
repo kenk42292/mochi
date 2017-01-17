@@ -5,8 +5,8 @@
     </data>
     
     <training-params>
-		<batch-size>10</batch-size>
-		<num-epochs>30</num-epochs>
+		<batch-size>128</batch-size>
+		<num-epochs>42</num-epochs>
 	</training-params>
 
     <net>
@@ -18,11 +18,11 @@
 	        <layer>
 	            <type>vanillafeedforward</type>
 	            <input-dim>784</input-dim>
-	            <output-dim>30</output-dim>
-	            <optimizer>sgd</optimizer>
-	            <eta>3.0</eta>
+	            <output-dim>300</output-dim>
+	            <optimizer>nag</optimizer>
+	            <eta>0.3</eta>
 	            <gamma>0.9</gamma>
-	            <wdecay>0.05</wdecay>
+	            <wdecay>3e-5</wdecay>
 	        </layer>
 	        
 	        <layer>
@@ -31,12 +31,40 @@
 	        
 	        <layer>
 	            <type>vanillafeedforward</type>
-	            <input-dim>30</input-dim>
-	            <output-dim>10</output-dim>
-	            <optimizer>sgd</optimizer>
-	            <eta>3.0</eta>
+	            <input-dim>300</input-dim>
+	            <output-dim>100</output-dim>
+	            <optimizer>nag</optimizer>
+	            <eta>0.3</eta>
 	            <gamma>0.9</gamma>
-	            <wdecay>0.05</wdecay>
+	            <wdecay>3e-5</wdecay>
+	        </layer>
+	        
+	        <layer>
+	            <type>softplus</type>
+	        </layer>
+	        
+	        <layer>
+	            <type>vanillafeedforward</type>
+	            <input-dim>100</input-dim>
+	            <output-dim>50</output-dim>
+	            <optimizer>nag</optimizer>
+	            <eta>0.3</eta>
+	            <gamma>0.9</gamma>
+	            <wdecay>3e-5</wdecay>
+	        </layer>
+	        
+	        <layer>
+	            <type>sigmoid</type>
+	        </layer>
+	        
+	        <layer>
+	            <type>vanillafeedforward</type>
+	            <input-dim>50</input-dim>
+	            <output-dim>10</output-dim>
+	            <optimizer>nag</optimizer>
+	            <eta>0.3</eta>
+	            <gamma>0.9</gamma>
+	            <wdecay>3e-5</wdecay>
 	        </layer>
 	        
 	        <layer>
