@@ -23,6 +23,7 @@
 #include "optimizer/Adagrad.hpp"
 #include "optimizer/RMSProp.hpp"
 #include "optimizer/SGD.hpp"
+#include "optimizer/Momentum.hpp"
 
 class LayerFactory {
 public:

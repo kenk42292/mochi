@@ -76,7 +76,9 @@ Optimizer* LayerFactory::createOptimizer(std::map<std::string, std::string> laye
 		optimizer = new Adagrad(stod(layerConfig["eta"]));
 	} else if (optimizerType.compare("rmsprop")==0) {
 		optimizer = new RMSProp(stod(layerConfig["eta"]), stod(layerConfig["gamma"]));
-	}else {
+	} else if (optimizerType.compare("momentum")==0) {
+		optimizer = new Momentum(stod(layerConfig["eta"]), stod(layerConfig["gamma"]));
+	} else {
 		std::cout << "Unimplemented Optimizer found" << std::endl;
 	}
 	return optimizer;
