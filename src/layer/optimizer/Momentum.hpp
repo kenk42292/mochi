@@ -14,9 +14,8 @@ class Momentum: public Optimizer {
 private:
 	double mEta;
 	bool cacheInitialized;
-	arma::field<arma::Cube<double>> mCache;
+	arma::field<arma::Cube<double>> mMomentum;
 	double mGamma;
-	double eps;
 public:
 	Momentum(double eta, double gamma);
 	virtual ~Momentum();

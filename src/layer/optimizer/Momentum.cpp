@@ -16,13 +16,15 @@ arma::field<arma::Cube<double>> Momentum::delta(
 		unsigned int batchSize) {
 	if (!cacheInitialized) {
 		cacheInitialized = true;
-		mCache = gradients;
+		mMomentum = arma::field<arma::Cube<double>>(gradients.size());
+		for (unsigned int i=0; i<gradients.size(); ++i) {
+			unsigned int nr=gradients[i].n_rows, nc=gradients[i].n_cols, ns=gradients[i].n_slices;
+			mMomentum[i] = arma::Cube<double>(nr, nc, ns, arma::fill::zeros);
+		}
 	}
-	arma::field<arma::Cube<double>> paramChange(gradients.size());
 	for (unsigned int i = 0; i < gradients.size(); ++i) {
-		mCache[i] = mGamma*mCache[i] + (1.0-mGamma)*gradients[i];
-		paramChange[i] = (mEta / batchSize) * mCache[i];
+		mMomentum[i] = mGamma*mMomentum[i] + (mEta / batchSize) * gradients[i];
 	}
-	return paramChange;
+	return mMomentum;
 }
 
