@@ -5,8 +5,8 @@
     </data>
     
     <training-params>
-		<batch-size>20</batch-size>
-		<num-epochs>200</num-epochs>
+		<batch-size>128</batch-size>
+		<num-epochs>360</num-epochs>
 	</training-params>
 
     <net>
@@ -28,10 +28,12 @@
 	            <kernel-dim>1,5,5</kernel-dim>
 	            <output-dim>8,24,24</output-dim>
 	            <mode>same</mode>
-	            <optimizer>rmsprop</optimizer>
-	            <eta>0.01</eta>
+	            <optimizer>adam</optimizer>
+	            <eta>3.0</eta>
 	            <gamma>0.9</gamma>
 	            <wdecay>3e-5</wdecay>
+	            <b1>0.9</b1>
+	            <b2>0.999</b2>
 	        </layer>
 	        
 	        <layer>
@@ -52,10 +54,12 @@
 	            <kernel-dim>8,5,5</kernel-dim>
 	            <output-dim>16,12,12</output-dim>
 	            <mode>same</mode>
-	            <optimizer>rmsprop</optimizer>
-	            <eta>0.01</eta>
+	            <optimizer>adam</optimizer>
+	            <eta>3.0</eta>
 	            <gamma>0.9</gamma>
 	            <wdecay>3e-5</wdecay>
+	            <b1>0.9</b1>
+	            <b2>0.999</b2>
 	        </layer>
 	        
 	        <layer>
@@ -73,10 +77,12 @@
 	            <type>vanillafeedforward</type>
 	            <input-dim>256</input-dim>
 	            <output-dim>10</output-dim>
-	            <optimizer>rmsprop</optimizer>
-	            <eta>0.005</eta>
+	            <optimizer>adam</optimizer>
+	            <eta>1.0</eta>
 	            <gamma>0.9</gamma>
 	            <wdecay>3e-5</wdecay>
+	            <b1>0.9</b1>
+	            <b2>0.999</b2>
 	        </layer>
 	        
 	        <layer>

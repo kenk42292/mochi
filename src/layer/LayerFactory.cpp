@@ -80,6 +80,8 @@ Optimizer* LayerFactory::createOptimizer(std::map<std::string, std::string> laye
 		optimizer = new Momentum(stod(layerConfig["eta"]), stod(layerConfig["gamma"]));
 	} else if (optimizerType.compare("nag")==0) {
 		optimizer = new NAG(stod(layerConfig["eta"]), stod(layerConfig["gamma"]));
+	} else if (optimizerType.compare("adam")==0) {
+		optimizer = new Adam(stod(layerConfig["eta"]), stod(layerConfig["b1"]), stod(layerConfig["b2"]));
 	} else {
 		std::cout << "Unimplemented Optimizer found" << std::endl;
 	}

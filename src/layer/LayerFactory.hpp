@@ -25,6 +25,7 @@
 #include "optimizer/SGD.hpp"
 #include "optimizer/Momentum.hpp"
 #include "optimizer/NAG.hpp"
+#include "optimizer/Adam.hpp"
 
 class LayerFactory {
 public:
